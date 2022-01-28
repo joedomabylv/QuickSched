@@ -38,6 +38,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'authentication.apps.AuthenticationConfig',
+    'laborganizer.apps.LaborganizerConfig',
+    'teachingassistant.apps.TeachingassistantConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
