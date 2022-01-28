@@ -11,9 +11,8 @@ from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth import authenticate, login, logout
 from . tokens import generate_token
 
-# Create your views here.
 def home(request):
-    return render(request, "authentication/index.html")
+    return render(request, "authentication/signin.html")
 
 def signup(request):
     if request.method == "POST":
@@ -106,13 +105,20 @@ def signin(request):
     if request.method == 'POST':
         username = request.POST['username']
         pass1 = request.POST['pass1']
-        
+
+        # NOTE: this only authenticates when the user enters their actual username,
+        # which might be different than their email. JOE changed the input form
+        # in signin.html to allow non-emails
         user = authenticate(username=username, password=pass1)
         
         if user is not None:
             login(request, user)
-            fname = user.first_name
-            return render(request, "authentication/index.html",{"fname":fname})
+            context = {'username':username}
+            # direct user based on account status
+            if user.is_superuser:
+                return render(request, "laborganizer/dashboard.html", context)
+            else:
+                return render(request, "teachingassistant/dashboard.html", context)
         else:
             messages.error(request, "Bad Credentials!!")
             return redirect('home')
