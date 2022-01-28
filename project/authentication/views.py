@@ -13,7 +13,7 @@ from . tokens import generate_token
 
 # Create your views here.
 def home(request):
-    return render(request, "authentication/index.html")
+    return render(request, "authentication/signin.html")
 
 def signup(request):
     if request.method == "POST":
