@@ -1,12 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
+<head>
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>TA Dashboard</title>
-    </head>
-  <body>
-    <div id="app">Hello {{username}}, you're a TA!</div>
-    </body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+</head>
+<body>
+
+    {% if user.is_authenticated %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <strong>Message:</strong> {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+    </div>
+    {% endfor %}
+
+    <h3>Welcome to Quicksched!</h3>
+
+
+    <h4>You're successfully logged in as a TA.</h4>
+    <button type="submit"><a href="/signout">SignOut</a></button>
+    {% else %}
+    <h4>Please sign in as a TA to access this page.</h4>
+    <button type="submit"><a href="/signin">SignIn</a></button>
+    {% endif %}
+</body>
   </html>

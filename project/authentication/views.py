@@ -116,12 +116,12 @@ def signin(request):
             context = {'username':username}
             # direct user based on account status
             if user.is_superuser:
-                return render(request, "laborganizer/dashboard.html", context)
+                return redirect('laborganizer/')
             else:
-                return render(request, "teachingassistant/dashboard.html", context)
+                return redirect('teachingassistant/')
         else:
             messages.error(request, "Bad Credentials!!")
-            return redirect('home')
+            return redirect('signin')
     
     return render(request, "authentication/signin.html")
 
@@ -129,4 +129,4 @@ def signin(request):
 def signout(request):
     logout(request)
     messages.success(request, "Logged Out Successfully!!")
-    return redirect('home')
+    return redirect('signin')
