@@ -113,7 +113,6 @@ def signin(request):
         
         if user is not None:
             login(request, user)
-            context = {'username':username}
             # direct user based on account status
             if user.is_superuser:
                 return redirect('laborganizer/')

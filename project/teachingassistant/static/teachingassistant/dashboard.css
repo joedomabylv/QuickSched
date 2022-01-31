@@ -1,0 +1,14 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-color: #ffe7b3;
+}
+
+main {
+  padding-top: 40px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
