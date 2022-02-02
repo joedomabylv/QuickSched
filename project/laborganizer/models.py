@@ -65,11 +65,13 @@ class Lab(models.Model):
     # change to list or something?
     time = models.CharField("Time", max_length=50)
 
+    # link to detect if a TA is assigned?
     staffed = models.BooleanField(default=False)
 
     semester = models.ForeignKey(
         'Semester',
         on_delete=models.CASCADE,
         verbose_name='Semester',
-        null=True
+        null=True,
+        blank=True
     )

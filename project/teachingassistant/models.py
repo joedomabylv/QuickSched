@@ -1,5 +1,6 @@
 """Models relating to Teaching Assistants."""
 from django.db import models
+from laborganizer.models import Lab
 
 
 class TA(models.Model):
@@ -49,3 +50,4 @@ class TA(models.Model):
                                   blank=True)
     year = models.CharField('TA\'s current year', max_length=2,
                             choices=YEAR, blank=True)
+    assignments = models.ManyToManyField(Lab, blank=True)
