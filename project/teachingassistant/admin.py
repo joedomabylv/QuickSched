@@ -2,4 +2,11 @@
 from django.contrib import admin
 from .models import TA
 
-admin.site.register(TA)
+
+class TAAdmin(admin.ModelAdmin):
+    """Admin configuration display."""
+
+    list_display = ['__str__', 'contracted']
+
+
+admin.site.register(TA, TAAdmin)

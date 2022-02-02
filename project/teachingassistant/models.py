@@ -41,11 +41,11 @@ class TA(models.Model):
     # availability still needs to be configured to account for different days
     availability = models.CharField('TA\'s availability', max_length=100,
                                     blank=True)
-    contracted = models.BooleanField('Is the TA contracted?')
+    contracted = models.BooleanField('Contracted')
 
     # experience needs to be configured to account for whatever
     # we want to display experience/relevant skills as
-    experience = models.CharField('TA\'s availability', max_length=100,
+    experience = models.CharField('TA\'s experience', max_length=100,
                                   blank=True)
     year = models.CharField('TA\'s current year', max_length=2,
                             choices=YEAR, blank=True)
