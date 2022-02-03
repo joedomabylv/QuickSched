@@ -8,7 +8,7 @@
 
     {% load static %}
     <!-- Custom styles for this template -->
-    <link href="{% static 'authentication/signin.css' %}" rel="stylesheet">
+    <link href="{% static 'authentication/sign_in.css' %}" rel="stylesheet">
     
     <!-- Bootstrap core CSS -->
     <link href="{% static 'authentication/bootstrap-3.4.1/dist/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -44,7 +44,7 @@
     <!-- {% endfor %} -->
         
     <main class="form-signin">
-      <form method="post" action="/signin">
+      <form method="post" action="/sign_in">
 	
 	{% csrf_token %}
 	

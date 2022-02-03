@@ -19,6 +19,8 @@
       <!-- Custom styles for this template -->
       <link href="{% static 'laborganizer/dashboard.css' %}" rel="stylesheet">
 
+      <link href="{% static 'global/Magisters.svg' %}" rel="icon"> 
+
     </head>
     
     <body class="text-center">
@@ -27,7 +29,7 @@
       <nav class="navbar navbar-expand-sm navbar-light bg-light">
 	<div class="container">
 	  <a class="navbar-brand" href="{% url 'lo_home' %}">
-            <img src="{% static 'laborganizer/Magisters.svg' %}" alt="image not found!" width="60" height="60">
+            <img src="{% static 'global/Magisters.svg' %}" alt="image not found!" width="60" height="60">
 	  </a>
 	  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -52,6 +54,11 @@
 		<!--*CODE*href = Semester page addrees-->
 		<a class="nav-link" href="#">Semester</a>
               </li>
+
+              <li class="nav-item">
+		<!--*CODE*href = Semester page addrees-->
+		<a class='nav-link' href="/sign_out">Sign Out</a>
+              </li>	      
 
             </ul>
 	  </div>

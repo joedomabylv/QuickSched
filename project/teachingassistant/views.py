@@ -1,5 +1,5 @@
 """Views for TeachingAssistant App."""
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 
 def ta_home(request):

@@ -9,6 +9,7 @@ urlpatterns = [
     # 'lo' prefix = lab organizer
     path('', views.lo_home, name='lo_home'),
     path('ta_management/', views.lo_ta_management, name='lo_ta_management'),
+    path('ta_add/', include("emailupload.urls")),
     path('upload/', views.lo_upload, name='lo_upload'),
 ]
 

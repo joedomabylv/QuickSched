@@ -1,0 +1,78 @@
+[
+    {
+    "model": "teachingassistant.ta",
+    "pk": 100,
+    "fields": {
+	"first_name": "John",
+	"last_name": "Smith",
+	"student_id": "00001",
+	"email": "jsmith@nau.edu",
+	"availability": "N/A",
+	"contracted": true,
+	"experience": "N/A",
+	"year": "SR"
+    }
+    
+},
+    
+    {
+    "model": "teachingassistant.ta",
+    "pk": 101,
+    "fields": {
+	"first_name": "Zoe",
+	"last_name": "Timberlake",
+	"student_id": "443910",
+	"email": "ztimberlake@nau.edu",
+	"availability": "Wednesday, Thursday",
+	"contracted": false,
+	"experience": "N/A",
+	"year": "FR"
+    }
+},
+
+    {
+    "model": "teachingassistant.ta",
+    "pk": 102,
+    "fields": {
+	"first_name": "Greg",
+	"last_name": "Davis",
+	"student_id": "93901",
+	"email": "gdavis@nau.edu",
+	"availability": "Monday",
+	"contracted": false,
+	"experience": "249",
+	"year": "JR"
+    }
+},
+
+    {
+    "model": "teachingassistant.ta",
+    "pk": 103,
+    "fields": {
+	"first_name": "Travis",
+	"last_name": "Young",
+	"student_id": "10394",
+	"email": "tyoung@nau.edu",
+	"availability": "Saturday",
+	"contracted": false,
+	"experience": "465, 126, 136",
+	"year": "GR"
+    }
+},
+
+    {
+    "model": "teachingassistant.ta",
+    "pk": 104,
+    "fields": {
+	"first_name": "Vanessa",
+	"last_name": "Maxis",
+	"student_id": "000002",
+	"email": "vmaxis@nau.edu",
+	"availability": "Wednesday, Thursday",
+	"contracted": true,
+	"experience": "212, 480",
+	"year": "SO"
+    }
+}    
+
+]

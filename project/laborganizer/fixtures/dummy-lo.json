@@ -1,0 +1,97 @@
+[
+    {
+    "model": "laborganizer.semester",
+    "pk": 1,
+    "fields": {
+	"year": "2022",
+	"semester_time": "SPR"
+    }
+},
+
+    {
+    "model": "laborganizer.semester",
+    "pk": 2,
+    "fields": {
+	"year": "2022",
+	"semester_time": "SUM"
+    }
+},
+
+    {
+    "model": "laborganizer.semester",
+    "pk": 3,
+    "fields": {
+	"year": "2023",
+	"semester_time": "WNT"
+    }
+},
+
+    {
+    "model": "laborganizer.lab",
+    "pk": 10,
+    "fields": {
+	"class_name": "Computer Science 1",
+	"course_id": "1234",
+	"catalog_id": "CS126",
+	"section": "001",
+	"day": "MWF",
+	"facility_id": "069",
+	"facility_building": "Engineering",
+	"instructor": "McAddis, C.",
+	"time": "11:10AM-12:20PM",
+	"staffed": false
+    }
+},
+
+    {
+    "model": "laborganizer.lab",
+    "pk": 11,
+    "fields": {
+	"class_name": "Data Structures",
+	"course_id": "4321",
+	"catalog_id": "CS249",
+	"section": "001",
+	"day": "TTh",
+	"facility_id": "069",
+	"facility_building": "Engineering",
+	"instructor": "Leverington, M.",
+	"time": "5:30PM-8:00PM",
+	"staffed": false
+    }
+},
+
+    {
+    "model": "laborganizer.lab",
+    "pk": 12,
+    "fields": {
+	"class_name": "Web Programming",
+	"course_id": "5678",
+	"catalog_id": "CS212",
+	"section": "002",
+	"day": "TThF",
+	"facility_id": "069",
+	"facility_building": "Engineering",
+	"instructor": "McAddis, C.",
+	"time": "2:20PM-3:00PM",
+	"staffed": false
+    }
+},
+
+    {
+    "model": "laborganizer.lab",
+    "pk": 13,
+    "fields": {
+	"class_name": "Computer Networks",
+	"course_id": "8765",
+	"catalog_id": "CS460",
+	"section": "003",
+	"day": "MF",
+	"facility_id": "069",
+	"facility_building": "Engineering",
+	"instructor": "Otte, W.",
+	"time": "12:45PM-2:50PM",
+	"staffed": false
+    }
+}
+
+]
