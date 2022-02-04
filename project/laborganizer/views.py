@@ -1,6 +1,5 @@
 """View management for LabOrganizer app. 'lo' prefix = lab organizer."""
-from django.shortcuts import render, redirect
-from django.core.files.storage import FileSystemStorage
+from django.shortcuts import render
 
 
 def lo_home(request):
@@ -18,5 +17,11 @@ def lo_ta_add(request):
     return render(request, 'laborganizer/ta_add.html')
 
 
+def lo_semester(request):
+    """View for semester information."""
+    return render(request, 'laborganizer/semester.html')
+
+
 def lo_upload(request):
+    """View to upload CSV file. Probably going to be deleted, see Andrew."""
     return render(request, 'laborganizer/dashboard.html')

@@ -41,10 +41,10 @@
 		<a class="nav-link active" aria-current="page" href="{% url 'lo_home' %}">Home</a>
               </li>
 
-              <li class="nav-item">
-		<!--*CODE*href = Schedule Manage page addrees-->
-		<a class="nav-link" href="#">Schedule Manage</a>
-              </li>
+              <!-- <li class="nav-item"> -->
+	      <!-- 	<\!--*CODE*href = Schedule Manage page addrees-\-> -->
+	      <!-- 	<a class="nav-link" href="#">Schedule Manage</a> -->
+              <!-- </li> -->
 
               <li class="nav-item">
 		<a class="nav-link" href="{% url 'lo_ta_management' %}">TA Management</a>
@@ -52,9 +52,14 @@
 
               <li class="nav-item">
 		<!--*CODE*href = Semester page addrees-->
-		<a class="nav-link" href="#">Semester</a>
+		<a class="nav-link" href="{% url 'lo_semester' %}">Semesters</a>
               </li>
 
+              <li class="nav-item">
+		<!--*CODE*href = Semester page addrees-->
+		<a class="nav-link" href="/admin">Admin</a>
+              </li>
+	      
               <li class="nav-item">
 		<!--*CODE*href = Semester page addrees-->
 		<a class='nav-link' href="/sign_out">Sign Out</a>
