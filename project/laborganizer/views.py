@@ -19,9 +19,4 @@ def lo_ta_add(request):
 
 
 def lo_upload(request):
-    """Upload route."""
-    if request.method == 'POST':
-        uploaded_file = request.FILES['document']
-        fs = FileSystemStorage()
-        fs.save(uploaded_file.name, uploaded_file)
     return render(request, 'laborganizer/dashboard.html')

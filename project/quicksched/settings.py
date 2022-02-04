@@ -135,7 +135,7 @@ STATICFILES_DIRS = [
 ]
 
 
-MEDIA_ROOT = '/tmp/media/django'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIA_URL = '/media/'
 
