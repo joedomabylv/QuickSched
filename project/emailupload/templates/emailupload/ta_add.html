@@ -9,7 +9,16 @@
   <body>
     
     <h1>Upload email file</h1>
-    <!-- Andrew goes here -->
+
+    {% block content %}
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type="file" name="document">
+      <button type="submit">Upload CSV File</button>
+      </form>
+    <a href="{% url 'lo_home' %}">Go Back</a>
+
+    {% endblock %}
     
     <a href="{% url 'lo_home' %}">Go Home</a>
 
