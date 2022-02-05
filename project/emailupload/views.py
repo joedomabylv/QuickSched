@@ -3,8 +3,10 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.core.files.storage import FileSystemStorage, default_storage
 from django.utils.crypto import get_random_string
+from django.contrib.auth import get_user_model
 import csv
 import os
+
 
 def eu_upload(request):
     """Home route, only uploading emails."""
@@ -21,7 +23,13 @@ def eu_upload(request):
         for email in emails:
             passwords.append(get_random_string(12))
 
-        print(emails)
-        print(passwords)
+        # loop through the list of emails and passwords
+        # NEED TO ADD CHECKS TO AVOID CREATING DUPLICATE ACCOUNTS, IT CRASHES DJANGO ANYWAY
+        index = 0
+        while index < len(emails):
+            print(f'{emails[index]}:{passwords[index]}')
+            get_user_model().objects.create_user(emails[index], passwords[index])
+            index += 1
+
 
     return render(request, 'emailupload/ta_add.html')

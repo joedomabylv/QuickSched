@@ -7,7 +7,6 @@
 	"last_name": "Smith",
 	"student_id": "00001",
 	"email": "jsmith@nau.edu",
-	"availability": "N/A",
 	"contracted": true,
 	"experience": "N/A",
 	"year": "SR"
@@ -23,7 +22,6 @@
 	"last_name": "Timberlake",
 	"student_id": "443910",
 	"email": "ztimberlake@nau.edu",
-	"availability": "Wednesday, Thursday",
 	"contracted": false,
 	"experience": "N/A",
 	"year": "FR"
@@ -38,7 +36,6 @@
 	"last_name": "Davis",
 	"student_id": "93901",
 	"email": "gdavis@nau.edu",
-	"availability": "Monday",
 	"contracted": false,
 	"experience": "249",
 	"year": "JR"
@@ -53,7 +50,6 @@
 	"last_name": "Young",
 	"student_id": "10394",
 	"email": "tyoung@nau.edu",
-	"availability": "Saturday",
 	"contracted": false,
 	"experience": "465, 126, 136",
 	"year": "GR"
@@ -68,11 +64,31 @@
 	"last_name": "Maxis",
 	"student_id": "000002",
 	"email": "vmaxis@nau.edu",
-	"availability": "Wednesday, Thursday",
 	"contracted": true,
 	"experience": "212, 480",
 	"year": "SO"
     }
-}    
+},    
 
+    {
+    "model": "teachingassistant.availability",
+    "pk": 9999,
+    "fields": {
+	"monday_start": "12:45",
+	"monday_end": "1:00",
+	"tuesday_start": "3:30",
+	"tuesday_end": "4:15",
+	"wednesday_start": "10:00",
+	"wednesday_end": "12:45",
+	"thursday_start": "9:15",
+	"thursday_end": "12:00",
+	"friday_start": "3:00",
+	"friday_end": "5:30",
+	"saturday_start": "12:00",
+	"saturday_end": "1:45",
+	"sunday_start": "6:00",
+	"sunday_end": "9:00"
+    }
+}    
+    
 ]

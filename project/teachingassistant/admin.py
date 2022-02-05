@@ -1,6 +1,6 @@
 """Admin information for teachingassistant app."""
 from django.contrib import admin
-from .models import TA
+from .models import TA, Availability
 from django import forms
 from laborganizer.models import Lab
 
@@ -22,3 +22,4 @@ class TAAdmin(admin.ModelAdmin):
 
 
 admin.site.register(TA, TAAdmin)
+admin.site.register(Availability)

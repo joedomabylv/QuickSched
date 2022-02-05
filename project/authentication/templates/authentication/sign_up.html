@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>QuickSched: Sign Up</title>
+    </head>
+  <body>
+    <div id="app">Sign Up Form</div>
+    
+    <form method="post" action="/sign_up">
+      {% csrf_token %}
+
+      <div class=""
+	   <label for="fname">First Name:</label>
+	   <input type="text" id="fname" name="fname" placeholder="First name" Required>
+      </div>
+
+      <div class=""
+	   <label for="lname">Last Name:</label>
+	   <input type="text" id="lname" name="lname" placeholder="First name" Required>
+      </div>
+
+      <div class=""
+	   <label for="student-id">Student ID:</label>
+	   <input type="text" id="student-id" name="student-id" placeholder="Student ID" Required>
+      </div>
+
+<!-- The following div represents all availability options -->
+      <div class=""
+	   When are you available?
+
+	   <!-- Monday -->
+	   <div class="">
+	     <h4>Monday</h4>
+	     <label for="monday-start">Start:</label>
+	     <input type="time" id="monday-start" name="monday-start" Required>
+	     <label for="monday-end">End:</label>
+	     <input type="time" id="monday-end" name="monday-end" Required>
+	   </div>
+
+	   <!-- Tuesday -->
+	   <div class="">
+	     <h4>Tuesday</h4>
+	     <label for="tuesday-start">Start:</label>
+	     <input type="time" id="tuesday-start" name="tuesday-start" Required>
+	     <label for="tuesday-end">End:</label>
+	     <input type="time" id="tuesday-end" name="tuesday-end" Required>
+	   </div>
+
+	   <!-- Wednesday -->
+	   <div class="">
+	     <h4>Wednesday</h4>
+	     <label for="wednesday-start">Start:</label>
+	     <input type="time" id="wednesday-start" name="wednesday-start" Required>
+	     <label for="wednesday-end">End:</label>
+	     <input type="time" id="wednesday-end" name="wednesday-end" Required>
+	   </div>
+
+	   <!-- Thursday -->
+	   <div class="">
+	     <h4>Thursday</h4>
+	     <label for="thursday-start">Start:</label>
+	     <input type="time" id="thursday-start" name="thursday-start" Required>
+	     <label for="thursday-end">End:</label>
+	     <input type="time" id="thursday-end" name="thursday-end" Required>
+	   </div>
+
+	   <!-- Friday -->
+	   <div class="">
+	     <h4>Friday</h4>
+	     <label for="friday-start">Start:</label>
+	     <input type="time" id="friday-start" name="friday-start" Required>
+	     <label for="friday-end">End:</label>
+	     <input type="time" id="friday-end" name="friday-end" Required>
+	   </div>
+
+	   <!-- Saturday -->
+	   <div class="">
+	     <h4>Saturday</h4>
+	     <label for="saturday-start">Start:</label>
+	     <input type="time" id="saturday-start" name="saturday-start" Required>
+	     <label for="saturday-end">End:</label>
+	     <input type="time" id="saturday-end" name="saturday-end" Required>
+	   </div>
+
+	   <!-- Sunday -->
+	   <div class="">
+	     <h4>Sunday</h4>
+	     <label for="sunday-start">Start:</label>
+	     <input type="time" id="sunday-start" name="sunday-start" Required>
+	     <label for="sunday-end">End:</label>	     
+	     <input type="time" id="sunday-end" name="sunday-end" Required>
+	   </div>
+
+      </div>
+
+      <div class=""
+	   <label for="experience">What courses have you previously worked for?</label>
+	   <input type="text" id="experience" name="experience" placeholder="Experience" Required>
+      </div>
+
+      <div class=""
+	   <label for="year">What year are you?</label>
+	   <select name="year" id="year">
+	     <option value="FR">Freshman</option>
+	     <option value="SO">Sophomore</option>
+	     <option value="JR">Junior</option>
+	     <option value="SR">Senior</option>
+	     <option value="GR">Graduate</option>
+	     </select>
+      </div>
+
+      <button type="submit">Submit</button>
+
+</form>
+
+  </body>
+  
+</html>
+

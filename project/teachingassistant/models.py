@@ -1,6 +1,26 @@
 """Models relating to Teaching Assistants."""
 from django.db import models
 from laborganizer.models import Lab
+from authentication.models import CustomUserModel
+
+
+class Availability(models.Model):
+    """Object representing a single TA's availability."""
+
+    monday_start = models.TimeField(auto_now=False, auto_now_add=False)
+    monday_end = models.TimeField(auto_now=False, auto_now_add=False)
+    tuesday_start = models.TimeField(auto_now=False, auto_now_add=False)
+    tuesday_end = models.TimeField(auto_now=False, auto_now_add=False)
+    wednesday_start = models.TimeField(auto_now=False, auto_now_add=False)
+    wednesday_end = models.TimeField(auto_now=False, auto_now_add=False)
+    thursday_start = models.TimeField(auto_now=False, auto_now_add=False)
+    thursday_end = models.TimeField(auto_now=False, auto_now_add=False)
+    friday_start = models.TimeField(auto_now=False, auto_now_add=False)
+    friday_end = models.TimeField(auto_now=False, auto_now_add=False)
+    saturday_start = models.TimeField(auto_now=False, auto_now_add=False)
+    saturday_end = models.TimeField(auto_now=False, auto_now_add=False)
+    sunday_start = models.TimeField(auto_now=False, auto_now_add=False)
+    sunday_end = models.TimeField(auto_now=False, auto_now_add=False)
 
 
 class TA(models.Model):
@@ -39,10 +59,12 @@ class TA(models.Model):
                                   unique=True)
     email = models.EmailField('TA\'s email', max_length=250)
 
+    user_model = models.ForeignKey(CustomUserModel, on_delete=models.CASCADE, blank=True, null=True)
+
     # availability still needs to be configured to account for different days
-    availability = models.CharField('TA\'s availability', max_length=100,
-                                    blank=True)
-    contracted = models.BooleanField('Contracted')
+    availability = models.ForeignKey(Availability, on_delete=models.CASCADE, blank=True, null=True)
+
+    contracted = models.BooleanField('Contracted', blank=True)
 
     # experience needs to be configured to account for whatever
     # we want to display experience/relevant skills as
