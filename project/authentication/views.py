@@ -1,6 +1,10 @@
 """Authentication app views."""
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.forms import PasswordChangeForm
+from .forms import CustomPasswordChangeForm
+from django.urls import reverse_lazy
 from django.contrib import messages
 from django.core.mail import EmailMessage, send_mail
 from quicksched import settings
@@ -19,15 +23,27 @@ def home(request):
     return render(request, "authentication/sign_in.html")
 
 
-def change_password(request):
-    """
-    Allow the user to change their password for the first time.
+class CustomPasswordChangeView(PasswordChangeView):
+    """Customize the password change view provided by Django for QuickSched."""
 
-    After completion, send them to the dashboard.
-    """
-    # update the password and direct the TA to their dashboard, flip
-    # the TA flag, i.e. request.user.init_changed_password = True
-    return redirect('sign_in')
+    form_class = CustomPasswordChangeForm
+    success_url = reverse_lazy('change_password_success')
+
+
+def change_password_success(request):
+    """View for the user on a successful password change."""
+    # update Boolean flag that the user has changed their password for the
+    # first time and save it to the database
+    request.user.init_changed_password = True
+    request.user.save()
+
+    # direct them to the success page to let them know it worked
+    return render(request, 'authentication/change_password_success.html')
+
+
+def ta_dashboard(request):
+    """Send the user to the TA dashboard."""
+    return render(request, 'teachingassistant/dashboard.html')
 
 
 def sign_up(request):
@@ -116,15 +132,9 @@ def sign_in(request):
             else:
                 # check if the user has changed their password for the first time
                 if not user.init_changed_password:
-                    # send them to the change their password
-                    # somehow figure out how to flip the flag after
-                    # they've changed their password
-
                     # send them to the new user form afterwards
-                    return render(request, "authentication/change_password.html")
-
+                    return redirect('change_password')
                 # else, take them to their dashboard
-                print(user.email)
                 return redirect('teachingassistant/')
         else:
             return redirect('sign_in')

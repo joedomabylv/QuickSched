@@ -1,72 +1,35 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>QuickSched: Sign In</title>
+{% extends 'authentication/base.html' %}
+{% block title %}QuickSched: Sign In{% endblock %}
+{% load static %}
 
-    {% load static %}
-    <!-- Custom styles for this template -->
-    <link href="{% static 'authentication/sign_in.css' %}" rel="stylesheet">
+{% block content %}
+
+<!-- Custom CSS -->
+<link href="{% static 'authentication/sign_in.css' %}" rel="stylesheet">
+
+<main class="form-signin">
+  <form method="post" action="/sign_in">
     
-    <!-- Bootstrap core CSS -->
-    <link href="{% static 'authentication/bootstrap-3.4.1/dist/css/bootstrap.min.css' %}" rel="stylesheet">
-
-    <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-    </style>
+    {% csrf_token %}
     
-  </head>
-  
-  <body class="text-center">
+    <img class="mb-4" src="{% static 'authentication/Magisters.svg' %}" alt="notfound" width="72" height="57">
+    <h1 class="h3 mb-3 fw-normal">QuickSched</h1>
+    <h5 class="h5 mb-3 fw-normal">Please sign in</h5>
 
-    <!-- LEAVING COMMENTED, BREAKS SIGNIN PAGE. SHIFTS IT TO THE RIGHT :( -->
-    <!-- {% for message in messages %} -->
-    <!-- <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert"> -->
-    <!--     <strong>Message:</strong> {{ message }} -->
-    <!--     <button type="button" class="close" data-dismiss="alert" aria-label="Close"> -->
-    <!-- 	  <span aria-hidden="true">&times;</span> -->
-    <!-- 	</button> -->
-    <!-- </div> -->
-    <!-- {% endfor %} -->
-        
-    <main class="form-signin">
-      <form method="post" action="/sign_in">
-	
-	{% csrf_token %}
-	
-	<img class="mb-4" src="{% static 'authentication/Magisters.svg' %}" alt="notfound" width="72" height="57">
-	<h1 class="h3 mb-3 fw-normal">Quicksched Lab Scheduler</h1>
-	<h5 class="h5 mb-3 fw-normal">Please sign in</h5>
+    <div class="form-floating">
+      <input type="email" class="form-control" id="floatingInput" name="email" placeholder="name@example.com">
+      <label for="floatingInput">Email address</label>
+    </div>
+    
+    <div class="form-floating">
+      <input type="password" class="form-control" id="floatingPassword" name="pass1" placeholder="Password">
+      <label for="floatingPassword">Password</label>
+    </div>
 
-	<div class="form-floating">
-	  <input type="email" class="form-control" id="floatingInput" name="email" placeholder="name@example.com">
-	  <label for="floatingInput">Email address</label>
-	</div>
-	
-	<div class="form-floating">
-	  <input type="password" class="form-control" id="floatingPassword" name="pass1" placeholder="Password">
-	  <label for="floatingPassword">Password</label>
-	</div>
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+    <p class="mt-5 mb-3 text-muted">ver 0.01</p>
+    
+  </form>
+</main>
 
-	<button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-	<p class="mt-5 mb-3 text-muted">ver 0.01</p>
-	
-      </form>
-    </main>
-
-  </body>
-</html>
+{% endblock %}

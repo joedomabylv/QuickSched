@@ -1,13 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>QuickSched: Account</title>
-    </head>
-  <body>
-    <div id="app">Hey pal, you've made it to the TA account page! Check back later!</div>
-    <a href="{% url 'ta_home' %}">Go Back</a>
-    </body>
-  </html>
+{% extends 'teachingassistant/base.html' %}
+{% block title %}QuickSched: {{ title_tag }} {% endblock %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+  <h1>TA Account Information</h1>
+  <a class="btn btn-primary" href="{% url 'ta_home' %}" role="button">Go Back</a>
+</div>
+
+{% endblock %}

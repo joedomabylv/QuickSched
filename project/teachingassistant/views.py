@@ -16,7 +16,8 @@ def ta_account(request):
     """Directs the user to their TA account status page."""
     # check if the user is authenticated before displaying personal information
     if request.user.is_authenticated:
-        return render(request, 'teachingassistant/account.html')
+        context = {'title_tag': request.user.first_name + ' ' + request.user.last_name}
+        return render(request, 'teachingassistant/account.html', context)
 
     # if they're not authenticated, return them to the login page
     return redirect('authentication/')
