@@ -1,8 +1,9 @@
-{% extends 'laborganizer/base.html' %}
-{% block title %}QuickSched: Dashboard{% endblock %}
+{% extends 'teachingassistant/base.html' %}
+{% block title %} {{ title_tag }} {% endblock %}
 {% load static %}
 
 {% block content %}
+
 
 {% for message in messages %}
 <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
@@ -17,12 +18,14 @@
   <form method="post">
     {% csrf_token %}
 
-    <h1>New Semester</h1>    
-    {{ form.as_p }}
+    <h1>Personal Information</h1>    
+    {{ new_ta_form.as_p }}
+
+    <h1>Availability</h1>
+    {{ new_ta_availability_form.as_p }}
 
     <button class="btn btn-secondary">Submit</button>
   </form>
 </div>
-
 
 {% endblock %}

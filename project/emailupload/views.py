@@ -31,5 +31,4 @@ def eu_upload(request):
             get_user_model().objects.create_user(emails[index], passwords[index])
             index += 1
 
-
     return render(request, 'emailupload/ta_add.html')

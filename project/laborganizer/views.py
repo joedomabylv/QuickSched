@@ -1,5 +1,7 @@
 """View management for LabOrganizer app. 'lo' prefix = lab organizer."""
 from django.shortcuts import render
+from .forms import SemesterForm
+from teachingassistant.models import TA
 
 
 def lo_home(request):
@@ -9,7 +11,14 @@ def lo_home(request):
 
 def lo_ta_management(request):
     """TA Management route."""
-    return render(request, 'laborganizer/ta_management.html')
+    # in the future, we should filter which TA's are displayed based on
+    # which semester is currently chosen
+    # ta = ta.objects.filter()
+    tas = TA.objects.all()
+    context = {
+        'tas': tas,
+        }
+    return render(request, 'laborganizer/ta_management.html', context)
 
 
 def lo_ta_add(request):
@@ -19,7 +28,12 @@ def lo_ta_add(request):
 
 def lo_semester(request):
     """View for semester information."""
-    return render(request, 'laborganizer/semester.html')
+    context = {
+        # get the name of the semester
+        # 'title_tag':
+        'form': SemesterForm(),
+        }
+    return render(request, 'laborganizer/semester.html', context)
 
 
 def lo_upload(request):

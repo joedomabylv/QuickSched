@@ -1,17 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>QuickSched: TA Management</title>
-    </head>
-  <body>
-    <div class="app">Hey there, you've reached the TA Management Section for the Lab Organizer. Check back later!</div>
-    <a href="{% url 'lo_home' %}">Go Back</a>
-    
-    <!-- THIS BUTTON SHOULD BE IN THE NAVBAR, WHEN IT'S MADE -->
-    <a href="{% url 'eu_upload' %}">Add New TA's</a>
-    
-    </body>
-  </html>
+{% extends 'laborganizer/base.html' %}
+{% block title %}QuickSched: Dashboard{% endblock %}
+{% load static %}
+
+{% block content %}
+
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+  <strong>Message:</strong> {{ message }}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endfor %}
+
+{% if tas %}
+
+<div class="my-4 container">
+  <h1>TA Management</h1>  
+  <ul class="list-group">
+    {% for ta in tas %}  
+    <li class="list-group-item">{{ ta.first_name }} {{ ta.last_name }}, {{ ta.year }}</li>
+    {% endfor %}
+  </ul>
+</div>
+
+{% else %}
+
+<div class="">
+  No TA's to display!
+</div>
+
+{% endif %}
+
+<a href="{% url 'eu_upload' %}">button</a>
+
+{% endblock %}
