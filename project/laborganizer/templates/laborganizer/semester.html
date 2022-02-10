@@ -4,25 +4,42 @@
 
 {% block content %}
 
-{% for message in messages %}
-<div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-  <strong>Message:</strong> {{ message }}
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
-</div>
-{% endfor %}
-
+{% if select_semester_form %}
 <div class="my-5 form-group" align="center">
-  <form method="post">
+  <form method="post" action="{% url 'lo_display_semester' %}">
+    {% csrf_token %}
+    {{ select_semester_form.as_p }}
+    <button class="btn btn-secondary">Select</button>
+  </form>    
+</div>
+{% endif %}
+
+{% if labs %}
+<div class="container">
+
+  <ul class="list-group">      
+    {% for lab in labs %}
+    <li class="list-group-item">{{ lab }}</li>
+    {% endfor %}
+  </ul>
+
+</div>
+{% else %}
+No labs to display!
+{% endif %}
+
+{% if new_semester_form %}
+<div class="my-5 form-group" align="center">
+  <form method="post" action="{% url 'lo_new_semester' %}">
     {% csrf_token %}
 
     <h1>New Semester</h1>    
-    {{ form.as_p }}
+    {{ new_semester_form.as_p }}
 
     <button class="btn btn-secondary">Submit</button>
   </form>
 </div>
+{% endif %}
 
 
 {% endblock %}

@@ -1,5 +1,6 @@
 """Models relating to Lab Organizers."""
 from django.db import models
+from datetime import date
 
 
 class Semester(models.Model):
@@ -29,11 +30,25 @@ class Semester(models.Model):
         ('WNT', 'Winter')
     )
 
-    # Year is subject to change from CharField to something more intelligent.
-    # Perhaps a list of choices ranging from current year to 10 years from now?
-    year = models.CharField('Calendar year', max_length=5)
+    def get_10_years():
+        """
+        Generate a list of tuples of 10 years.
+
+        Beginning with the current year, assign keys and values.
+        Note that keys/values are the same, allowing the list to
+        remain dynamic.
+        """
+        year = date.today().year
+        years = [(year, year)]
+        for index in range(10):
+            year += 1
+            years.append((year, year))
+        return years
+
+    YEARS = get_10_years()
+
+    year = models.CharField('Calendar year', max_length=5, choices=YEARS)
     semester_time = models.CharField('Time held', max_length=3, choices=TIMES)
-    # labs = link labs? maybe just a counter
 
 
 class Lab(models.Model):
@@ -47,7 +62,7 @@ class Lab(models.Model):
 
     def __str__(self):
         """Human readable class name, for admin site."""
-        return self.class_name + ', ' + self.catalog_id
+        return self.catalog_id + ' : ' + self.class_name
 
     class_name = models.CharField("Class name", default="N/A", max_length=50)
     course_id = models.CharField("Course ID", max_length=10, blank=True)
