@@ -1,9 +1,21 @@
 """View management for LabOrganizer app. 'lo' prefix = lab organizer."""
 from django.shortcuts import render, redirect
-from .forms import NewSemesterForm, SelectSemesterForm
+from .forms import NewSemesterForm
 from teachingassistant.models import TA
 from .models import Semester, Lab
 from django.contrib import messages
+
+
+def generate_semester_tuples():
+    """Generate a list of tuples to be presented as choices within the form."""
+    semesters = Semester.objects.all()
+    semester_list = []
+    for semester in semesters:
+        # key and value are the same for database representation
+        current_tuple = (semester.semester_time + '' + semester.year,
+                         semester.semester_time + '' + semester.year)
+        semester_list.append(current_tuple)
+    return semester_list
 
 
 def lo_home(request):
@@ -28,10 +40,12 @@ def lo_ta_add(request):
 def lo_semester(request):
     """View for semester information."""
     labs = Lab.objects.all()
+    semesters = Semester.objects.all()
+
     context = {
         # get the name of the semester
         # 'title_tag':
-        'select_semester_form': SelectSemesterForm(),
+        'semesters': semesters,
         'new_semester_form': NewSemesterForm(),
         }
     return render(request, 'laborganizer/semester.html', context)
@@ -75,6 +89,7 @@ def lo_display_semester(request):
         semester_year = semester[3:]
 
         labs = Lab.objects.all()
+        all_semesters = Semester.objects.all()
         select_labs = []
 
         for lab in labs:
@@ -83,8 +98,9 @@ def lo_display_semester(request):
                 lab.semester.semester_time == semester_time):
                 select_labs.append(lab)
 
+
         context = {
-            'select_semester_form': SelectSemesterForm(),
+            'semesters': all_semesters,
             'labs': select_labs,
         }
         return render(request, 'laborganizer/semester.html', context)

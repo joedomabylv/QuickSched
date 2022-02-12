@@ -4,11 +4,16 @@
 
 {% block content %}
 
-{% if select_semester_form %}
+{% if semesters %}
 <div class="my-5 form-group" align="center">
   <form method="post" action="{% url 'lo_display_semester' %}">
     {% csrf_token %}
-    {{ select_semester_form.as_p }}
+    <label for="semester_selection">Semester Selection:</label>
+    <select class="my-2 form-select" style="width:20%" name="semester_selection" id="semester_selection">
+    {% for semester in semesters %}
+    <option value="{{ semester.semester_time }}{{ semester.year }}">{{ semester.semester_time }}{{ semester.year }}</option>
+    {% endfor %}
+    </select>
     <button class="btn btn-secondary">Select</button>
   </form>    
 </div>

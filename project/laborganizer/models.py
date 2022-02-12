@@ -8,9 +8,6 @@ class Semester(models.Model):
     Semester Object. Primary key is predefined as an integer by Django.
 
     One Semester contains many labs.
-    TODO: Implement a check that warns the LO if a semester already exists
-          with a given time/year, i.e. 'you already have a SPR2022 semester,
-          did you want another one?'
     """
 
     class Meta:
