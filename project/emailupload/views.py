@@ -74,18 +74,20 @@ def eu_upload(request):
             index += 1
 
         # Welcome Email
-        welcome_subject = "Welcome to Quicksched- Django Login!!"
-        welcome_message = "Hello!! \n Welcome to Quicksched!!\nYour Account has successfully been created. \
-        \n\n To finish your registration, please use your email and temporary password down below to login.\n \
-        You will be prompted to change it upon your login.\n\n Temporary Password: " + temp_pass
-        from_email = settings.EMAIL_HOST_USER
-        send_mail(welcome_subject, welcome_message, from_email, new_accounts, fail_silently=True)
+        if len(new_accounts) > 0:
+            welcome_subject = "Welcome to Quicksched- Django Login!!"
+            welcome_message = "Hello!! \n Welcome to Quicksched!!\nYour Account has successfully been created. \
+            \n\n To finish your registration, please use your email and temporary password down below to login.\n \
+            You will be prompted to change it upon your login.\n\n Temporary Password: " + temp_pass
+            from_email = settings.EMAIL_HOST_USER
+            send_mail(welcome_subject, welcome_message, from_email, new_accounts, fail_silently=True)
 
-        welcome_subject = "Welcome to back to Quicksched!!"
-        welcome_message = "Hello!\n This email is here to let you know that your email has been registered back in the system.\n\
-        Please sign in and update your schedule and other information about your availability and qualifications."
-        from_email = settings.EMAIL_HOST_USER
-        send_mail(welcome_subject, welcome_message, from_email, returning_accounts, fail_silently=True)
+        if len(returning_accounts) > 0:
+            welcome_subject = "Welcome to back to Quicksched!!"
+            welcome_message = "Hello!\n This email is here to let you know that your email has been registered back in the system.\n\
+            Please sign in and update your schedule and other information about your availability and qualifications."
+            from_email = settings.EMAIL_HOST_USER
+            send_mail(welcome_subject, welcome_message, from_email, returning_accounts, fail_silently=True)
 
         print("new accounts: " + str(new_accounts))
         print("returning accounts: " + str(returning_accounts))
