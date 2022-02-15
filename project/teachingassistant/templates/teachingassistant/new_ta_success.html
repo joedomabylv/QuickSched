@@ -1,9 +1,8 @@
 {% extends 'teachingassistant/base.html' %}
-{% block title %} {{ title_tag }} {% endblock %}
+{% block title %}QuickSched: Dashboard{% endblock %}
 {% load static %}
 
 {% block content %}
-
 
 {% for message in messages %}
 <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
@@ -14,18 +13,7 @@
 </div>
 {% endfor %}
 
-<div class="my-5 form-group" align="center">
-  <form method="post" action="/teachingassistant/ta_info">
-    {% csrf_token %}
-
-    <h1>Personal Information</h1>    
-    {{ new_ta_form.as_p }}
-
-    <h1>Availability</h1>
-    {{ new_ta_availability_form.as_p }}
-
-    <button class="btn btn-secondary">Submit</button>
-  </form>
-</div>
+<h1>Success! Welcome to QuickSched, {{ first_name }}!</h1>
+<a href="{% url 'ta_home' %}">Dashboard</a>
 
 {% endblock %}

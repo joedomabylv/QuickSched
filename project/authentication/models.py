@@ -1,6 +1,7 @@
 """Model information for custom users."""
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from teachingassistant.models import TA
 
 
 class CustomUserManager(BaseUserManager):
@@ -20,6 +21,7 @@ class CustomUserManager(BaseUserManager):
 
         # save to applications database
         user.save(using=self._db)
+
         return user
 
     def create_superuser(self, email, password=None):
@@ -58,10 +60,10 @@ class CustomUserModel(AbstractBaseUser):
     # link a User object with a TA object
     # must be allowed to be blank/null because a TA might enter their personal
     # information some time after their User account model is created
-    # ta_object = models.ForeignKey(TA, on_delete=models.CASCADE, blank=True, null=True)
+    ta_object = models.ForeignKey(TA, on_delete=models.CASCADE,
+                                  blank=True, null=True)
 
     # the following four fields must be overridden to subclass AbstractBaseUser
-    # 'is_superuser' is the only field that will be used
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)

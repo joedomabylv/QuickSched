@@ -1,6 +1,6 @@
 """Admin information for teachingassistant app."""
 from django.contrib import admin
-from .models import TA, Availability
+from .models import TA, Holds, Availability
 from django import forms
 from laborganizer.models import Lab
 
@@ -10,7 +10,7 @@ class AssignmentForm(forms.ModelForm):
 
     assignments = forms.ModelMultipleChoiceField(
         queryset=Lab.objects.all(),
-        widget=forms.CheckboxSelectMultiple
+        widget=forms.CheckboxSelectMultiple,
     )
 
 
@@ -22,4 +22,7 @@ class TAAdmin(admin.ModelAdmin):
 
 
 admin.site.register(TA, TAAdmin)
+
+# these won't be registered in the final product
+admin.site.register(Holds)
 admin.site.register(Availability)

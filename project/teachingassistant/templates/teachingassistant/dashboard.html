@@ -47,6 +47,9 @@
     <div class="gx-3 col-sm-3">
       <div class="border bg-light"><h5>Holds</h5></div>
       <div class="text-start h-80 border bg-white p-2 ">
+	{% for hold in holds %}
+	<p><span class="badge bg-warning">required</span> {{ hold }}</p>
+	{% endfor %}
         <p><span class="badge bg-warning">required</span> Incomplete Profile</p>
         <p><span class="badge bg-warning">required</span> Course Evaluation</p>
         <p><span class="badge bg-danger">critical</span> Update Personal Email</p>
