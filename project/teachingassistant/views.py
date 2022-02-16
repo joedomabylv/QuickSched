@@ -65,42 +65,54 @@ def ta_info(request):
         year = request.POST['year']
         default_time = '12:00'
 
-        new_ta = TA.objects.create(
-            first_name=first_name,
-            last_name=last_name,
-            student_id=student_id,
-            experience=experience,
-            # do we want the LO to determine whether or not a TA is contracted?
-            contracted=False,
-            year=year,
-        )
+        # new_ta = TA.objects.create(
+        #     first_name=first_name,
+        #     last_name=last_name,
+        #     student_id=student_id,
+        #     experience=experience,
+        #     # do we want the LO to determine whether or not a TA is contracted?
+        #     contracted=False,
+        #     year=year,
+        # )
+
+        # update existing TA object
+        request.user.ta_object.first_name = first_name
+        request.user.ta_object.last_name = last_name
+        request.user.ta_object.student_id = student_id
+        request.user.ta_object.experience = experience
+        request.user.ta_object.contraced = False
+        request.user.ta_object.year = year
+
+        print(f'Holds Key: {request.user.ta_object.holds_key}')
+        print(f'Availability Key: {request.user.ta_object.availability_key}')
 
         # create a new availability object
-        availability_object = Availability.objects.create(
-            monday_start=request.POST.get('monday_start', default_time),
-            monday_end=request.POST.get('monday_end', default_time),
-            tuesday_start=request.POST.get('tuesday_start', default_time),
-            tuesday_end=request.POST.get('tuesday_end', default_time),
-            wednesday_start=request.POST.get('wednesday_start', default_time),
-            wednesday_end=request.POST.get('wednesday_end', default_time),
-            thursday_start=request.POST.get('thursday_start', default_time),
-            thursday_end=request.POST.get('thursday_end', default_time),
-            friday_start=request.POST.get('friday_start', default_time),
-            friday_end=request.POST.get('friday_end', default_time),
-            saturday_start=request.POST.get('saturday_start', default_time),
-            saturday_end=request.POST.get('saturday_end', default_time),
-            sunday_start=request.POST.get('sunday_start', default_time),
-            sunday_end=request.POST.get('sunday_end', default_time),
-            ta=new_ta,
-            )
+        # availability_object = Availability.objects.create(
+        #     monday_start=request.POST.get('monday_start', default_time),
+        #     monday_end=request.POST.get('monday_end', default_time),
+        #     tuesday_start=request.POST.get('tuesday_start', default_time),
+        #     tuesday_end=request.POST.get('tuesday_end', default_time),
+        #     wednesday_start=request.POST.get('wednesday_start', default_time),
+        #     wednesday_end=request.POST.get('wednesday_end', default_time),
+        #     thursday_start=request.POST.get('thursday_start', default_time),
+        #     thursday_end=request.POST.get('thursday_end', default_time),
+        #     friday_start=request.POST.get('friday_start', default_time),
+        #     friday_end=request.POST.get('friday_end', default_time),
+        #     saturday_start=request.POST.get('saturday_start', default_time),
+        #     saturday_end=request.POST.get('saturday_end', default_time),
+        #     sunday_start=request.POST.get('sunday_start', default_time),
+        #     sunday_end=request.POST.get('sunday_end', default_time),
+        #     # ta=new_ta,
+        #     ta=request.user.ta_object,
+        #     )
 
         # create default holds object
-        holds_object = Holds.objects.create(ta=new_ta)
+        # holds_object = Holds.objects.create(ta=new_ta)
 
         # assign the new TA object to the user model
         request.user.first_name = first_name
         request.user.last_name = last_name
-        request.user.ta_object = new_ta
+        # request.user.ta_object = new_ta
         request.user.save()
 
         context = {

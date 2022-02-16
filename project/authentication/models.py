@@ -19,6 +19,25 @@ class CustomUserManager(BaseUserManager):
 
         user.set_password(password)
 
+        # create shell TA objects
+        new_ta = TA.objects.create()
+        holds_object = Holds.objects.create(ta=new_ta)
+        availability_object = Availability.objects.create(ta=new_ta)
+        holds_object.save()
+        availability_object.save()
+
+        # get the keys from Holds/Availability
+        holds_key = holds_object.id
+        availability_key = availability_object.id
+
+        # attach those key values to the ta
+        new_ta.holds_key = holds_key
+        new_ta.availability_key = availability_key
+        new_ta.save()
+
+        # attach the ta to the user model
+        user.ta_object = new_ta
+
         # save to applications database
         user.save(using=self._db)
 

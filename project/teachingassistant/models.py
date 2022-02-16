@@ -49,6 +49,12 @@ class TA(models.Model):
     year = models.CharField('TA\'s current year', max_length=2,
                             choices=YEAR, blank=True)
 
+    holds_key = models.IntegerField('Primary Holds key', blank=True,
+                                    null=True, unique=True)
+
+    availability_key = models.IntegerField('Primary Availability key',
+                                           blank=True, null=True, unique=True)
+
 
 class Availability(models.Model):
     """Object representing a single TA's availability."""
