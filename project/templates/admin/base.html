@@ -41,7 +41,7 @@
             {% endblock %}
             {% block userlinks %}
                 {% if site_url %}
-                    <a href="../laborganizer/">{% translate 'Return to Dashboard' %}</a> /
+                    <a href="{{ siteurl }}/laborganizer/">{% translate 'Return to Dashboard' %}</a> /
                 {% endif %}
                 {% if user.is_active and user.is_staff %}
                     {% url 'django-admindocs-docroot' as docsroot %}
