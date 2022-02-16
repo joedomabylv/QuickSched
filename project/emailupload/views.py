@@ -61,7 +61,7 @@ def eu_upload(request):
                 new_accounts = new_accounts + row
 
         # Generate passwords for new emails
-        for email in new_emails:
+        for account in new_accounts:
             passwords.append(get_random_string(12))
 
         # loop through the list of emails and passwords

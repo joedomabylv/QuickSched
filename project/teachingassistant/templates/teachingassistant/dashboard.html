@@ -21,39 +21,43 @@
   <div class="row">
     <div class="gx-3 col-md-9">
       <div class="h-80 border bg-light"><h5>Assigned Classes</h5></div>
+      {% if labs %}      
       <div class="list-group overflow-auto">
+	{% for lab in labs %}
         <a class="list-group-item list-group-item-action d-flex py-3" aria-current="True">
           <div class="w-20 justify-content-between">
-	    <h6 class="mb-0 d-flex">CS 249-001</h6>
-	    <p class="mb-0 d-flex opacity-75">TuTh 12:45pm-1:35pm</p>
+	    <h6 class="mb-0 d-flex">{{ lab }}</h6>
+	    <p class="mb-0 d-flex opacity-75">{{ lab.day }} : {{ lab.time }}</p>
           </div>
         </a>
-        <a class="list-group-item list-group-item-action d-flex py-3" aria-current="True">
-          <div class="w-20 justify-content-between">
-	    <h6 class="mb-0 d-flex">CS 413-001</h6>
-	    <p class="mb-0 d-flex opacity-75">TuTh 2:20pm-3:15pm</p>
-          </div>
-        </a>
-        <a class="list-group-item list-group-item-action d-flex py-3" aria-current="True">
-          <div class="w-20 justify-content-between">
-	    <h6 class="mb-0 d-flex">MAT 449-006</h6>
-	    <p class="mb-0 d-flex opacity-75">MoWeFr 11:00am-12:45pm</p>
-          </div>
-        </a>
-        
+	{% endfor %}
       </div>
+      {% else %}
+      You don't have any current assignments!
+      {% endif %}
     </div>
     
     <div class="gx-3 col-sm-3">
       <div class="border bg-light"><h5>Holds</h5></div>
       <div class="text-start h-80 border bg-white p-2 ">
-	{% for hold in holds %}
-	<p><span class="badge bg-warning">required</span> {{ hold }}</p>
-	{% endfor %}
-        <p><span class="badge bg-warning">required</span> Incomplete Profile</p>
-        <p><span class="badge bg-warning">required</span> Course Evaluation</p>
-        <p><span class="badge bg-danger">critical</span> Update Personal Email</p>
-        <p><span class="badge bg-success">good</span> No Holds</p>
+	{% if holds %}
+  	  {% for hold in holds %}
+
+	    {% if hold == "incomplete_profile" %}
+	    <p><span class="badge bg-danger">critical</span> Incomplete Profile!</p>
+
+	    {% elif hold == "update_availability" %}
+	    <p><span class="badge bg-warning">required</span> Update Availability!</p>
+
+	    {% elif hold == "update_experience" %}
+	    <p><span class="badge bg-warning">required</span> Update Experience!</p>
+	    {% endif %}
+
+          {% endfor %}
+
+	  {% else %}
+  	  <p><span class="badge bg-success">good</span> No Holds!</p>
+	{% endif %}
       </div>
     </div>
   </div>

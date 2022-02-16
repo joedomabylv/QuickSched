@@ -1,6 +1,5 @@
 """Models relating to Teaching Assistants."""
 from django.db import models
-from laborganizer.models import Lab
 
 
 class TA(models.Model):
@@ -33,12 +32,14 @@ class TA(models.Model):
         )
 
     # define fields
-    first_name = models.CharField('TA\'s first name', max_length=50)
-    last_name = models.CharField('TA\'s last name', max_length=50)
+    first_name = models.CharField('TA\'s first name',
+                                  max_length=50, default='missing')
+    last_name = models.CharField('TA\'s last name',
+                                 max_length=50, default='missing')
     student_id = models.CharField('TA\'s student ID', max_length=50,
-                                  unique=True)
+                                  unique=True, blank=True)
 
-    contracted = models.BooleanField('Contracted', blank=True)
+    contracted = models.BooleanField('Contracted', blank=True, null=True)
 
     # experience needs to be configured to account for whatever
     # we want to display experience/relevant skills as
@@ -47,8 +48,6 @@ class TA(models.Model):
 
     year = models.CharField('TA\'s current year', max_length=2,
                             choices=YEAR, blank=True)
-
-    assignments = models.ManyToManyField(Lab, blank=True)
 
 
 class Availability(models.Model):
@@ -64,20 +63,34 @@ class Availability(models.Model):
         """Human readable object name."""
         return f'{self.ta}\'s Availability'
 
-    monday_start = models.TimeField(auto_now=False, auto_now_add=False)
-    monday_end = models.TimeField(auto_now=False, auto_now_add=False)
-    tuesday_start = models.TimeField(auto_now=False, auto_now_add=False)
-    tuesday_end = models.TimeField(auto_now=False, auto_now_add=False)
-    wednesday_start = models.TimeField(auto_now=False, auto_now_add=False)
-    wednesday_end = models.TimeField(auto_now=False, auto_now_add=False)
-    thursday_start = models.TimeField(auto_now=False, auto_now_add=False)
-    thursday_end = models.TimeField(auto_now=False, auto_now_add=False)
-    friday_start = models.TimeField(auto_now=False, auto_now_add=False)
-    friday_end = models.TimeField(auto_now=False, auto_now_add=False)
-    saturday_start = models.TimeField(auto_now=False, auto_now_add=False)
-    saturday_end = models.TimeField(auto_now=False, auto_now_add=False)
-    sunday_start = models.TimeField(auto_now=False, auto_now_add=False)
-    sunday_end = models.TimeField(auto_now=False, auto_now_add=False)
+    monday_start = models.TimeField(auto_now=False, auto_now_add=False,
+                                    blank=True, null=True)
+    monday_end = models.TimeField(auto_now=False, auto_now_add=False,
+                                  blank=True, null=True)
+    tuesday_start = models.TimeField(auto_now=False, auto_now_add=False,
+                                     blank=True, null=True)
+    tuesday_end = models.TimeField(auto_now=False, auto_now_add=False,
+                                   blank=True, null=True)
+    wednesday_start = models.TimeField(auto_now=False, auto_now_add=False,
+                                       blank=True, null=True)
+    wednesday_end = models.TimeField(auto_now=False, auto_now_add=False,
+                                     blank=True, null=True)
+    thursday_start = models.TimeField(auto_now=False, auto_now_add=False,
+                                      blank=True, null=True)
+    thursday_end = models.TimeField(auto_now=False, auto_now_add=False,
+                                    blank=True, null=True)
+    friday_start = models.TimeField(auto_now=False, auto_now_add=False,
+                                    blank=True, null=True)
+    friday_end = models.TimeField(auto_now=False, auto_now_add=False,
+                                  blank=True, null=True)
+    saturday_start = models.TimeField(auto_now=False, auto_now_add=False,
+                                      blank=True, null=True)
+    saturday_end = models.TimeField(auto_now=False, auto_now_add=False,
+                                    blank=True, null=True)
+    sunday_start = models.TimeField(auto_now=False, auto_now_add=False,
+                                    blank=True, null=True)
+    sunday_end = models.TimeField(auto_now=False, auto_now_add=False,
+                                  blank=True, null=True)
 
     # key to TA
     ta = models.OneToOneField(TA, on_delete=models.CASCADE)

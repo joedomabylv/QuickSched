@@ -1,7 +1,7 @@
 """Model information for custom users."""
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from teachingassistant.models import TA
+from teachingassistant.models import TA, Holds, Availability
 
 
 class CustomUserManager(BaseUserManager):

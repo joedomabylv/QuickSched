@@ -2,6 +2,7 @@
 from django.shortcuts import render, redirect
 from .forms import NewTAForm, NewTAAvailabilityForm
 from .models import TA, Availability, Holds
+from laborganizer.models import Lab
 
 
 def ta_home(request):
@@ -13,11 +14,28 @@ def ta_home(request):
         # get any holds on a TA's account
         all_holds = Holds.objects.all()
         for holds in all_holds:
-            if holds.ta.student_id == request.user.ta_object.student_id:
+            # loop through all Holds objects, compare against the
+            # student ID of the user
+            if (holds.ta.student_id == request.user.ta_object.student_id or
+                holds.ta.student_id is None):
                 holds_list = []
-                for hold in holds._meta.get_fields():
-                    holds_list.append(hold.name)
+                if holds.incomplete_profile:
+                    holds_list.append('incomplete_profile')
+                if holds.update_availability:
+                    holds_list.append('update_availability')
+                if holds.update_experience:
+                    holds_list.append('update_experience')
                 context['holds'] = holds_list
+
+        # get all labs a TA is assigned to
+        all_labs = Lab.objects.all()
+        labs_list = []
+        for lab in all_labs:
+            for ta in lab.assigned_tas.all():
+                if ta.student_id == request.user.ta_object.student_id:
+                    labs_list.append(lab)
+                context['labs'] = labs_list
+                print(labs_list)
         return render(request, 'teachingassistant/dashboard.html', context)
 
     # if they're not authenticated, take them to the login page
@@ -88,7 +106,6 @@ def ta_info(request):
         context = {
             'first_name': request.user.first_name,
         }
-        print(request.user.first_name)
 
         return render(request, 'teachingassistant/new_ta_success.html', context)
 

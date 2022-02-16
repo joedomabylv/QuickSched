@@ -1,6 +1,7 @@
 """Models relating to Lab Organizers."""
 from django.db import models
 from datetime import date
+from teachingassistant.models import TA
 
 
 class Semester(models.Model):
@@ -77,8 +78,9 @@ class Lab(models.Model):
     # change to list or something?
     time = models.CharField("Time", max_length=50)
 
-    # link to detect if a TA is assigned?
     staffed = models.BooleanField(default=False)
+
+    assigned_tas = models.ManyToManyField(TA, blank=True)
 
     semester = models.ForeignKey(
         'Semester',
