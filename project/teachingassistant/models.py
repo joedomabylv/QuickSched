@@ -122,15 +122,12 @@ class Holds(models.Model):
                                              default=True)
 
     # if the TA needs to update their availability
-    update_availability = models.BooleanField('Update availability!',
+    update_availability = models.BooleanField('Update availability',
                                               default=False)
 
     # if the TA needs to update their experience
-    update_experience = models.BooleanField('Update experience!',
+    update_experience = models.BooleanField('Update experience',
                                             default=False)
 
-    # if the TA has no holds
-    no_holds = models.BooleanField('No holds', default=False)
-
     # key to TA
-    ta = models.OneToOneField(TA, on_delete=models.CASCADE)
+    ta = models.OneToOneField(TA, on_delete=models.CASCADE, verbose_name='TA')

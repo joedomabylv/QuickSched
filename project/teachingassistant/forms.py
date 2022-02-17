@@ -22,9 +22,6 @@ class NewTAForm(forms.Form):
     student_id = forms.CharField(label='Student ID', max_length=50,
                                  widget=forms.TextInput(attrs=field_attributes))
 
-    # availability still needs to be configured to account for different days
-    # availability = models.ForeignKey(Availability, on_delete=models.CASCADE, blank=True, null=True)
-
     # experience needs to be configured to account for whatever
     # we want to display experience/relevant skills as
     experience = forms.CharField(label='Experience', max_length=100,

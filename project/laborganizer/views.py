@@ -6,21 +6,24 @@ from .models import Semester, Lab
 from django.contrib import messages
 
 
-def generate_semester_tuples():
-    """Generate a list of tuples to be presented as choices within the form."""
-    semesters = Semester.objects.all()
-    semester_list = []
-    for semester in semesters:
-        # key and value are the same for database representation
-        current_tuple = (semester.semester_time + '' + semester.year,
-                         semester.semester_time + '' + semester.year)
-        semester_list.append(current_tuple)
-    return semester_list
-
-
 def lo_home(request):
-    """Home route."""
-    return render(request, 'laborganizer/dashboard.html')
+    """Home route for the Lab Organizer dashboard."""
+    # temp access of all labs
+    labs = Lab.objects.all()
+    lab_total = len(labs)
+
+    # temp access of all TA's
+    tas = TA.objects.all()
+
+    # NOTE: In the future, we only want to send information into this view
+    #       relevant to the selected semester. This way, when an LO has 9000
+    #       TA's/labs, we're not scraping the whole database.
+    context = {
+        'labs': labs,
+        'lab_total': lab_total,
+        'tas': tas,
+    }
+    return render(request, 'laborganizer/dashboard.html', context)
 
 
 def lo_ta_management(request):

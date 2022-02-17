@@ -7,6 +7,7 @@ class TAAdmin(admin.ModelAdmin):
     """Admin configuration display."""
 
     list_display = ['__str__', 'contracted']
+    exclude = ['holds_key', 'availability_key']
 
 
 admin.site.register(TA, TAAdmin)

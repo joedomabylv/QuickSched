@@ -6,7 +6,6 @@
 	"first_name": "John",
 	"last_name": "Smith",
 	"student_id": "00001",
-	"email": "jsmith@nau.edu",
 	"contracted": true,
 	"experience": "N/A",
 	"year": "SR"
@@ -21,7 +20,6 @@
 	"first_name": "Zoe",
 	"last_name": "Timberlake",
 	"student_id": "443910",
-	"email": "ztimberlake@nau.edu",
 	"contracted": false,
 	"experience": "N/A",
 	"year": "FR"
@@ -35,7 +33,6 @@
 	"first_name": "Greg",
 	"last_name": "Davis",
 	"student_id": "93901",
-	"email": "gdavis@nau.edu",
 	"contracted": false,
 	"experience": "249",
 	"year": "JR"
@@ -49,7 +46,6 @@
 	"first_name": "Travis",
 	"last_name": "Young",
 	"student_id": "10394",
-	"email": "tyoung@nau.edu",
 	"contracted": false,
 	"experience": "465, 126, 136",
 	"year": "GR"
@@ -63,7 +59,6 @@
 	"first_name": "Vanessa",
 	"last_name": "Maxis",
 	"student_id": "000002",
-	"email": "vmaxis@nau.edu",
 	"contracted": true,
 	"experience": "212, 480",
 	"year": "SO"
@@ -87,8 +82,20 @@
 	"saturday_start": "12:00",
 	"saturday_end": "1:45",
 	"sunday_start": "6:00",
-	"sunday_end": "9:00"
+	"sunday_end": "9:00",
+	"ta": 100
     }
-}    
+},
+
+    {
+    "model": "teachingassistant.holds",
+    "pk": 1234,
+    "fields": {
+	"incomplete_profile": true,
+	"update_availability": false,
+	"update_experience": false,
+	"ta": 100
+    }
+}
     
 ]

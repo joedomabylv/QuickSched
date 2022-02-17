@@ -80,7 +80,8 @@ class Lab(models.Model):
 
     staffed = models.BooleanField(default=False)
 
-    assigned_tas = models.ManyToManyField(TA, blank=True)
+    assigned_ta = models.OneToOneField(TA, on_delete=models.DO_NOTHING,
+                                       null=True, blank=True)
 
     semester = models.ForeignKey(
         'Semester',

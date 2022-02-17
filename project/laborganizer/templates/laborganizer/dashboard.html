@@ -17,94 +17,77 @@
       <div class="list-group overflow-auto h-60 bg-white" style = "height:280px">
 
         <!--Example of a TA selection-->
+	{% if tas %}
+	{% for ta in tas %}
+	{% if ta.contracted %}
         <a class="list-group-item list-group-item-action d-flex py-3" aria-current="True">
 	  <div class="form-check">
 	    <!--*CODE* HTML value tag(for check box)-->
             <input class="form-check-input" type="checkbox" value="" id="TA_ID">
             <!--*CODE* TA's name-->
-            <label class="form-check-label" for="TA_ID">Alex</label>
+            <label class="form-check-label" for="TA_ID">{{ ta.first_name }} {{ ta.last_name }}</label>
 	  </div>
         </a>
-
-        <!--Examples for test scrollbar-->
-        <a class="list-group-item list-group-item-action d-flex py-3" aria-current="True">
-	  <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="TA_ID">
-            <label class="form-check-label" for="TA_ID">Masa</label>
-	  </div>
-        </a>
-        <a class="list-group-item list-group-item-action d-flex py-3" aria-current="True">
-	  <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="TA_ID">
-            <label class="form-check-label" for="TA_ID">Devin</label>
-	  </div>
-        </a>
-        <a class="list-group-item list-group-item-action d-flex py-3" aria-current="True">
-	  <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="TA_ID">
-            <label class="form-check-label" for="TA_ID">Bill</label>
-	  </div>
-        </a>
-        <a class="list-group-item list-group-item-action d-flex py-3" aria-current="True">
-	  <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="TA_ID">
-            <label class="form-check-label" for="TA_ID">June</label>
-	  </div>
-        </a>
-
+	{% endif %}
+	{% endfor %}
+	{% else %}
+	No Contracted TA's!
+	{% endif %}
         <!--end of contracted TAs-->
       </div>
 
       <div class="border bg-light"><h5>Uncontracted TAs</h5></div>
-      <div class="list-group overflow-auto h-60 bg-white" style = "height:280px">
+      <div class="list-group overflow-auto h-60 bg-white" style="height:280px">
 
         <!--Example of a TA selection-->
+	{% if tas %}
+	{% for ta in tas %}
+	{% if not ta.contracted %}
         <a class="list-group-item list-group-item-action d-flex py-3" aria-current="True">
 	  <div class="form-check">
 	    <!--*CODE* HTML value tag(for check box)-->
 	    <input class="form-check-input" type="checkbox" value="" id="TA_ID">
 	    <!--*CODE* TA's name-->
-	    <label class="form-check-label" for="TA_ID">Alex</label>
+	    <label class="form-check-label" for="TA_ID">{{ ta.first_name }} {{ ta.last_name }}</label>
 	  </div>
         </a>
-      </div>
+
+	{% endif %}
+	{% endfor %}
+	{% else %}
+	No Uncontracted TA's!
+	{% endif %}
+      </div>	
       <!--end of Uncontracted TAs-->
     </div>
 
     <!--Current Semester Labs-->
     <div class="vh-70 col-7">
-      <div class="border bg-light"><h5>Current Semester Labs</h5></div>
-      <div class="list-group overflow-auto h-60 bg-white" style = "height:400px">
-
-        <!--*CODE*a example of a lab-->
+      <div class="border bg-light"><h5>Current Semester Labs: {{ lab_total }}</h5></div>
+      <div class="list-group overflow-auto h-60 bg-white" style="height:400px">
+	{% if labs %}
+	{% for lab in labs %}
         <a class="list-group-item list-group-item-action d-flex justify-content-between gap-3 py-3" aria-current="True">
 	  <!--*CODE*labs infor-->
-	  <div class="text-center">CS 249-001 TuTh 12:45pm-1:35pm</div>
+	  <div class="text-center">{{ lab }}-{{ lab.section }} {{ lab.day }} {{ lab.time }}</div>
 	  <div class="btn-group" role="group" aria-label="Lab Operations">
             <!--*CODE*Name of TA button-->
-            <button type="button" class="btn btn-outline-secondary btn-sm" style = "width:180px"><div class= "d-flex justify-content-start">Sigmund Simon</div></button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" style="width:180px"><div class= "d-flex justify-content-start">
+		{% if lab.assigned_ta %}
+		{{ lab.assigned_ta }}
+		{% else %}
+		Unassigned
+		{% endif %}
+	    </div></button>
             <!--*CODE*Operation button-->
             <button type="button" class="btn btn-outline-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
 		<path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
 	    </svg></button>
 	  </div>
         </a>
-
-        <!--*CODE*a example of a lab-->
-        <a class="list-group-item list-group-item-action d-flex justify-content-between gap-3 py-3" aria-current="True">
-	  <!--*CODE*labs infor-->
-	  <div class="text-center">CS 444-001 MonWedFri 2:45pm-4:45pm</div>
-	  <div class="btn-group" role="group" aria-label="Lab Operations">
-            <!--*CODE*Name of TA button-->
-            <button type="button" class="btn btn-outline-secondary btn-sm" style = "width:180px"><div class= "d-flex justify-content-start">Alexandra Daddario</div></button>
-            <!--*CODE*Operation button-->
-            <button type="button" class="btn btn-outline-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
-		<path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
-	    </svg></button>
-	  </div>
-        </a>
-
+	{% endfor %}
       </div>
+      {% endif %}
 
       <div class="border bg-light mt-3"><h5>Change History</h5></div>
       <div class="list-group mx-0 overflow-auto h-60 bg-white" style = "height:150px">

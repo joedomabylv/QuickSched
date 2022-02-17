@@ -30,7 +30,7 @@ class CustomUserManager(BaseUserManager):
         holds_key = holds_object.id
         availability_key = availability_object.id
 
-        # attach those key values to the ta
+        # attach those key values to the TA
         new_ta.holds_key = holds_key
         new_ta.availability_key = availability_key
         new_ta.save()
