@@ -26,6 +26,14 @@ def lo_home(request):
     return render(request, 'laborganizer/dashboard.html', context)
 
 
+def lo_assign_ta(request):
+    """Handle requests to assign a TA to a lab."""
+    if request.method == 'POST':
+        print('got a post reqeust from lo_assign_ta')
+
+    return redirect('lo_home')
+
+
 def lo_ta_management(request):
     """TA Management route."""
     tas = TA.objects.all()

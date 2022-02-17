@@ -1,0 +1,41 @@
+<!--Current Semester Labs-->
+<div class="vh-70 col-7">
+    
+    <div class="border bg-light"><h5>Current Semester Labs: {{ lab_total }}</h5></div>
+    
+    <div class="list-group overflow-auto h-60 bg-white" style="height:400px">
+	{% if labs %}
+	{% for lab in labs %}
+	<form class="" action="/laborganizer/lo_assign_ta">
+        <a class="list-group-item list-group-item-action d-flex justify-content-between gap-3 py-3" aria-current="True">
+
+	    <!-- Lab Information -->
+	    <div class="text-center">{{ lab }}-{{ lab.section }} {{ lab.day }} {{ lab.time }}</div>
+
+	    <div class="btn-group" role="group" aria-label="Lab Operations">
+		
+		<!-- Name of TA button -->
+		<button type="button" class="btn btn-outline-secondary btn-sm" style="width:180px">
+		    <div class= "d-flex justify-content-start">
+		    {% if lab.assigned_ta %}
+		    {{ lab.assigned_ta }}
+		    {% else %}
+		    Unassigned
+		    {% endif %}
+		    </div>
+		</button>
+
+		<!-- Operation button -->
+		<input type="submit" class="btn btn-outline-secondary btn-sm">
+		    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
+			<path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+		    </svg>
+		</input>
+		
+	    </div>
+        </a>
+	{% endfor %}
+	</form>
+
+	{% endif %}	
+    </div>
