@@ -29,7 +29,7 @@ def lo_home(request):
 def lo_assign_ta(request):
     """Handle requests to assign a TA to a lab."""
     if request.method == 'POST':
-        print('got a post reqeust from lo_assign_ta')
+        print('got a post request from lo_assign_ta')
 
     return redirect('lo_home')
 
@@ -37,6 +37,10 @@ def lo_assign_ta(request):
 def lo_ta_management(request):
     """TA Management route."""
     tas = TA.objects.all()
+    # TEMP, DELETE THIS BLOCK. TESTING SCORE FUNCTIONALITY.
+    # joe_ta = TA.objects.get(first_name='Joe')
+    # joe_ta.add_score('CS249', '5')
+    # END BLOCK
     context = {
         'tas': tas,
         }

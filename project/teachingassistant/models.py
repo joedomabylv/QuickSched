@@ -22,6 +22,61 @@ class TA(models.Model):
         human_readable_name += 'TA ' + self.first_name + ' ' + self.last_name
         return human_readable_name
 
+    def score_in_list(self, catalog_id):
+        """
+        Check if a score for a lab already exists in the list.
+
+        If found, return the index. If not, return -1.
+        """
+        # split the list by comma delimiter
+        score_list = self.scores.split(',')
+        index = 0
+
+        # loop through score list
+        while index < len(score_list):
+            # get the catalog id of the current index
+            current_catalog_id = score_list[index].split(':')[0]
+            # check if it matches the 'new' catalog id
+            if current_catalog_id == catalog_id:
+                # if found, return the index
+                return index
+            index += 1
+        return -1
+
+    def add_score(self, catalog_id, score):
+        """Add a new optimization score to a TA."""
+        # split the current scores list
+        current_score_list = self.scores.split(',')
+
+        # check if this score is the first score being added
+        if current_score_list[0] == '':
+            new_score = catalog_id + ':' + score
+            self.scores = new_score
+
+        # if not, check if the lab score already exists in the list
+        elif self.score_in_list(catalog_id) != -1:
+            # if it exists, overwrite the existing score
+            found_index = self.score_in_list(catalog_id)
+            current_score_list[found_index] = ',' + catalog_id + ':' + score
+            new_score_list = ''.join(current_score_list)
+            print(current_score_list)
+            self.scores = new_score_list
+        # score is for a new lab, append it to the list
+        else:
+            new_score = ',' + catalog_id + ':' + score
+            self.scores += new_score
+
+        # save the new changes
+        self.save()
+
+    def remove_score(self, catalog_id, score):
+        """Remove an optimization score for a TA."""
+        pass
+
+    def get_score(self, catalog_id):
+        """Get an optimization score for a TA."""
+        pass
+
     # define choice variable
     YEAR = (
         ('FR', 'Freshman'),
@@ -54,6 +109,9 @@ class TA(models.Model):
 
     availability_key = models.IntegerField('Primary Availability key',
                                            blank=True, null=True, unique=True)
+
+    scores = models.TextField('TA\'s optimization scores', default='',
+                              null=True, blank=True)
 
 
 class Availability(models.Model):

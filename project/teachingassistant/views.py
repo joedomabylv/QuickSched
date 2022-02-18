@@ -31,11 +31,9 @@ def ta_home(request):
         all_labs = Lab.objects.all()
         labs_list = []
         for lab in all_labs:
-            for ta in lab.assigned_tas.all():
-                if ta.student_id == request.user.ta_object.student_id:
-                    labs_list.append(lab)
-                context['labs'] = labs_list
-                print(labs_list)
+            if lab.assigned_ta == request.user.ta_object:
+                labs_list.append(lab)
+            context['labs'] = labs_list
         return render(request, 'teachingassistant/dashboard.html', context)
 
     # if they're not authenticated, take them to the login page
