@@ -1,7 +1,7 @@
 """View management for LabOrganizer app. 'lo' prefix = lab organizer."""
 from django.shortcuts import render, redirect
 from .forms import NewSemesterForm
-from teachingassistant.models import TA
+from teachingassistant.models import TA, ScorePair
 from .models import Semester, Lab
 from django.contrib import messages
 
@@ -37,10 +37,6 @@ def lo_assign_ta(request):
 def lo_ta_management(request):
     """TA Management route."""
     tas = TA.objects.all()
-    # TEMP, DELETE THIS BLOCK. TESTING SCORE FUNCTIONALITY.
-    # joe_ta = TA.objects.get(first_name='Joe')
-    # joe_ta.add_score('CS249', '5')
-    # END BLOCK
     context = {
         'tas': tas,
         }
