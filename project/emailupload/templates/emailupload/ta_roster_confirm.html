@@ -1,0 +1,39 @@
+
+{% extends 'emailupload/base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>QuickSched: Add New TA's</title>
+    </head>
+  <body>
+
+    {% block content %}
+    <h1>Are you sure you want to update the roster for these TA's?</h1>
+
+    <h2>New Accounts</h2>
+        {% block NewTAlist %}
+            {% for account in new_accounts %}
+                <tr>
+                  <td>{{ account }}</td>
+                </tr>
+            {% endfor %}
+        {% endblock %}
+
+    <h2>Returning Accounts</h2>
+        {% block OldTAlist %}
+            {% for account in returning_accounts %}
+                <tr>
+                  <td>{{ account }}</td>
+                </tr>
+            {% endfor %}
+        {% endblock %}
+
+    <a href="{% url 'eu_upload' %}">Cancel</a>
+    {% endblock %}
+
+
+    </body>
+  </html>

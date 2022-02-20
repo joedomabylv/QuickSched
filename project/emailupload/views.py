@@ -7,6 +7,9 @@ from django.contrib.auth import get_user_model
 from django.core.validators import validate_email
 from django.core.mail import EmailMessage, send_mail
 from quicksched import settings
+from django.contrib import messages
+from django.core.validators import validate_email
+from django.forms import ValidationError
 import csv
 import os
 
@@ -18,6 +21,11 @@ def eu_upload(request):
         # Snatch the uploaded document [NEED TO HAVE NGINX DO FILE HANDLING UPON DEPLOYMENT]
         uploaded_file = request.FILES['document']
         fs = FileSystemStorage()
+
+        if not uploaded_file.name.endswith('.csv'):
+
+            messages.error(request, 'This file is not a CSV!')
+            return render(request, 'emailupload/ta_add.html')
 
         # Checks if there is an existing list of emails, then grabs the name
         old_emails_name=""
@@ -60,40 +68,58 @@ def eu_upload(request):
             for row in new_file_reader:
                 new_accounts = new_accounts + row
 
-        # Generate passwords for new emails
+        # Check for validity of new accounts
         for account in new_accounts:
-            passwords.append(get_random_string(12))
+            try:
+                validate_email(account)
+            except ValidationError:
+                messages.error(request, account + ' is not a valid email for this roster!')
+                return render(request, 'emailupload/ta_add.html')
 
-        # loop through the list of emails and passwords
-        index = 0
-        while index < len(new_accounts):
-            username = new_accounts[index]
-            temp_pass = passwords[index]
-            print(f'{new_accounts[index]}:{passwords[index]}')
-            get_user_model().objects.create_user(username, temp_pass)
-            index += 1
+        context = {'new_accounts': new_accounts,
+                   'returning_accounts': returning_accounts,
+                   'old_file': old_emails_name,
+                   'new_file': uploaded_file.name
+                   }
 
-        # Welcome Email
-        if len(new_accounts) > 0:
-            welcome_subject = "Welcome to Quicksched- Django Login!!"
-            welcome_message = "Hello!! \n Welcome to Quicksched!!\nYour Account has successfully been created. \
-            \n\n To finish your registration, please use your email and temporary password down below to login.\n \
-            You will be prompted to change it upon your login.\n\n Temporary Password: " + temp_pass
-            from_email = settings.EMAIL_HOST_USER
-            send_mail(welcome_subject, welcome_message, from_email, new_accounts, fail_silently=True)
-
-        if len(returning_accounts) > 0:
-            welcome_subject = "Welcome to back to Quicksched!!"
-            welcome_message = "Hello!\n This email is here to let you know that your email has been registered back in the system.\n\
-            Please sign in and update your schedule and other information about your availability and qualifications."
-            from_email = settings.EMAIL_HOST_USER
-            send_mail(welcome_subject, welcome_message, from_email, returning_accounts, fail_silently=True)
-
-        print("new accounts: " + str(new_accounts))
-        print("returning accounts: " + str(returning_accounts))
-
-        # delete the list of old emails
-        if existing_emails:
-            default_storage.delete(os.path.join('', old_emails_name))
+        return render(request, 'emailupload/ta_roster_confirm.html', context)
 
     return render(request, 'emailupload/ta_add.html')
+
+def cancel_roster(request, filename):
+    default_storage.delete(os.path.join('', filename))
+    return render(request, 'emailupload/ta_add.html')
+
+def confirm_emails(request, new_accounts, returning_accounts, old_emails_name):
+    # Generate passwords for new emails                                                                                           #
+    for account in new_accounts:                                                                                                  #
+        passwords.append(get_random_string(12))                                                                                   #
+                                                                                                                                    #
+    # loop through the list of emails and passwords                                                                               #
+    index = 0                                                                                                                     #
+    while index < len(new_accounts):                                                                                              #
+        username = new_accounts[index]                                                                                            #
+        temp_pass = passwords[index]                                                                                              #
+        print(f'{new_accounts[index]}:{passwords[index]}')                                                                        #
+        get_user_model().objects.create_user(username, temp_pass)                                                                 #
+        index += 1                                                                                                                #
+                                                                                                                                    #
+    # Welcome Email                                                                                                               #
+    if len(new_accounts) > 0:                                                                                                     #
+        welcome_subject = "Welcome to Quicksched- Django Login!!"                                                                 #
+        welcome_message = "Hello!! \n Welcome to Quicksched!!\nYour Account has successfully been created. \                      #
+        \n\n To finish your registration, please use your email and temporary password down below to login.\n \                   #
+        You will be prompted to change it upon your login.\n\n Temporary Password: " + temp_pass                                  #
+        from_email = settings.EMAIL_HOST_USER                                                                                     #
+        send_mail(welcome_subject, welcome_message, from_email, new_accounts, fail_silently=True)                                 #
+                                                                                                                                    #
+    if len(returning_accounts) > 0:                                                                                               #
+        welcome_subject = "Welcome to back to Quicksched!!"                                                                       #
+        welcome_message = "Hello!\n This email is here to let you know that your email has been registered back in the system.\n\ #
+        Please sign in and update your schedule and other information about your availability and qualifications."                #
+        from_email = settings.EMAIL_HOST_USER                                                                                     #
+        send_mail(welcome_subject, welcome_message, from_email, returning_accounts, fail_silently=True)                           #
+                                                                                                                                    #
+    # delete the list of old emails                                                                                               #
+    if existing_emails:                                                                                                           #
+        default_storage.delete(os.path.join('', old_emails_name))                                                                 #
