@@ -8,4 +8,6 @@ from django.conf.urls.static import static
 urlpatterns = [
     # 'eu' prefix = email_upload
     path('', views.eu_upload, name='eu_upload'),
+    path('cancel_roster', views.cancel_roster, name='cancel_roster'),
+    path('confirm_emails', views.confirm_emails, name='confirm_emails'),
 ]

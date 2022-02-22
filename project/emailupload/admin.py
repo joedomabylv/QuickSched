@@ -1,3 +1,5 @@
+"""Admin information for emailupload app."""
 from django.contrib import admin
+from .models import EmailInformation
 
-# Register your models here.
+admin.site.register(EmailInformation)

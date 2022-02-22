@@ -1,26 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>QuickSched: Add New TA's</title>
-    </head>
-  <body>
-    
-    <h1>Upload email file</h1>
+{% extends 'emailupload/base.html' %}
+{% block title %}QuickSched: TA{% endblock %}
+{% load static %}
 
-    {% block content %}
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %}
-      <input type="file" name="document">
-      <button type="submit">Upload CSV File</button>
-      </form>
-    <a href="{% url 'lo_home' %}">Go Back</a>
+{% block content %}
 
-    {% endblock %}
-    
-    <a href="{% url 'lo_home' %}">Go Home</a>
+<h1>Upload email roster file</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input class="form-control" type="file" name="document">
+    <button class="m-4 btn btn-primary" type="submit">Upload CSV File</button>
+</form>
+<a class="btn btn-secondary" href="{% url 'lo_ta_management' %}">Go Back</a>
+<a class="btn btn-secondary" href="{% url 'lo_home' %}">Go Home</a>
 
-    </body>
-  </html>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'emailupload/base.html' %}
+{% block title %}QuickSched: Confirm{% endblock %}
+{% load static %}
+
+{% block content %}
+<h1>Are you sure you want to update the roster for these TA's?</h1>
+
+{% if new_accounts %}
+<h2>New Accounts</h2>
+<ul class="list-group">
+    {% for account in new_accounts %}
+    <li class="list-group-item">{{ account }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if returning_accounts %}
+<h2>Returning Accounts</h2>
+<ul class="list-group">
+    {% for account in returning_accounts %}
+    <li class="list-group-item">{{ account }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<a class="btn btn-primary" href="{% url 'confirm_emails' %}">Confirm</a>
+<a class="btn btn-primary" href="{% url 'cancel_roster' %}">Cancel</a>
+
+{% endblock %}
