@@ -152,15 +152,22 @@ def confirm_emails(request):
         get_user_model().objects.create_user(email, temp_pass)
         index += 1
 
+    messages = []
+
     # welcome email
+    index = 0
     if len(new_accounts) > 0:
-        welcome_subject = "Welcome to QuickSched! - Django Login"
-        welcome_message = """Hello! \n Welcome to Quicksched!\nYour Account has successfully been created.
-        \n\n To finish your registration, please use your email and temporary password down below to login.
-        You will be prompted to change it upon your login.\n\n Temporary Password: """ + temp_pass
-        from_email = settings.EMAIL_HOST_USER
-        send_mail(welcome_subject, welcome_message, from_email,
-                  new_accounts, fail_silently=True)
+        while index < len(new_accounts):
+            to_email = new_accounts[index]
+            temp_pass = passwords[index]
+            welcome_subject = "Welcome to QuickSched! - Django Login"
+            welcome_message = """Hello! \n Welcome to Quicksched!\nYour Account has successfully been created.
+            \n\n To finish your registration, please use your email and temporary password down below to login.
+            You will be prompted to change it upon your login.\n\n Temporary Password: """ + temp_pass
+            from_email = settings.EMAIL_HOST_USER
+            messages.append((welcome_subject, welcome_message, from_email, [to_email]))
+            index += 1
+        send_mass_mail(tuple(messages), fail_silently=True)
 
     # returning email
     if len(returning_accounts) > 0:
