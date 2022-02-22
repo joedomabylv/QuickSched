@@ -1,39 +1,29 @@
-
 {% extends 'emailupload/base.html' %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>QuickSched: Add New TA's</title>
-    </head>
-  <body>
+{% block title %}QuickSched: Confirm{% endblock %}
+{% load static %}
 
-    {% block content %}
-    <h1>Are you sure you want to update the roster for these TA's?</h1>
+{% block content %}
+<h1>Are you sure you want to update the roster for these TA's?</h1>
 
-    <h2>New Accounts</h2>
-        {% block NewTAlist %}
-            {% for account in new_accounts %}
-                <tr>
-                  <td>{{ account }}</td>
-                </tr>
-            {% endfor %}
-        {% endblock %}
+{% if new_accounts %}
+<h2>New Accounts</h2>
+<ul class="list-group">
+    {% for account in new_accounts %}
+    <li class="list-group-item">{{ account }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 
-    <h2>Returning Accounts</h2>
-        {% block OldTAlist %}
-            {% for account in returning_accounts %}
-                <tr>
-                  <td>{{ account }}</td>
-                </tr>
-            {% endfor %}
-        {% endblock %}
+{% if returning_accounts %}
+<h2>Returning Accounts</h2>
+<ul class="list-group">
+    {% for account in returning_accounts %}
+    <li class="list-group-item">{{ account }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 
-    <a href="{% url 'eu_upload' %}">Cancel</a>
-    {% endblock %}
+<a class="btn btn-primary" href="{% url 'confirm_emails' %}">Confirm</a>
+<a class="btn btn-primary" href="{% url 'cancel_roster' %}">Cancel</a>
 
-
-    </body>
-  </html>
+{% endblock %}

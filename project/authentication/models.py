@@ -2,6 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from teachingassistant.models import TA, Holds, Availability
+from emailupload.models import EmailInformation
 
 
 class CustomUserManager(BaseUserManager):
@@ -54,6 +55,10 @@ class CustomUserManager(BaseUserManager):
         user.is_admin = True
         user.is_staff = True
         user.is_superuser = True
+
+        # create empty EmailInformation object
+        new_email_info = EmailInformation.objects.create()
+        new_email_info.save()
 
         # save to application database
         user.save(using=self._db)

@@ -8,6 +8,7 @@ from django.core.mail import send_mail
 from quicksched import settings
 from django.contrib import messages
 from django.forms import ValidationError
+from .models import EmailInformation
 import csv
 import os
 
@@ -83,21 +84,30 @@ def eu_upload(request):
                 new_accounts = new_accounts + row
 
         # Check for validity of new accounts
-        for account in new_accounts:
-            # try to validate
-            try:
-                validate_email(account)
-            except ValidationError:
-                # TODO: get ALL invalid emails, not just one
-                messages.error(request, account + ' is not a valid email for this roster!')
-                return render(request, 'emailupload/ta_add.html')
+        # for account in new_accounts:
+        #     # try to validate
+        #     try:
+        #         validate_email(account)
+        #     except ValidationError:
+        #         # TODO: get and display ALL invalid emails, not just one
+        #         messages.error(request, account + ' is not a valid email for this roster!')
+        #         return render(request, 'emailupload/ta_add.html')
+
+        # delete the list of old emails
+        if existing_emails:
+            default_storage.delete(os.path.join('', old_emails_name))
+
+        # set email information block
+        set_email_info(new_accounts, returning_accounts,
+                       existing_emails, old_emails_name)
 
         # generate context variable for view
-        context = {'new_accounts': new_accounts,
-                   'returning_accounts': returning_accounts,
-                   'old_file': old_emails_name,
-                   'new_file': uploaded_file.name
-                   }
+        context = {
+            'new_accounts': new_accounts,
+            'returning_accounts': returning_accounts,
+            'old_file': old_emails_name,
+            'new_file': uploaded_file.name
+        }
 
         # direct the user to the confirmation page
         return render(request, 'emailupload/ta_roster_confirm.html', context)
@@ -106,14 +116,53 @@ def eu_upload(request):
     return render(request, 'emailupload/ta_add.html')
 
 
-def cancel_roster(request, filename):
+def set_email_info(new_accounts, returning_accounts,
+                   existing_emails, old_emails_name):
+    """Set/initialize the Email Information object."""
+    # grab the email information object
+    email_info = EmailInformation.objects.all()[0]
+
+    # wipe the email information object
+    email_info.clear_all_fields()
+
+    # set email information object status
+    if len(new_accounts) > 0:
+        email_info.set_new_accounts(new_accounts)
+        print(email_info.get_new_accounts())
+
+    if len(returning_accounts) > 0:
+        email_info.set_returning_accounts(returning_accounts)
+        print(email_info.get_returning_accounts())
+
+    if existing_emails:
+        email_info.old_email_file_name = old_emails_name
+
+    # save email information object to database
+    email_info.save()
+
+
+def cancel_roster(request):
     """Cancel the file upload of new emails."""
-    default_storage.delete(os.path.join('', filename))
+    # default_storage.delete(os.path.join('', filename))
+    email_info = EmailInformation.objects.all()[0]
+
+    # i dont know why but new_accounts always has an empty string
+    # as the first entry. in response, i splice
+    new_accounts = email_info.get_new_accounts()[1:]
+    returning_accounts = email_info.get_returning_accounts()
+    print(new_accounts)
+    print(returning_accounts)
     return render(request, 'emailupload/ta_add.html')
 
 
-def confirm_emails(request, new_accounts, returning_accounts, old_emails_name):
+# def confirm_emails(request, new_accounts, returning_accounts, old_emails_name):
+def confirm_emails(request):
     """Confirm the emails in all accounts, new or returning."""
+    # get email information
+    email_info = EmailInformation.objects.all()[0]
+    new_accounts = email_info.get_new_accounts()[1:]
+    returning_accounts = email_info.get_returning_accounts()
+
     # generate passwords for new emails
     passwords = []
     for account in new_accounts:
@@ -122,10 +171,10 @@ def confirm_emails(request, new_accounts, returning_accounts, old_emails_name):
     # loop through the list of emails and passwords
     index = 0
     while index < len(new_accounts):
-        username = new_accounts[index]
+        email = new_accounts[index]
         temp_pass = passwords[index]
         print(f'{new_accounts[index]}:{passwords[index]}')
-        get_user_model().objects.create_user(username, temp_pass)
+        get_user_model().objects.create_user(email, temp_pass)
         index += 1
 
     # welcome email
@@ -146,7 +195,3 @@ def confirm_emails(request, new_accounts, returning_accounts, old_emails_name):
         from_email = settings.EMAIL_HOST_USER
         send_mail(welcome_subject, welcome_message, from_email,
                   returning_accounts, fail_silently=True)
-
-    # # delete the list of old emails
-    # if existing_emails:
-    #     default_storage.delete(os.path.join('', old_emails_name))
