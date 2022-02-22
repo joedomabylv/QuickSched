@@ -4,32 +4,52 @@
 
 {% block content %}
 
-<!-- Custom CSS -->
-<link href="{% static 'authentication/sign_in.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'authentication/sign_in.css' %}" />
 
 <main class="form-signin">
-  <form method="post" action="/sign_in">
-    
-    {% csrf_token %}
-    
-    <img class="mb-4" src="{% static 'authentication/Magisters.svg' %}" alt="notfound" width="72" height="57">
-    <h1 class="h3 mb-3 fw-normal">QuickSched</h1>
-    <h5 class="h5 mb-3 fw-normal">Please sign in</h5>
+    <form method="post" action="/sign_in">
 
-    <div class="form-floating">
-      <input type="email" class="form-control" id="floatingInput" name="email" placeholder="name@example.com">
-      <label for="floatingInput">Email address</label>
-    </div>
-    
-    <div class="form-floating">
-      <input type="password" class="form-control" id="floatingPassword" name="pass1" placeholder="Password">
-      <label for="floatingPassword">Password</label>
-    </div>
+	{% csrf_token %}
+	
+        <img
+            class="mb-4"
+            src="{% static 'global/Magisters.svg' %}"
+            alt=""
+            width="150"
+            height="150"
+        />
 
-    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-    <p class="mt-5 mb-3 text-muted">ver 0.01</p>
-    
-  </form>
+        <h1 class="h3 mb-3 fw-normal">QuickSched</h1>
+        <h5 class="h5 mb-3 fw-normal">Please sign in</h5>
+
+        <div class="form-floating">
+            <input
+		type="email"
+		name="email"
+		class="form-control"
+		id="floatingInput"
+		placeholder="name@example.com"
+            />
+            <label for="floatingInput">Email address</label>
+        </div>
+
+        <div class="form-floating">
+            <input
+		type="password"
+		name="pass1"
+		class="form-control"
+		id="floatingPassword"
+		placeholder="Password"
+            />
+            <label for="floatingPassword">Password</label>
+        </div>
+
+        <button class="w-100 btn btn-lg btn-primary" type="submit">
+            Sign in
+        </button>
+        <p class="mt-5 mb-3 text-muted">ver 0.9</p>
+
+    </form>
 </main>
 
 {% endblock %}

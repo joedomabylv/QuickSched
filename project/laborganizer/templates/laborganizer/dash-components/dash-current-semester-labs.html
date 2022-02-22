@@ -1,41 +1,200 @@
-<!--Current Semester Labs-->
-<div class="vh-70 col-7">
-    
-    <div class="border bg-light"><h5>Current Semester Labs: {{ lab_total }}</h5></div>
-    
-    <div class="list-group overflow-auto h-60 bg-white" style="height:400px">
-	{% if labs %}
-	{% for lab in labs %}
-	<form class="" action="/laborganizer/lo_assign_ta">
-        <a class="list-group-item list-group-item-action d-flex justify-content-between gap-3 py-3" aria-current="True">
+<!--Labs section-->
+<div class="col d-flex flex-column flex-shrink-0 bg-light">
 
-	    <!-- Lab Information -->
-	    <div class="text-center">{{ lab }}-{{ lab.section }} {{ lab.day }} {{ lab.time }}</div>
+    <!--Vertical Tool bar-->
+    <div
+        class="m-0 p-0 bg-white d-flex justify-content-between align-items-center border-bottom w-100"
+        style="min-height: 72px"
+    >
 
-	    <div class="btn-group" role="group" aria-label="Lab Operations">
-		
-		<!-- Name of TA button -->
-		<button type="button" class="btn btn-outline-secondary btn-sm" style="width:180px">
-		    <div class= "d-flex justify-content-start">
-		    {% if lab.assigned_ta %}
-		    {{ lab.assigned_ta }}
-		    {% else %}
-		    Unassigned
-		    {% endif %}
-		    </div>
-		</button>
+        <!--Left Side Tools-->
 
-		<!-- Operation button -->
-		<input type="submit" class="btn btn-outline-secondary btn-sm">
-		    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
-			<path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+        <!--Sort from low to high button-->
+        <div class="d-flex flex-row">
+	    <div class="h-100 mx-1 d-inline-block d-flex">
+		<button
+		    class="btn btn-vtools"
+			   type="button"
+			   id="dropdownSortDown"
+			   data-bs-toggle="dropdown"
+			   aria-expanded="false"
+			   data-bs-placement="left"
+			   title="Sort A-Z 1-9"
+		>
+		    <svg class="bi" width="16" height="16">
+			<use xlink:href="#sort-alpha-down"></use>
 		    </svg>
-		</input>
-		
+		</button>
+		<!--Sort Drop down menue-->
+		<ul class="dropdown-menu" aria-labelledby="dropdownSortDown">
+		    <li><a class="dropdown-item" href="#">Index</a></li>
+		    <li><a class="dropdown-item" href="#">Subject</a></li>
+		    <li><a class="dropdown-item" href="#">Cat Nbr</a></li>
+		    <li><a class="dropdown-item" href="#">Class Nbr</a></li>
+		    <li><a class="dropdown-item" href="#">Class Nbr</a></li>
+		    <li><a class="dropdown-item" href="#">End Time</a></li>
+		    <li><a class="dropdown-item" href="#">Days</a></li>
+		    <li><a class="dropdown-item" href="#">Instrucior</a></li>
+		    <li><a class="dropdown-item" href="#">Assigned GTA</a></li>
+		</ul>
 	    </div>
-        </a>
-	{% endfor %}
-	</form>
 
-	{% endif %}	
+	    <!--Sorf from high to low button-->
+	    <div class="h-100 mx-1 d-inline-block d-flex">
+		<button
+		    class="btn btn-vtools"
+			   type="button"
+			   id="dropdownSortUp"
+			   data-bs-toggle="dropdown"
+			   aria-expanded="false"
+			   data-bs-placement="left"
+			   title="Sort Z-A 9-1"
+		>
+		    <svg class="bi" width="16" height="16">
+			<use xlink:href="#sort-alpha-up"></use>
+		    </svg>
+		</button>
+		<!--Sort Drop down menue-->
+		<ul class="dropdown-menu" aria-labelledby="dropdownSortUp">
+		    <li><a class="dropdown-item" href="#">Index</a></li>
+		    <li><a class="dropdown-item" href="#">Subject</a></li>
+		    <li><a class="dropdown-item" href="#">Cat Nbr</a></li>
+		    <li><a class="dropdown-item" href="#">Class Nbr</a></li>
+		    <li><a class="dropdown-item" href="#">Class Nbr</a></li>
+		    <li><a class="dropdown-item" href="#">End Time</a></li>
+		    <li><a class="dropdown-item" href="#">Days</a></li>
+		    <li><a class="dropdown-item" href="#">Instrucior</a></li>
+		    <li><a class="dropdown-item" href="#">Assigned GTA</a></li>
+		</ul>
+	    </div>
+        </div>
+
+        <!--Lab Title-->
+        <div class="d-flex flex-row">
+	    <span class="fs-5 ms-5 px-1">&ltSEMESTER TIME&gt</span>
+	    <span class="fs-5 px-1">&ltYEAR&gt</span>
+	    <span class="fs-5 px-1">Labs</span>
+        </div>
+
+        <!--Right Side tools-->
+        <div class="d-flex flex-row px-2">
+	    <!--Rencent Semesters selector-->
+	    <!--Display a short selections of 5 most recnet semesters-->
+	    <button
+		class="btn btn-vtools"
+		type="button"
+		id="dropdownSemester"
+		data-bs-toggle="dropdown"
+		aria-expanded="false"
+		data-bs-placement="left"
+		title="Recent semesters"
+	    >
+		<svg class="bi" width="16" height="16">
+		    <use xlink:href="#semester"></use>
+		</svg>
+	    </button>
+	    <!--Semeter Drop down menu-->
+	    <ul class="dropdown-menu" aria-labelledby="dropdownSemester">
+		<li><a class="dropdown-item" href="#">2022 Summer</a></li>
+		<li><a class="dropdown-item" href="#">2022 Fall</a></li>
+		<li><a class="dropdown-item" href="#">2021 Winer</a></li>
+		<li><a class="dropdown-item" href="#">2021 Fall</a></li>
+		<li><a class="dropdown-item" href="#">2021 Summer</a></li>
+	    </ul>
+
+	    <!--Filter-->
+	    <form class="container-fluid">
+		<div class="input-group">
+		    <span class="input-group-text bg-white">
+			<svg class="bi" width="16" height="16">
+			    <use xlink:href="#filter"></use>
+			</svg>
+		    </span>
+		    <input
+			class="form-control me-2"
+			type="search"
+			placeholder="Type to filter..."
+			aria-label="filter"
+		    />
+		</div>
+	    </form>
+        </div>
     </div>
+
+    <!--Table of Lab list-->
+    <div class="overflow-auto">
+        <table
+	    class="table table-hover table-bordered text-center align-middle overflow-auto"
+        >
+	    <thead>
+		<tr>
+		    <!--Table headers-->
+		    <th scope="col">#</th>
+		    <th scope="col">Subject</th>
+		    <th scope="col">Cat Nbr</th>
+		    <th scope="col">Section</th>
+		    <th scope="col">Class Nbr</th>
+		    <th scope="col">Start time</th>
+		    <th scope="col">End Time</th>
+		    <th scope="col">Days</th>
+		    <th scope="col">Instrucior</th>
+		    <th scope="col">Assigned GTA</th>
+		    <th scope="col">Switch</th>
+		</tr>
+	    </thead>
+	    {% if labs %}
+	    <tbody>
+		{% for lab in labs %}
+		<tr>
+		    <!--Table rows-->
+		    <th scope="row">1</th>
+		    <td>{{ lab.catalog_id }}</td>
+		    <td>122L</td>
+		    <td>{{ lab.section }}</td>
+		    <td>{{ lab.course_id }}</td>
+		    <td>10:20:00 AM</td>
+		    <td>12:20:00 PM</td>
+		    <td>{{ lab.day }}</td>
+		    <td>{{ lab.instructor }}</td>
+		    <td>
+			<!--More info button-->
+			<div class="d-grid">
+			    <button
+				type="button"
+				class="btn btn-outline-dark border-0"
+				data-bs-toggle="popover"
+				data-bs-placement="left"
+				title="Email: lol@lol.com"
+				data-bs-content="Score: 20"
+			    >
+				{{ lab.assigned_ta }}
+			    </button>
+			</div>
+		    </td>
+		    <td>
+			<!--Run switch button-->
+			<div class="d-grid">
+			    <button
+				type="button"
+				class="btn btn-outline-dark border-0"
+				type="button"
+				class="btn btn-outline-dark border-0"
+				data-bs-toggle="offcanvas"
+				data-bs-target="#offcanvasOperations"
+				aria-controls="offcanvasOperations"
+			    >
+				<svg class="bi" width="16" height="16">
+				    <use xlink:href="#operation"></use>
+				</svg>
+			    </button>
+			</div>
+		    </td>
+		</tr>
+		{% endfor %}
+
+	    </tbody>
+	    {% endif %}
+        </table>
+
+    </div>
+</div>

@@ -1,0 +1,35 @@
+{% extends 'authentication/base.html' %}
+{% block title %}QuickSched: Sign In{% endblock %}
+{% load static %}
+
+{% block content %}
+
+<!-- Custom CSS -->
+<link href="{% static 'authentication/sign_in.css' %}" rel="stylesheet">
+
+<main class="form-signin">
+  <form method="post" action="/sign_in">
+    
+    {% csrf_token %}
+    
+    <img class="mb-4" src="{% static 'authentication/Magisters.svg' %}" alt="notfound" width="72" height="57">
+    <h1 class="h3 mb-3 fw-normal">QuickSched</h1>
+    <h5 class="h5 mb-3 fw-normal">Please sign in</h5>
+
+    <div class="form-floating">
+      <input type="email" class="form-control" id="floatingInput" name="email" placeholder="name@example.com">
+      <label for="floatingInput">Email address</label>
+    </div>
+    
+    <div class="form-floating">
+      <input type="password" class="form-control" id="floatingPassword" name="pass1" placeholder="Password">
+      <label for="floatingPassword">Password</label>
+    </div>
+
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+    <p class="mt-5 mb-3 text-muted">ver 0.01</p>
+    
+  </form>
+</main>
+
+{% endblock %}
