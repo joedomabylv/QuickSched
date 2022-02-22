@@ -1,5 +1,5 @@
 """View management for EmailUpload app. 'eu' prefix = email upload."""
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.files.storage import FileSystemStorage, default_storage
 from django.utils.crypto import get_random_string
 from django.contrib.auth import get_user_model
@@ -84,14 +84,14 @@ def eu_upload(request):
                 new_accounts = new_accounts + row
 
         # Check for validity of new accounts
-        # for account in new_accounts:
-        #     # try to validate
-        #     try:
-        #         validate_email(account)
-        #     except ValidationError:
-        #         # TODO: get and display ALL invalid emails, not just one
-        #         messages.error(request, account + ' is not a valid email for this roster!')
-        #         return render(request, 'emailupload/ta_add.html')
+        for account in new_accounts:
+            # try to validate
+            try:
+                validate_email(account)
+            except ValidationError:
+                # TODO: get and display ALL invalid emails, not just one
+                messages.error(request, account + ' is not a valid email for this roster!')
+                return redirect('laborganizer/ta_add')
 
         # delete the list of old emails
         if existing_emails:
@@ -152,7 +152,7 @@ def cancel_roster(request):
     returning_accounts = email_info.get_returning_accounts()
     print(new_accounts)
     print(returning_accounts)
-    return render(request, 'emailupload/ta_add.html')
+    return redirect('laborganizer/ta_add')
 
 
 # def confirm_emails(request, new_accounts, returning_accounts, old_emails_name):
@@ -160,7 +160,8 @@ def confirm_emails(request):
     """Confirm the emails in all accounts, new or returning."""
     # get email information
     email_info = EmailInformation.objects.all()[0]
-    new_accounts = email_info.get_new_accounts()[1:]
+    new_accounts = email_info.get_new_accounts()
+    print(new_accounts)
     returning_accounts = email_info.get_returning_accounts()
 
     # generate passwords for new emails
@@ -195,3 +196,6 @@ def confirm_emails(request):
         from_email = settings.EMAIL_HOST_USER
         send_mail(welcome_subject, welcome_message, from_email,
                   returning_accounts, fail_silently=True)
+
+    messages.success(request, 'Success!')
+    return render(request, 'laborganizer/dashboard.html')

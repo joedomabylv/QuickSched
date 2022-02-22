@@ -8,7 +8,7 @@ from emailupload.models import EmailInformation
 class CustomUserManager(BaseUserManager):
     """User manager for QuickSched."""
 
-    def create_user(self, email, password=None):
+    def create_user(self, email, password=None, is_ta=True):
         """Create normal user accounts. Overriding from BaseUserManager."""
         if not email:
             raise ValueError("Users must have an email address.")
@@ -20,24 +20,26 @@ class CustomUserManager(BaseUserManager):
 
         user.set_password(password)
 
-        # create shell TA objects
-        new_ta = TA.objects.create()
-        holds_object = Holds.objects.create(ta=new_ta)
-        availability_object = Availability.objects.create(ta=new_ta)
-        holds_object.save()
-        availability_object.save()
+        # check if the new account is supposed to be a TA
+        if is_ta:
+            # create shell TA objects
+            new_ta = TA.objects.create()
+            holds_object = Holds.objects.create(ta=new_ta)
+            availability_object = Availability.objects.create(ta=new_ta)
+            holds_object.save()
+            availability_object.save()
 
-        # get the keys from Holds/Availability
-        holds_key = holds_object.id
-        availability_key = availability_object.id
+            # get the keys from Holds/Availability
+            holds_key = holds_object.id
+            availability_key = availability_object.id
 
-        # attach those key values to the TA
-        new_ta.holds_key = holds_key
-        new_ta.availability_key = availability_key
-        new_ta.save()
+            # attach those key values to the TA
+            new_ta.holds_key = holds_key
+            new_ta.availability_key = availability_key
+            new_ta.save()
 
-        # attach the ta to the user model
-        user.ta_object = new_ta
+            # attach the ta to the user model
+            user.ta_object = new_ta
 
         # save to applications database
         user.save(using=self._db)
@@ -49,6 +51,7 @@ class CustomUserManager(BaseUserManager):
         user = self.create_user(
             email=self.normalize_email(email),
             password=password,
+            is_ta=False,
         )
 
         # ensure permissions
