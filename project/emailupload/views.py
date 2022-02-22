@@ -8,7 +8,9 @@ from django.core.mail import send_mail
 from quicksched import settings
 from django.contrib import messages
 from django.forms import ValidationError
+from django.utils.datastructures import MultiValueDictKeyError
 from .models import EmailInformation
+from authentication.models import CustomUserModel
 import csv
 import os
 
@@ -19,7 +21,11 @@ def eu_upload(request):
 
         # get the uploaded document
         # [NEED TO HAVE NGINX DO FILE HANDLING UPON DEPLOYMENT]
-        uploaded_file = request.FILES['document']
+        try:
+            uploaded_file = request.FILES['document']
+        except MultiValueDictKeyError:
+            messages.error(request, 'Please upload a csv file before proceeding!')
+            return render(request, 'emailupload/ta_add.html')
 
         # open the file system
         fs = FileSystemStorage()
@@ -28,17 +34,6 @@ def eu_upload(request):
         if not uploaded_file.name.endswith('.csv'):
             messages.error(request, 'This file is not a CSV!')
             return render(request, 'emailupload/ta_add.html')
-
-        # check if there is an existing list of emails, then grab the name
-        old_emails_name = ''
-        existing_emails = False
-
-        # if there are files within the existing directory, an old file exists
-        if len(default_storage.listdir('')[1]) >= 1:
-            # update flag
-            existing_emails = True
-            # get the name of that file
-            old_emails_name = default_storage.listdir('')[1][0]
 
         # save the uploaded file to the default 'media' directory, then
         # initialize lists and file reader
@@ -52,36 +47,26 @@ def eu_upload(request):
 
         # if there are any returning emails from a previous upload, make sure
         # they are not prompted to make a new account
-        if existing_emails:
-            # open the file of previous emails
-            old_emails_file = default_storage.open(os.path.join('', old_emails_name), 'r')
+        # open the file of previous emails
 
-            # open reader
-            old_file_reader = csv.reader(old_emails_file, delimiter=',')
+        # generate list of old emails
+        for old_user in CustomUserModel.objects.all():
+            old_emails.append(old_user.email)
 
-            # generate list of old emails
-            for old_user in old_file_reader:
-                old_emails = old_emails + old_user
+        # generate list of new emails
+        for new_user in new_file_reader:
+            new_emails = new_emails + new_user
 
-            # generate list of new emails
-            for new_user in new_file_reader:
-                new_emails = new_emails + new_user
+        # check for overlap between the two lists, populate list of
+        # returning accounts
+        for old_email in old_emails:
+            if old_email in new_emails:
+                returning_accounts.append(old_email)
 
-            # check for overlap between the two lists, populate list of
-            # returning accounts
-            for old_email in old_emails:
-                if old_email in new_emails:
-                    returning_accounts.append(old_email)
-
-            # check for new emails/users, populate list of new accounts
-            for new_email in new_emails:
-                if new_email not in returning_accounts:
-                    new_accounts.append(new_email)
-
-        # there is no old email file, create a new list
-        else:
-            for row in new_file_reader:
-                new_accounts = new_accounts + row
+        # check for new emails/users, populate list of new accounts
+        for new_email in new_emails:
+            if new_email not in returning_accounts:
+                new_accounts.append(new_email)
 
         # Check for validity of new accounts
         for account in new_accounts:
@@ -93,21 +78,13 @@ def eu_upload(request):
                 messages.error(request, account + ' is not a valid email for this roster!')
                 return redirect('laborganizer/ta_add')
 
-        # delete the list of old emails
-        if existing_emails:
-            default_storage.delete(os.path.join('', old_emails_name))
-
         # set email information block
-        set_email_info(new_accounts, returning_accounts,
-                       existing_emails, old_emails_name)
+        set_email_info(new_accounts, returning_accounts)
 
-        # generate context variable for view
-        context = {
-            'new_accounts': new_accounts,
-            'returning_accounts': returning_accounts,
-            'old_file': old_emails_name,
-            'new_file': uploaded_file.name
-        }
+        context = {"new_accounts": new_accounts,
+                   "returning_accounts": returning_accounts}
+
+        default_storage.delete(os.path.join('', uploaded_file.name))
 
         # direct the user to the confirmation page
         return render(request, 'emailupload/ta_roster_confirm.html', context)
@@ -116,8 +93,8 @@ def eu_upload(request):
     return render(request, 'emailupload/ta_add.html')
 
 
-def set_email_info(new_accounts, returning_accounts,
-                   existing_emails, old_emails_name):
+def set_email_info(new_accounts, returning_accounts):
+
     """Set/initialize the Email Information object."""
     # grab the email information object
     email_info = EmailInformation.objects.all()[0]
@@ -134,9 +111,6 @@ def set_email_info(new_accounts, returning_accounts,
         email_info.set_returning_accounts(returning_accounts)
         print(email_info.get_returning_accounts())
 
-    if existing_emails:
-        email_info.old_email_file_name = old_emails_name
-
     # save email information object to database
     email_info.save()
 
@@ -152,15 +126,15 @@ def cancel_roster(request):
     returning_accounts = email_info.get_returning_accounts()
     print(new_accounts)
     print(returning_accounts)
-    return redirect('laborganizer/ta_add')
 
+    return render(request, 'emailupload/ta_add.html')
 
 # def confirm_emails(request, new_accounts, returning_accounts, old_emails_name):
 def confirm_emails(request):
     """Confirm the emails in all accounts, new or returning."""
     # get email information
     email_info = EmailInformation.objects.all()[0]
-    new_accounts = email_info.get_new_accounts()
+    new_accounts = email_info.get_new_accounts()[1:]
     print(new_accounts)
     returning_accounts = email_info.get_returning_accounts()
 
@@ -171,7 +145,7 @@ def confirm_emails(request):
 
     # loop through the list of emails and passwords
     index = 0
-    while index < len(new_accounts):
+    while index < len(new_accounts) and len(new_accounts) > 0:
         email = new_accounts[index]
         temp_pass = passwords[index]
         print(f'{new_accounts[index]}:{passwords[index]}')

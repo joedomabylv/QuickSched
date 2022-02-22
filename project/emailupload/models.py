@@ -54,4 +54,3 @@ class EmailInformation(models.Model):
 
     new_accounts = models.TextField(blank=True, null=True)
     returning_accounts = models.TextField(blank=True, null=True)
-    old_email_file_name = models.CharField(max_length=100)
