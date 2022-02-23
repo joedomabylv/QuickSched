@@ -60,29 +60,28 @@ class Lab(models.Model):
 
     def __str__(self):
         """Human readable class name, for admin site."""
-        return self.catalog_id + ' : ' + self.class_name
+        return self.subject + self.catalog_id + ' : ' + self.class_name
+
+    def get_days(self):
+        """Convert 'days' field into a readable list."""
+        split_days = self.days.split(' ')
+        return ', '.join(split_days)
 
     class_name = models.CharField("Class name", default="N/A", max_length=50)
+    subject = models.CharField("Subject", max_length=10)
+    catalog_id = models.CharField("Catalog ID", max_length=10)
     course_id = models.CharField("Course ID", max_length=10, blank=True)
-    catalog_id = models.CharField("Catalog ID", max_length=10, blank=True)
     section = models.CharField("Section", max_length=10, blank=True)
-
-    # change to list or something?
-    day = models.CharField("Day", max_length=10)
-
+    days = models.CharField("Days", max_length=10)
     facility_id = models.CharField("Facility ID", max_length=20, blank=True)
     facility_building = models.CharField("Facility Building", max_length=50,
                                          blank=True)
     instructor = models.CharField("Instructor", max_length=50, blank=True)
-
-    # change to list or something?
-    time = models.CharField("Time", max_length=50)
-
+    start_time = models.CharField("Start time", max_length=50, blank=True)
+    end_time = models.CharField("End time", max_length=50, blank=True)
     staffed = models.BooleanField(default=False)
-
     assigned_ta = models.OneToOneField(TA, on_delete=models.DO_NOTHING,
                                        null=True, blank=True)
-
     semester = models.ForeignKey(
         'Semester',
         on_delete=models.CASCADE,

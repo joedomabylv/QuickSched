@@ -63,7 +63,7 @@
 		    <li><a class="dropdown-item" href="#">Class Nbr</a></li>
 		    <li><a class="dropdown-item" href="#">End Time</a></li>
 		    <li><a class="dropdown-item" href="#">Days</a></li>
-		    <li><a class="dropdown-item" href="#">Instrucior</a></li>
+		    <li><a class="dropdown-item" href="#">Instructor</a></li>
 		    <li><a class="dropdown-item" href="#">Assigned GTA</a></li>
 		</ul>
 	    </div>
@@ -71,15 +71,15 @@
 
         <!--Lab Title-->
         <div class="d-flex flex-row">
-	    <span class="fs-5 ms-5 px-1">&ltSEMESTER TIME&gt</span>
-	    <span class="fs-5 px-1">&ltYEAR&gt</span>
+	    <span class="fs-5 ms-5 px-1">{{ current_semester.0 }}</span>
+	    <span class="fs-5 px-1">{{ current_semester.1 }}</span>
 	    <span class="fs-5 px-1">Labs</span>
         </div>
 
         <!--Right Side tools-->
         <div class="d-flex flex-row px-2">
-	    <!--Rencent Semesters selector-->
-	    <!--Display a short selections of 5 most recnet semesters-->
+	    <!--Recent Semesters selector-->
+	    <!--Display a short selections of 5 most recent semesters-->
 	    <button
 		class="btn btn-vtools"
 		type="button"
@@ -131,14 +131,14 @@
 		    <!--Table headers-->
 		    <th scope="col">#</th>
 		    <th scope="col">Subject</th>
-		    <th scope="col">Cat Nbr</th>
+		    <th scope="col">Catalog ID</th>
 		    <th scope="col">Section</th>
-		    <th scope="col">Class Nbr</th>
-		    <th scope="col">Start time</th>
+		    <th scope="col">Course ID</th>
+		    <th scope="col">Start Time</th>
 		    <th scope="col">End Time</th>
 		    <th scope="col">Days</th>
-		    <th scope="col">Instrucior</th>
-		    <th scope="col">Assigned GTA</th>
+		    <th scope="col">Instructor</th>
+		    <th scope="col">TA</th>
 		    <th scope="col">Switch</th>
 		</tr>
 	    </thead>
@@ -147,14 +147,14 @@
 		{% for lab in labs %}
 		<tr>
 		    <!--Table rows-->
-		    <th scope="row">1</th>
+		    <th scope="row">{{ forloop.counter }}</th>
+		    <td>{{ lab.subject }}</td>
 		    <td>{{ lab.catalog_id }}</td>
-		    <td>122L</td>
 		    <td>{{ lab.section }}</td>
 		    <td>{{ lab.course_id }}</td>
-		    <td>10:20:00 AM</td>
-		    <td>12:20:00 PM</td>
-		    <td>{{ lab.day }}</td>
+		    <td>{{ lab.start_time }}</td>
+		    <td>{{ lab.end_time }}</td>
+		    <td>{{ lab.get_days }}</td>
 		    <td>{{ lab.instructor }}</td>
 		    <td>
 			<!--More info button-->
@@ -193,6 +193,8 @@
 		{% endfor %}
 
 	    </tbody>
+	    {% else %}
+	    <strong>No labs to display!</strong>
 	    {% endif %}
         </table>
 

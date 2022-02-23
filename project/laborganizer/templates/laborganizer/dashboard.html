@@ -313,7 +313,7 @@
         </ul>
     </div>
 </div>
-<!--Semester  Offcanves-->
+<!--Semester  Off Canvas-->
 <div
     class="offcanvas offcanvas-start"
     data-bs-scroll="true"
@@ -323,7 +323,7 @@
     aria-labelledby="offcanvasSemester"
 >
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasHistory">Semester Picker</h5>
+        <h5 class="offcanvas-title" id="offcanvasHistory">Semester Select</h5>
         <button
             type="button"
             class="btn-close text-reset"
@@ -331,30 +331,45 @@
             aria-label="Close"
         ></button>
     </div>
-    <div class="offcanvas-body">
-        <div class="d-flex flex-column align-items-center text-center p-3">
-            <!--Year select-->
-            <span class="fs-5 m-2">Year</span>
-            <select class="form-select" aria-label="Year select">
-		<option selected>2022</option>
-		<option value="1">2021</option>
-		<option value="2">2020</option>
-		<option value="3">2019</option>
-            </select>
-            <!--Section select-->
-            <span class="fs-5 m-2">Time</span>
-            <select class="form-select" aria-label="Time select">
-		<option selected>Spring</option>
-		<option value="1">Summer</option>
-		<option value="2">Fall</option>
-		<option value="3">Winter</option>
-            </select>
-            <!--Submit buttn-->
-            <div class="d-grid w-100 m-4">
-		<button class="btn btn-primary">Select</button>
+
+    <form method="post" action="{% url 'lo_home' %}">
+	{% csrf_token %}
+	<div class="offcanvas-body">
+            <div class="d-flex flex-column align-items-center text-center p-3">
+		
+		<!--Year select-->
+		<label for="semester_year"><span class="fs-5 m-2">Year</span></label>
+		<select class="form-select" name="semester_year" id="semester_year" aria-label="Year select">
+		    {% if semester_years %}
+		    {% for year in semester_years %}
+		    <option value="{{ year }}">{{ year }}</option>
+		    {% endfor %}
+		    {% else %}
+		    <option value="{{ current_semester.1 }}">{{ current_semester.1 }}</option>
+		    {% endif %}
+		</select>
+		
+		<!--Section select-->
+		<label for="semester_time"><span class="fs-5 m-2">Time</span></label>
+		<select class="form-select" name="semester_time" id="semester_time" aria-label="Time select">
+		    {% if semester_times %}
+		    {% for time in semester_times %}
+		    <option value="{{ time }}">{{ time }}</option>
+		    {% endfor %}
+		    {% else %}
+		    <option value="{{ current_semester.0 }}">{{ current_semester.0 }}</option>
+		    {% endif %}
+		</select>
+		
+		<!--Submit button-->
+		<div class="d-grid w-100 m-4">
+		    <input type="submit" class="btn btn-primary"></input>
+		</div>
+		
             </div>
-        </div>
-    </div>
+
+	</div>
+    </form>
 </div>
 <!--Switch Operations Offcanves-->
 <div

@@ -31,14 +31,16 @@
     "pk": 10,
     "fields": {
 	"class_name": "Computer Science 1",
+	"subject": "CS",
+	"catalog_id": "126",
 	"course_id": "1234",
-	"catalog_id": "CS126",
 	"section": "001",
-	"day": "MWF",
+	"days": "M W F",
 	"facility_id": "069",
 	"facility_building": "Engineering",
 	"instructor": "McAddis, C.",
-	"time": "11:10AM-12:20PM",
+	"start_time": "11:10AM",
+	"end_time": "12:20PM",
 	"staffed": false,
 	"semester": 2
     }
@@ -49,14 +51,16 @@
     "pk": 11,
     "fields": {
 	"class_name": "Data Structures",
+	"subject": "CS",
+	"catalog_id": "249",	
 	"course_id": "4321",
-	"catalog_id": "CS249",
 	"section": "001",
-	"day": "TTh",
+	"days": "T Th",
 	"facility_id": "069",
 	"facility_building": "Engineering",
 	"instructor": "Leverington, M.",
-	"time": "5:30PM-8:00PM",
+	"start_time": "4:00PM",
+	"end_time": "5:30PM",
 	"staffed": false,
 	"semester": 1
     }
@@ -67,14 +71,16 @@
     "pk": 12,
     "fields": {
 	"class_name": "Web Programming",
+	"subject": "CS",
+	"catalog_id": "212",	
 	"course_id": "5678",
-	"catalog_id": "CS212",
 	"section": "002",
-	"day": "TThF",
+	"days": "T Th F",
 	"facility_id": "069",
 	"facility_building": "Engineering",
 	"instructor": "McAddis, C.",
-	"time": "2:20PM-3:00PM",
+	"start_time": "2:20PM",
+	"end_time": "3:30PM",
 	"staffed": false,
 	"semester": 1
     }
@@ -85,14 +91,16 @@
     "pk": 13,
     "fields": {
 	"class_name": "Computer Networks",
+	"subject": "CS",
+	"catalog_id": "460",	
 	"course_id": "8765",
-	"catalog_id": "CS460",
 	"section": "003",
-	"day": "MF",
+	"days": "M F",
 	"facility_id": "069",
 	"facility_building": "Engineering",
 	"instructor": "Otte, W.",
-	"time": "12:45PM-2:50PM",
+	"start_time": "12:45PM",
+	"end_time": "2:00PM",
 	"staffed": false,
 	"semester": 3
     }
