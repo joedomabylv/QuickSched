@@ -13,6 +13,7 @@ urlpatterns = [
     path('semester/', views.lo_semester, name='lo_semester'),
     path('new_semester/', views.lo_new_semester, name='lo_new_semester'),
     path('display_semester/', views.lo_display_semester, name='lo_display_semester'),
+    path('filter_tas/', views.lo_filter_tas, name='lo_filter_tas'),
     path('upload/', views.lo_upload, name='lo_upload'),
 ]
 

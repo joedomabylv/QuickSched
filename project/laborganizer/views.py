@@ -37,6 +37,7 @@ def lo_home(request):
         current_semester = get_current_semester()
         labs = Lab.objects.filter(semester__year=current_semester[1],
                                   semester__semester_time=current_semester[0])
+        tas = get_tas_by_semester(current_semester[0], current_semester[1])
 
     all_semester_years = get_semester_years()
     all_semester_times = get_semester_times()
@@ -55,6 +56,22 @@ def lo_home(request):
     if len(labs) == 0:
         messages.warning(request, 'No labs in the selected semester!')
         return render(request, 'laborganizer/dashboard.html', context)
+    return render(request, 'laborganizer/dashboard.html', context)
+
+
+def lo_filter_tas(request):
+    """
+    View for filtered TA's via LO command.
+
+    When the LO chooses new TA's from the left-hand contracted/uncontracted
+    TA list, display new information regarding those chosen TA's.
+    """
+    if request.method == 'POST':
+        # get the student id's of all selected TA's
+        ta_ids = request.POST.getlist('checks[]')
+        print(ta_ids)
+
+    context = {}
     return render(request, 'laborganizer/dashboard.html', context)
 
 
