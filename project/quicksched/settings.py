@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'laborganizer.apps.LaborganizerConfig',
     'teachingassistant.apps.TeachingassistantConfig',
     'emailupload.apps.EmailuploadConfig',
+    'optimization.apps.OptimizationConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
