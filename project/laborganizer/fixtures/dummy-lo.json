@@ -39,7 +39,8 @@
 	"facility_building": "Engineering",
 	"instructor": "McAddis, C.",
 	"time": "11:10AM-12:20PM",
-	"staffed": false
+	"staffed": false,
+	"semester": 2
     }
 },
 
@@ -56,7 +57,8 @@
 	"facility_building": "Engineering",
 	"instructor": "Leverington, M.",
 	"time": "5:30PM-8:00PM",
-	"staffed": false
+	"staffed": false,
+	"semester": 1
     }
 },
 
@@ -73,7 +75,8 @@
 	"facility_building": "Engineering",
 	"instructor": "McAddis, C.",
 	"time": "2:20PM-3:00PM",
-	"staffed": false
+	"staffed": false,
+	"semester": 1
     }
 },
 
@@ -90,7 +93,8 @@
 	"facility_building": "Engineering",
 	"instructor": "Otte, W.",
 	"time": "12:45PM-2:50PM",
-	"staffed": false
+	"staffed": false,
+	"semester": 3
     }
 }
 
