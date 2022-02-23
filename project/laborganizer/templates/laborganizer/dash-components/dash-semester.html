@@ -1,0 +1,58 @@
+<!--Semester Off Canvas-->
+<div
+    class="offcanvas offcanvas-start"
+    data-bs-scroll="true"
+    data-bs-backdrop="false"
+    tabindex="-1"
+    id="offcanvasSemester"
+    aria-labelledby="offcanvasSemester"
+>
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasHistory">Semester Select</h5>
+        <button
+            type="button"
+            class="btn-close text-reset"
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
+        ></button>
+    </div>
+
+    <form method="post" action="{% url 'lo_home' %}">
+	{% csrf_token %}
+	<div class="offcanvas-body">
+            <div class="d-flex flex-column align-items-center text-center p-3">
+		
+		<!--Year select-->
+		<label for="semester_year"><span class="fs-5 m-2">Year</span></label>
+		<select class="form-select" name="semester_year" id="semester_year" aria-label="Year select">
+		    {% if semester_years %}
+		    {% for year in semester_years %}
+		    <option value="{{ year }}">{{ year }}</option>
+		    {% endfor %}
+		    {% else %}
+		    <option value="{{ current_semester.1 }}">{{ current_semester.1 }}</option>
+		    {% endif %}
+		</select>
+		
+		<!--Section select-->
+		<label for="semester_time"><span class="fs-5 m-2">Time</span></label>
+		<select class="form-select" name="semester_time" id="semester_time" aria-label="Time select">
+		    {% if semester_times %}
+		    {% for time in semester_times %}
+		    <option value="{{ time }}">{{ time }}</option>
+		    {% endfor %}
+		    {% else %}
+		    <option value="{{ current_semester.0 }}">{{ current_semester.0 }}</option>
+		    {% endif %}
+		</select>
+		
+		<!--Submit button-->
+		<div class="d-grid w-100 m-4">
+		    <input type="submit" class="btn btn-primary"></input>
+		</div>
+		
+            </div>
+
+	</div>
+    </form>
+</div>
