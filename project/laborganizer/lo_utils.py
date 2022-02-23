@@ -1,7 +1,7 @@
 """Utility functions used in Lab Organizer views."""
 from .models import Semester
 from datetime import datetime
-
+from teachingassistant.models import TA
 
 def get_semester_years():
     """Get a list of all existing semester years with no duplicates."""
@@ -41,3 +41,10 @@ def get_current_semester():
     else:
         semester_time = 'WNT'
     return (semester_time, current_year)
+
+
+def get_tas_by_semester(time, year):
+    """Get a list of all TA's assigned to the specified semester."""
+    tas = TA.objects.filter(assigned_semesters__semester_time=time,
+                            assigned_semesters__year=year)
+    return tas

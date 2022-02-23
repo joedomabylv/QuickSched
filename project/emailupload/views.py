@@ -4,7 +4,7 @@ from django.core.files.storage import FileSystemStorage, default_storage
 from django.utils.crypto import get_random_string
 from django.contrib.auth import get_user_model
 from django.core.validators import validate_email
-from django.core.mail import send_mail
+from django.core.mail import send_mail, send_mass_mail
 from quicksched import settings
 from django.contrib import messages
 from django.forms import ValidationError
@@ -94,7 +94,6 @@ def eu_upload(request):
 
 
 def set_email_info(new_accounts, returning_accounts):
-
     """Set/initialize the Email Information object."""
     # grab the email information object
     email_info = EmailInformation.objects.all()[0]
@@ -129,13 +128,13 @@ def cancel_roster(request):
 
     return render(request, 'emailupload/ta_add.html')
 
-# def confirm_emails(request, new_accounts, returning_accounts, old_emails_name):
+
 def confirm_emails(request):
     """Confirm the emails in all accounts, new or returning."""
     # get email information
     email_info = EmailInformation.objects.all()[0]
-    new_accounts = email_info.get_new_accounts()[1:]
-    print(new_accounts)
+    new_accounts = email_info.get_new_accounts()
+    print(f'New Accounts: {new_accounts}')
     returning_accounts = email_info.get_returning_accounts()
 
     # generate passwords for new emails
@@ -152,7 +151,7 @@ def confirm_emails(request):
         get_user_model().objects.create_user(email, temp_pass)
         index += 1
 
-    messages = []
+    email_messages = []
 
     # welcome email
     index = 0
@@ -165,9 +164,9 @@ def confirm_emails(request):
             \n\n To finish your registration, please use your email and temporary password down below to login.
             You will be prompted to change it upon your login.\n\n Temporary Password: """ + temp_pass
             from_email = settings.EMAIL_HOST_USER
-            messages.append((welcome_subject, welcome_message, from_email, [to_email]))
+            email_messages.append((welcome_subject, welcome_message, from_email, [to_email]))
             index += 1
-        send_mass_mail(tuple(messages), fail_silently=True)
+        send_mass_mail(tuple(email_messages), fail_silently=True)
 
     # returning email
     if len(returning_accounts) > 0:

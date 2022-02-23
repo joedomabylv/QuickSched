@@ -33,38 +33,17 @@ class TA(models.Model):
         human_readable_name += 'TA ' + self.first_name + ' ' + self.last_name
         return human_readable_name
 
-    # def score_in_list(self, catalog_id):
-    #     """
-    #     Check if a score for a lab already exists in the list.
+    def get_all_assigned_semesters(self):
+        """
+        Get a list of all semesters this TA is assigned to.
 
-    #     If found, return the index. If not, return -1.
-    #     """
-    #     # split the list by comma delimiter
-    #     score_list = self.scores.split(',')
-    #     index = 0
-
-    #     # loop through score list
-    #     while index < len(score_list):
-    #         # get the catalog id of the current index
-    #         current_catalog_id = score_list[index].split(':')[0]
-    #         # check if it matches the 'new' catalog id
-    #         if current_catalog_id == catalog_id:
-    #             # if found, return the index
-    #             return index
-    #         index += 1
-    #     return -1
-
-    # def update_scores(self, catalog_id, score):
-    #     """Update the score list for a TA."""
-    #     pass
-
-    # def remove_score(self, catalog_id, score):
-    #     """Remove an optimization score for a TA."""
-    #     pass
-
-    # def get_score(self, catalog_id):
-    #     """Get an optimization score for a TA."""
-    #     pass
+        Return a Python list of tuples with index 0 begin the time and
+        index 1 being the year, i.e. ('SPR', 2022).
+        """
+        semester_list = []
+        for semester in self.assigned_semesters.all():
+            semester_list.append((semester.semester_time, semester.year))
+        return semester_list
 
     # define choice variable
     YEAR = (
@@ -99,7 +78,10 @@ class TA(models.Model):
     availability_key = models.IntegerField('Primary Availability key',
                                            blank=True, null=True, unique=True)
 
-    scores = models.ManyToManyField(ScorePair)
+    scores = models.ManyToManyField(ScorePair, blank=True)
+
+    assigned_semesters = models.ManyToManyField("laborganizer.Semester",
+                                                blank=True)
 
 
 class Availability(models.Model):

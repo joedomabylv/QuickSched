@@ -4,10 +4,10 @@ from .forms import NewSemesterForm
 from teachingassistant.models import TA, ScorePair
 from .models import Semester, Lab
 from django.contrib import messages
-from django.contrib.messages import get_messages
 from laborganizer.lo_utils import (get_semester_years,
                                    get_semester_times,
-                                   get_current_semester)
+                                   get_current_semester,
+                                   get_tas_by_semester)
 
 
 def lo_home(request):
@@ -24,41 +24,37 @@ def lo_home(request):
     chooses a lab that doesnt exist to display, nothing get's sent through, but
     it's still a POST request.
     """
-    context = {}
     # check for post request
     if request.method == 'POST':
         selected_year = request.POST.get('semester_year')
         selected_time = request.POST.get('semester_time')
         labs = Lab.objects.filter(semester__year=selected_year,
                                   semester__semester_time=selected_time)
-        if len(labs) == 0:
-            messages.warning(request, 'No labs in the selected semester!')
-            return render(request, 'laborganizer/dashboard.html', context)
-
+        tas = get_tas_by_semester(selected_time, selected_year)
         current_semester = (selected_time, selected_year)
 
     else:
         current_semester = get_current_semester()
         labs = Lab.objects.filter(semester__year=current_semester[1],
                                   semester__semester_time=current_semester[0])
-    lab_total = len(labs)
+
     all_semester_years = get_semester_years()
     all_semester_times = get_semester_times()
-
-    # temp access of all TA's
-    tas = TA.objects.all()
 
     # NOTE: In the future, we only want to send information into this view
     #       relevant to the selected semester. This way, when an LO has 9000
     #       TA's/labs, we're not scraping the whole database.
     context = {
         'labs': labs,
-        'lab_total': lab_total,
         'tas': tas,
         'semester_years': all_semester_years,
         'semester_times': all_semester_times,
         'current_semester': current_semester,
     }
+
+    if len(labs) == 0:
+        messages.warning(request, 'No labs in the selected semester!')
+        return render(request, 'laborganizer/dashboard.html', context)
     return render(request, 'laborganizer/dashboard.html', context)
 
 

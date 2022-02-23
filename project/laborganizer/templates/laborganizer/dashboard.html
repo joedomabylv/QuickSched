@@ -11,15 +11,15 @@
 <main>
     
     {% include 'laborganizer/sidebar.html' %}
-    {% include 'laborganizer/dash-components/dash-current-semester-labs.html' %}
+    {% include 'laborganizer/dash-components/current-semester.html' %}
 
 </main>
 
 <!--Pop up windows codes-->
-{% include 'laborganizer/dash-components/dash-ta-selection.html' %}
-{% include 'laborganizer/dash-components/dash-history.html' %}
-{% include 'laborganizer/dash-components/dash-semester.html' %}
-{% include 'laborganizer/dash-components/dash-switch.html' %}
+{% include 'laborganizer/dash-components/ta-select.html' %}
+{% include 'laborganizer/dash-components/history.html' %}
+{% include 'laborganizer/dash-components/semester-select.html' %}
+{% include 'laborganizer/dash-components/switch.html' %}
 
 <!--Bootstrap set up -->
 <script src="{% static 'laborganizer/dashboard.js' %}"></script>

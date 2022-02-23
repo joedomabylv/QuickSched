@@ -1,0 +1,115 @@
+<!--TA selector Off canvas-->
+<div
+    class="offcanvas offcanvas-start"
+    data-bs-scroll="true"
+    data-bs-backdrop="false"
+    tabindex="-1"
+    id="offcanvasTASelector"
+    aria-labelledby="offcanvasTASelector"
+>
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasTASelector">TA Selector</h5>
+        <button
+            type="button"
+            class="btn-close text-reset"
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
+        ></button>
+    </div>
+    <!--Body of this offcanves-->
+    <div class="offcanvas-body">
+        <!-- TA lists Collapsed-->
+        <div class="accordion accordion-flush" id="accordionTAselector">
+            <!--Uncontract TAs-->
+            <div class="accordion-item">
+		<h2 class="accordion-header" id="flush-headingUncontractTA">
+		    <button
+			class="accordion-button collapsed"
+			       type="button"
+			       data-bs-toggle="collapse"
+			       data-bs-target="#flush-UncontractTA"
+			       aria-expanded="false"
+			       aria-controls="flush-UncontractTA"
+		    >
+			Uncontract TA
+		    </button>
+		</h2>
+		<div
+		    id="flush-UncontractTA"
+		    class="accordion-collapse collapse"
+		    aria-labelledby="flush-headingUncontractTA"
+		    data-bs-parent="#accordionTAselector"
+		>
+		    <div class="accordion-body px-2 pt-1 pb-3">
+			<!--Uncontract TA list-->
+			<ul class="list-group list-group-flush">
+			    {% for ta in tas %}
+			    {% if not ta.contracted %}
+			    <li class="list-group-item">
+				<div class="form-check">
+				    <input
+					class="form-check-input"
+					       type="checkbox"
+					       value=""
+					       id="UC_TA_01"
+				    />
+				    <label class="form-check-label w-100" for="UC_TA_01">
+					{{ ta.first_name }} {{ ta.last_name }}
+				    </label>
+				</div>
+			    </li>
+			    {% endif %}
+			    {% endfor %}
+			</ul>
+		    </div>
+		</div>
+            </div>
+            <!--Contract TAs-->
+            <div class="accordion-item">
+		<h2 class="accordion-header" id="flush-headingContractTA">
+		    <button
+			class="accordion-button collapsed"
+			       type="button"
+			       data-bs-toggle="collapse"
+			       data-bs-target="#flush-ContractTA"
+			       aria-expanded="false"
+			       aria-controls="flush-ContractTA"
+		    >
+			Contract TA
+		    </button>
+		</h2>
+		<div
+		    id="flush-ContractTA"
+		    class="accordion-collapse collapse"
+		    aria-labelledby="flush-headingContractTA"
+		    data-bs-parent="#accordionTAselector"
+		>
+		    <!-- TA lists Collapsed-->
+		    <div class="accordion-body px-2 pt-1 pb-3">
+			<!--Contract TA list-->
+			{% for ta in tas %}
+			{% if ta.contracted %}
+			<ul class="list-group list-group-flush">
+			    <li class="list-group-item">
+				<div class="form-check">
+				    <input
+					class="form-check-input"
+					       type="checkbox"
+					       value=""
+					       id="C_TA_01"
+					       checked
+				    />
+				    <label class="form-check-label w-100" for="C_TA_01">
+					{{ ta.first_name }} {{ ta.last_name }}
+				    </label>
+				</div>
+			    </li>
+			    {% endif %}
+			    {% endfor %}
+			</ul>
+		    </div>
+		</div>
+            </div>
+        </div>
+    </div>
+</div>
