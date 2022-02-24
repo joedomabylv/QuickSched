@@ -1,5 +1,5 @@
 """Utility functions used in Lab Organizer views."""
-from .models import Semester
+from .models import Semester, Lab
 from datetime import datetime
 from teachingassistant.models import TA
 

@@ -80,8 +80,10 @@ class Lab(models.Model):
     start_time = models.CharField("Start time", max_length=50, blank=True)
     end_time = models.CharField("End time", max_length=50, blank=True)
     staffed = models.BooleanField(default=False)
-    assigned_ta = models.OneToOneField(TA, on_delete=models.DO_NOTHING,
-                                       null=True, blank=True)
+
+    # assigned_ta = models.OneToOneField(TA, on_delete=models.DO_NOTHING,
+    #                                   null=True, blank=True)
+
     semester = models.ForeignKey(
         'Semester',
         on_delete=models.CASCADE,

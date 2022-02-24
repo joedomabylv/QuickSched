@@ -39,23 +39,6 @@ def lo_home(request):
     chooses a lab that doesnt exist to display, nothing get's sent through, but
     it's still a POST request.
     """
-    # check for post request
-    # if request.method == 'POST':
-    #     selected_year = request.POST.get('semester_year')
-    #     selected_time = request.POST.get('semester_time')
-    #     labs = Lab.objects.filter(semester__year=selected_year,
-    #                               semester__semester_time=selected_time)
-    #     tas = get_tas_by_semester(selected_time, selected_year)
-    #     current_semester = (selected_time, selected_year)
-
-    # else:
-    #     current_semester = get_current_semester()
-    #     labs = Lab.objects.filter(semester__year=current_semester[1],
-    #                               semester__semester_time=current_semester[0])
-    #     tas = get_tas_by_semester(current_semester[0], current_semester[1])
-
-    # all_semester_years = get_semester_years()
-    # all_semester_times = get_semester_times()
 
     # establish current semester time/year
     current_semester = get_current_semester()
@@ -87,58 +70,6 @@ def lo_home(request):
         messages.warning(request, 'No labs in the current semester!')
 
     return render(request, 'laborganizer/dashboard.html', context)
-
-# def lo_home(request):
-#     """
-#     Home route for the Lab Organizer dashboard.
-
-#     Displays data relevant to the active semester based on the time of year.
-#     """
-#     """
-#     TODO:
-
-#     fix the display of the selections for times/years.
-#     we should have it where you select a year first, then
-#     it gives you the available times to choose from. i don't know how
-#     to do that.
-
-#     figure out what to display when it's a POST but no data. meaning, if a LO
-#     chooses a lab that doesnt exist to display, nothing get's sent through, but
-#     it's still a POST request.
-#     """
-#     # check for post request
-#     if request.method == 'POST':
-#         selected_year = request.POST.get('semester_year')
-#         selected_time = request.POST.get('semester_time')
-#         labs = Lab.objects.filter(semester__year=selected_year,
-#                                   semester__semester_time=selected_time)
-#         tas = get_tas_by_semester(selected_time, selected_year)
-#         current_semester = (selected_time, selected_year)
-
-#     else:
-#         current_semester = get_current_semester()
-#         labs = Lab.objects.filter(semester__year=current_semester[1],
-#                                   semester__semester_time=current_semester[0])
-#         tas = get_tas_by_semester(current_semester[0], current_semester[1])
-
-#     all_semester_years = get_semester_years()
-#     all_semester_times = get_semester_times()
-
-#     # NOTE: In the future, we only want to send information into this view
-#     #       relevant to the selected semester. This way, when an LO has 9000
-#     #       TA's/labs, we're not scraping the whole database.
-#     context = {
-#         'labs': labs,
-#         'tas': tas,
-#         'semester_years': all_semester_years,
-#         'semester_times': all_semester_times,
-#         'current_semester': current_semester,
-#     }
-
-#     if len(labs) == 0:
-#         messages.warning(request, 'No labs in the selected semester!')
-#         return render(request, 'laborganizer/dashboard.html', context)
-#     return render(request, 'laborganizer/dashboard.html', context)
 
 
 def lo_generate_schedule(request):
@@ -190,10 +121,28 @@ def lo_generate_schedule(request):
 
 def lo_ta_management(request):
     """TA Management route."""
-    tas = TA.objects.all()
-    context = {
-        'tas': tas,
+    context = {}
+    # check for post request
+    if request.method == 'POST':
+        # get value from chosen semester form
+        post_semester = request.POST.get('chosen_semester')
+
+        # split results
+        semester = {'year': post_semester[3:], 'time': post_semester[:3]}
+
+        # get all TA's assigned to that semester
+        tas = get_tas_by_semester(semester['time'], semester['year'])
+
+        # populate context
+        context = {
+            'tas': tas,
+            'semester': semester,
         }
+
+    # always populate semester selection options
+    semester_options = Semester.objects.all()
+    context['semester_options'] = semester_options
+
     return render(request, 'laborganizer/ta_management/ta_management.html',
                   context)
 

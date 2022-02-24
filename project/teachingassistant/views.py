@@ -29,11 +29,7 @@ def ta_home(request):
 
         # get all labs a TA is assigned to
         all_labs = Lab.objects.all()
-        labs_list = []
-        for lab in all_labs:
-            if lab.assigned_ta == request.user.ta_object:
-                labs_list.append(lab)
-            context['labs'] = labs_list
+
         return render(request, 'teachingassistant/dashboard.html', context)
 
     # if they're not authenticated, take them to the login page

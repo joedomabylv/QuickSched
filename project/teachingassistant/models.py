@@ -45,6 +45,17 @@ class TA(models.Model):
             semester_list.append((semester.semester_time, semester.year))
         return semester_list
 
+    def get_all_assigned_labs(self):
+        """
+        Get a list of all labs this TA is assigned to.
+
+        Returns the name of the lab in human readable format.
+        """
+        lab_list = []
+        for lab in self.assigned_labs.all():
+            lab_list.append(lab.__str__())
+        return ', '.join(lab_list)
+
     # define choice variable
     YEAR = (
         ('FR', 'Freshman'),
@@ -82,6 +93,9 @@ class TA(models.Model):
 
     assigned_semesters = models.ManyToManyField("laborganizer.Semester",
                                                 blank=True)
+
+    assigned_labs = models.ManyToManyField("laborganizer.Lab",
+                                           blank=True)
 
 
 class Availability(models.Model):

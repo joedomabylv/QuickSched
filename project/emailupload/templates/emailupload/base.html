@@ -20,50 +20,6 @@
   </head>
   <body class="text-center">
 
-    <!--Navbar codes -->
-    <nav class="navbar navbar-expand-sm navbar-light bg-light">
-      <div class="container">
-	<a class="navbar-brand" href="{% url 'lo_home' %}">
-          <img src="{% static 'global/Magisters.svg' %}" alt="image not found!" width="60" height="60">
-	</a>
-	<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-	</button>
-	<div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-
-            <li class="nav-item">
-	      <a class="nav-link active" aria-current="page" href="{% url 'lo_home' %}">Home</a>
-            </li>
-
-            <!-- <li class="nav-item"> -->
-	      <!-- 	<\!--*CODE*href = Schedule Manage page addrees-\-> -->
-		<!-- 	<a class="nav-link" href="#">Schedule Manage</a> -->
-		<!-- </li> -->
-
-            <li class="nav-item">
-	      <a class="nav-link" href="{% url 'lo_ta_management' %}">TA Management</a>
-            </li>
-
-            <li class="nav-item">
-	      <!--*CODE*href = Semester page addrees-->
-	      <a class="nav-link" href="{% url 'lo_semester' %}">Semesters</a>
-            </li>
-
-            <li class="nav-item">
-	      <!--*CODE*href = Semester page addrees-->
-	      <a class="nav-link" href="/admin">Admin</a>
-            </li>
-	    
-            <li class="nav-item">
-	      <!--*CODE*href = Semester page addrees-->
-	      <a class='nav-link' href="/sign_out">Sign Out</a>
-            </li>	      
-
-          </ul>
-	</div>
-      </div>
-    </nav>
 
     {% include 'laborganizer/message.html' %}
     
