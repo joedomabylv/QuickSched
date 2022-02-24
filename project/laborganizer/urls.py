@@ -10,10 +10,10 @@ urlpatterns = [
     path('', views.lo_home, name='lo_home'),
     path('ta_management/', views.lo_ta_management, name='lo_ta_management'),
     path('ta_add/', include("emailupload.urls")),
-    path('semester/', views.lo_semester, name='lo_semester'),
-    path('new_semester/', views.lo_new_semester, name='lo_new_semester'),
-    path('display_semester/', views.lo_display_semester, name='lo_display_semester'),
-    path('filter_tas/', views.lo_filter_tas, name='lo_filter_tas'),
+    path('semester_management/', views.lo_semester_management,
+         name='lo_semester_management'),
+    path('generate_schedule/', views.lo_generate_schedule,
+         name='lo_generate_schedule'),
     path('upload/', views.lo_upload, name='lo_upload'),
 ]
 

@@ -22,57 +22,11 @@
     
     <hr />
     
-    <!--Side Bar Tools-->
-    <ul class="flex-column mb-auto">
-        <li class="d-grid">
-            <button
-		class="btn btn-toggle"
-		type="button"
-		data-bs-toggle="offcanvas"
-		data-bs-target="#offcanvasTASelector"
-		aria-controls="offcanvasTASelector"
-            >
-		<svg class="bi me-2" width="16" height="16">
-                    <use xlink:href="#TA Selector"></use>
-		</svg>
-		TA Selector
-            </button>
-        </li>
-        <li class="d-grid">
-            <button
-		class="btn btn-toggle"
-		type="button"
-		data-bs-toggle="offcanvas"
-		data-bs-target="#offcanvasHistory"
-		aria-controls="offcanvasHistory"
-            >
-		<svg class="bi me-2" width="16" height="16">
-                    <use xlink:href="#history"></use>
-		</svg>
-		History
-            </button>
-        </li>
-        <li class="d-grid">
-            <button
-		class="btn btn-toggle"
-		type="button"
-		data-bs-toggle="offcanvas"
-		data-bs-target="#offcanvasSemester"
-		aria-controls="offcanvasSemester"
-            >
-		<svg class="bi me-2" width="16" height="16">
-                    <use xlink:href="#semester"></use>
-		</svg>
-		Semester
-            </button>
-        </li>
-    </ul>
-
-    <hr />
     <!--Side Bar Nav-->
+    {% with url_name=request.resolver_match.url_name %}    
     <ul class="nav nav-pills flex-column mb-auto">
-        <li class="nav-item">
-            <a href="{% url 'lo_home' %}" class="nav-link active" aria-current="page">
+        <li class="nav-item">	    
+            <a href="{% url 'lo_home' %}" class="nav-link {% if url_name == 'lo_home' %}active{% else %}link-dark{% endif %}" aria-current="page">
 		<svg class="bi me-2" width="16" height="16">
                     <use xlink:href="#scheduling"></use>
 		</svg>
@@ -80,11 +34,19 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="{% url 'lo_ta_management' %}" class="nav-link link-dark" aria-current="page">
+            <a href="{% url 'lo_ta_management' %}" class="nav-link {% if url_name == 'lo_ta_management' %}active{% else %}link-dark{% endif %}" aria-current="page">
 		<svg class="bi me-2" width="16" height="16">
                     <use xlink:href="#TA-list"></use>
 		</svg>
-		TA List
+		TA Management
+            </a>
+        </li>
+	<li class="nav-item">
+            <a href="{% url 'lo_semester_management' %}" class="nav-link {% if url_name == 'lo_semester_management' %}active{% else %}link-dark{% endif %}" aria-current="page">
+		<svg class="bi me-2" width="16" height="16">
+                    <use xlink:href="#semester"></use>
+		</svg>
+		Semester Management
             </a>
         </li>
         <li class="nav-item">
@@ -96,6 +58,7 @@
             </a>
         </li>
     </ul>
+    {% endwith %}
 
     <hr />
 

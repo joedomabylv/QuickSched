@@ -1,0 +1,25 @@
+<div class="col d-flex flex-column flex-shrink-0 bg-light">
+
+    {% include 'laborganizer/ta_management/horizontal_tool_bar.html' %}
+    
+    {% if tas %}
+
+    <div class="my-4 container">
+	<h1>TA Management</h1>  
+	<ul class="list-group">
+	    {% for ta in tas %}  
+	    <li class="list-group-item">{{ ta.first_name }} {{ ta.last_name }}, {{ ta.year }}</li>
+	    {% endfor %}
+	</ul>
+    </div>
+
+    {% else %}
+
+    <div class="">
+	No TA's to display!
+    </div>
+
+    {% endif %}
+
+    <a href="{% url 'eu_upload' %}">Click here to upload a new roster of TA's</a>
+</div>

@@ -8,7 +8,7 @@
     aria-labelledby="offcanvasTASelector"
 >
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasTASelector">TA Selector</h5>
+        <h5 class="offcanvas-title" id="offcanvasTASelector">{{ current_semester.time}} {{ current_semester.year }} TA Selector</h5>
         <button
             type="button"
             class="btn-close text-reset"
@@ -21,7 +21,7 @@
     <div class="offcanvas-body">
 	
         <!-- TA List Collapsed-->
-	<form method="post" action="{% url 'lo_filter_tas' %}">
+	<form method="post" action="{% url 'lo_generate_schedule' %}">
 	    {% csrf_token %}
             <div class="accordion accordion-flush" id="accordionTAselector">
 		

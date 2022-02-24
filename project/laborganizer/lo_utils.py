@@ -3,8 +3,14 @@ from .models import Semester
 from datetime import datetime
 from teachingassistant.models import TA
 
+
 def get_semester_years():
-    """Get a list of all existing semester years with no duplicates."""
+    """
+    Get a list of all existing semester years with no duplicates.
+
+    When the LO goes to select a new semester from the sidebar, only display
+    each available year (2022, 2023, etc.) once.
+    """
     semesters = Semester.objects.all()
     year_list = []
     for semester in semesters:
@@ -14,7 +20,12 @@ def get_semester_years():
 
 
 def get_semester_times():
-    """Get a list of all existing semester times with no duplicates."""
+    """
+    Get a list of all existing semester times with no duplicates.
+
+    When the LO goes to select a new semester from the sidebar, only display
+    each available time (SPR, WNT, etc.) once.
+    """
     semesters = Semester.objects.all()
     time_list = []
     for semester in semesters:
@@ -40,7 +51,13 @@ def get_current_semester():
     # december
     else:
         semester_time = 'WNT'
-    return (semester_time, current_year)
+
+    current_semester_dict = {
+        'year': current_year,
+        'time': semester_time,
+    }
+
+    return current_semester_dict
 
 
 def get_tas_by_semester(time, year):

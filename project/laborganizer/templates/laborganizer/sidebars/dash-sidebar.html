@@ -1,0 +1,117 @@
+{% load static %}
+
+<!--Side bar-->
+<div
+    class="col-auto d-flex justify-content-between flex-column flex-shrink-0 p-3 bg-white border-end"
+>
+    <!--Clickable Icon-->
+    <a
+        href="{% url 'lo_home' %}"
+        class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none"
+    >
+        <img
+            src="{% static 'global/Magisters.svg' %}"
+            alt="Magisters"
+            width="40"
+            height="40"
+            class="bi me-2"
+            viewBox="0 0 16 16"
+        />
+        <span class="fs-4">QuickSched</span>
+    </a>
+    
+    <hr />
+    
+    <!--Side Bar Tools-->
+    <ul class="flex-column mb-auto">
+        <li class="d-grid">
+            <button
+		class="btn btn-toggle"
+		type="button"
+		data-bs-toggle="offcanvas"
+		data-bs-target="#offcanvasTASelector"
+		aria-controls="offcanvasTASelector"
+            >
+		<svg class="bi me-2" width="16" height="16">
+                    <use xlink:href="#TA Selector"></use>
+		</svg>
+		TA Selector
+            </button>
+        </li>
+        <li class="d-grid">
+            <button
+		class="btn btn-toggle"
+		type="button"
+		data-bs-toggle="offcanvas"
+		data-bs-target="#offcanvasHistory"
+		aria-controls="offcanvasHistory"
+            >
+		<svg class="bi me-2" width="16" height="16">
+                    <use xlink:href="#history"></use>
+		</svg>
+		History
+            </button>
+        </li>
+        <li class="d-grid">
+            <button
+		class="btn btn-toggle"
+		type="button"
+		data-bs-toggle="offcanvas"
+		data-bs-target="#offcanvasSemester"
+		aria-controls="offcanvasSemester"
+            >
+		<svg class="bi me-2" width="16" height="16">
+                    <use xlink:href="#semester"></use>
+		</svg>
+		Semester
+            </button>
+        </li>
+    </ul>
+
+    <hr />
+    <!--Side Bar Nav-->
+    <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+            <a href="{% url 'lo_home' %}" class="nav-link active" aria-current="page">
+		<svg class="bi me-2" width="16" height="16">
+                    <use xlink:href="#scheduling"></use>
+		</svg>
+		Schedule
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'lo_ta_management' %}" class="nav-link link-dark" aria-current="page">
+		<svg class="bi me-2" width="16" height="16">
+                    <use xlink:href="#TA-list"></use>
+		</svg>
+		TA Management
+            </a>
+        </li>
+	<li class="nav-item">
+            <a href="{% url 'lo_semester_management' %}" class="nav-link link-dark" aria-current="page">
+		<svg class="bi me-2" width="16" height="16">
+                    <use xlink:href="#semester"></use>
+		</svg>
+		Semester Management
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="/admin" class="nav-link link-dark" aria-current="page">
+		<svg class="bi me-2" width="16" height="16">
+                    <use xlink:href="#admin"></use>
+		</svg>
+		Admin
+            </a>
+        </li>
+    </ul>
+
+    <hr />
+
+    <!--Sign out button-->
+    <a href="/sign_out" class="btn-signOut link-dark rounded text-decoration-none">
+        <svg class="bi me-2" width="16" height="16">
+            <use xlink:href="#sign-out"></use>
+        </svg>
+        Sign Out
+    </a>
+</div>
