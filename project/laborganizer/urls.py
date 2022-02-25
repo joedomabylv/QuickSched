@@ -14,6 +14,7 @@ urlpatterns = [
          name='lo_semester_management'),
     path('generate_schedule/', views.lo_generate_schedule,
          name='lo_generate_schedule'),
+    path('edit_lab', views.lo_edit_lab, name='lo_edit_lab'),
     path('upload/', views.lo_upload, name='lo_upload'),
 ]
 

@@ -18,7 +18,8 @@ from django.contrib import messages
 from laborganizer.lo_utils import (get_semester_years,
                                    get_semester_times,
                                    get_current_semester,
-                                   get_tas_by_semester)
+                                   get_tas_by_semester,
+                                   get_labs_by_semester)
 
 
 def lo_home(request):
@@ -34,10 +35,6 @@ def lo_home(request):
     we should have it where you select a year first, then
     it gives you the available times to choose from. i don't know how
     to do that.
-
-    figure out what to display when it's a POST but no data. meaning, if a LO
-    chooses a lab that doesnt exist to display, nothing get's sent through, but
-    it's still a POST request.
     """
 
     # establish current semester time/year
@@ -127,6 +124,11 @@ def lo_ta_management(request):
         # get value from chosen semester form
         post_semester = request.POST.get('chosen_semester')
 
+        # check if the user selected a semester before submitting it
+        if post_semester is None:
+            messages.warning(request, 'Please select a semester first!')
+            return redirect('lo_ta_management')
+
         # split results
         semester = {'year': post_semester[3:], 'time': post_semester[:3]}
 
@@ -149,13 +151,71 @@ def lo_ta_management(request):
 
 def lo_semester_management(request):
     """View for semester information."""
-    semesters = Semester.objects.all()
+    context = {}
+    if request.method == 'POST':
+        post_semester = request.POST.get('chosen_semester')
 
-    context = {
-        'semesters': semesters,
+        # check the the user selected a semester before submitting it
+        if post_semester is None:
+            messages.warning(request, 'Please select a semester first!')
+            return redirect('lo_semester_management')
+
+        # split results
+        semester = {'year': post_semester[3:], 'time': post_semester[:3]}
+
+        # get all labs assigned to the chosen semester
+        labs = get_labs_by_semester(semester['time'], semester['year'])
+
+        # instantiate context variable
+        context = {
+            'labs': labs,
+            'semester': semester,
         }
+
+    # always load options
+    semester_options = Semester.objects.all()
+    context['semester_options'] = semester_options
+
     return render(request, 'laborganizer/semester_management/semester_management.html',
                   context)
+
+
+def lo_edit_lab(request):
+    """Update lab information for a single lab."""
+    if request.method == 'POST':
+        # get all data from the post request
+        new_course_id = request.POST.get('course_id')
+        new_section = request.POST.get('section')
+        new_facility_building = request.POST.get('facility_building')
+        new_facility_id = request.POST.get('facility_id')
+        new_instructor = request.POST.get('instructor')
+        new_days = request.POST.getlist('days[]')
+        new_start_time = request.POST.get('start_time')
+        new_end_time = request.POST.get('end_time')
+
+        # get the name of the lab from the submit button
+        submit_value = request.POST.get('submit')
+
+        # get the previous course ID for database lookup
+        old_course_id = request.POST.get('old_course_id')
+
+        # get the lab that needs to be updated
+        lab = Lab.objects.filter(course_id=old_course_id)
+
+        # update to new information
+        # lab.course_id = new_course_id
+        # lab.section = new_section
+        # lab.set_days(new_days)
+        # lab.facility_id = new_facility_id
+        # lab.facility_building = new_facility_building
+        # lab.instructor = new_instructor
+        # lab.start_time = new_start_time
+        # lab.end_time = new_end_time
+
+        # # save changes to database
+        # lab.save()
+
+    return redirect('lo_semester_management')
 
 
 def lo_new_semester(request):

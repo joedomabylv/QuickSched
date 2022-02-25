@@ -65,3 +65,10 @@ def get_tas_by_semester(time, year):
     tas = TA.objects.filter(assigned_semesters__semester_time=time,
                             assigned_semesters__year=year)
     return tas
+
+
+def get_labs_by_semester(time, year):
+    """Get a list of all Labs assigned to a specific semester."""
+    labs = Lab.objects.filter(semester__semester_time=time,
+                              semester__year=year)
+    return labs

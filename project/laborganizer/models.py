@@ -67,22 +67,34 @@ class Lab(models.Model):
         split_days = self.days.split(' ')
         return ', '.join(split_days)
 
+    def set_days(self, days_list):
+        """Convert a list of days into a string delimited by ' ' character."""
+        self.days = ' '.join(days_list)
+        self.save()
+
+    def get_start_time(self):
+        """Convert the stored start time fo a lab."""
+        return str(self.start_time)
+
+    def get_end_time(self):
+        """Convert the stored end time fo a lab."""
+        return str(self.end_time)
+
     class_name = models.CharField("Class name", default="N/A", max_length=50)
     subject = models.CharField("Subject", max_length=10)
     catalog_id = models.CharField("Catalog ID", max_length=10)
-    course_id = models.CharField("Course ID", max_length=10, blank=True)
+    course_id = models.CharField("Course ID", max_length=10, blank=True, unique=True)
     section = models.CharField("Section", max_length=10, blank=True)
     days = models.CharField("Days", max_length=10)
     facility_id = models.CharField("Facility ID", max_length=20, blank=True)
     facility_building = models.CharField("Facility Building", max_length=50,
                                          blank=True)
     instructor = models.CharField("Instructor", max_length=50, blank=True)
-    start_time = models.CharField("Start time", max_length=50, blank=True)
-    end_time = models.CharField("End time", max_length=50, blank=True)
+    start_time = models.TimeField("Start Time", auto_now=False,
+                                  auto_now_add=False, blank=True, null=True)
+    end_time = models.TimeField("End Time", auto_now=False,
+                                auto_now_add=False, blank=True, null=True)
     staffed = models.BooleanField(default=False)
-
-    # assigned_ta = models.OneToOneField(TA, on_delete=models.DO_NOTHING,
-    #                                   null=True, blank=True)
 
     semester = models.ForeignKey(
         'Semester',
