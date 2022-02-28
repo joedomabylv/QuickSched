@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import TemplateSchedule, TemplateAssignment
 
-# Register your models here.
+admin.site.register(TemplateSchedule)
+admin.site.register(TemplateAssignment)

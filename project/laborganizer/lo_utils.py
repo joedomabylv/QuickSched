@@ -53,8 +53,8 @@ def get_current_semester():
         semester_time = 'WNT'
 
     current_semester_dict = {
-        'year': current_year,
         'time': semester_time,
+        'year': current_year,
     }
 
     return current_semester_dict

@@ -22,7 +22,7 @@ from laborganizer.lo_utils import (get_semester_years,
                                    get_labs_by_semester)
 
 
-def lo_home(request):
+def lo_home(request, selected_semester=None):
     """
     Home route for the Lab Organizer dashboard.
 
@@ -37,45 +37,73 @@ def lo_home(request):
     to do that.
     """
 
-    # establish current semester time/year
-    current_semester = get_current_semester()
+    if selected_semester is None:
+        # establish current semester time/year, based on time
+        current_semester = get_current_semester()
+
+    else:
+        # get the current semester argument
+        current_semester = selected_semester
 
     # get all labs for the current semester
-    labs = Lab.objects.filter(semester__semester_time=current_semester['time'],
-                              semester__year=current_semester['year'])
+    labs = Lab.objects.filter(
+        semester__semester_time=current_semester['time'],
+        semester__year=current_semester['year']
+    )
 
     # get all TA's assigned to that semester
     tas = get_tas_by_semester(current_semester['time'],
                               current_semester['year'])
 
-    # get all existing semester years for selection purposes in the sidebar
-    all_semester_years = get_semester_years()
+    # # get all existing semester years for selection purposes in the sidebar
+    # all_semester_years = get_semester_years()
 
-    # get all existing semester times for selection purposes in the sidebar
-    all_semester_times = get_semester_times()
+    # # get all existing semester times for selection purposes in the sidebar
+    # all_semester_times = get_semester_times()
+
+    # get the names of all the semesters for selection purposes
+    semester_options = Semester.objects.all()
 
     # instantiate context variable
     context = {
         'labs': labs,
         'tas': tas,
-        'semester_years': all_semester_years,
-        'semester_times': all_semester_times,
+        'semester_options': semester_options,
         'current_semester': current_semester,
     }
 
+    # check if there are no labs in the selected semester
     if len(labs) == 0:
         messages.warning(request, 'No labs in the current semester!')
 
     return render(request, 'laborganizer/dashboard.html', context)
 
 
-def lo_generate_schedule(request):
+def lo_select_semester(request):
     """
-    View for generating TA schedule via LO command, from the TA Selector.
+    View to generate semester information regarding a chosen semester.
 
-    When the LO chooses new TA's from the left-hand contracted/uncontracted
-    TA list, display template scheduling including those chosen TA's.
+    When the LO selects a semester from the lefthand dropdown menu, display
+    that semester information.
     """
+    if request.method == 'POST':
+        semester = request.POST.get('selected_semester')
+        year = semester[3:]
+        time = semester[:3]
+        print(year, time)
+        selected_semester = {
+            'time': time,
+            'year': year,
+        }
+
+        # pass the selected semester to the primary view
+        return lo_home(request, selected_semester)
+
+    return redirect('lo_home')
+
+
+def lo_generate_schedule(request):
+    """View for generating TA schedule via LO command, from the TA Selector."""
     if request.method == 'POST':
         # get the student id's of all selected TA's
         ta_ids = request.POST.getlist('checks[]')
@@ -149,11 +177,15 @@ def lo_ta_management(request):
                   context)
 
 
-def lo_semester_management(request):
+def lo_semester_management(request, selected_semester=None):
     """View for semester information."""
     context = {}
     if request.method == 'POST':
-        post_semester = request.POST.get('chosen_semester')
+
+        if selected_semester is None:
+            post_semester = request.POST.get('chosen_semester')
+        else:
+            post_semester = selected_semester
 
         # check the the user selected a semester before submitting it
         if post_semester is None:
@@ -196,26 +228,28 @@ def lo_edit_lab(request):
         # get the name of the lab from the submit button
         submit_value = request.POST.get('submit')
 
+        print(submit_value)
+
         # get the previous course ID for database lookup
         old_course_id = request.POST.get('old_course_id')
 
         # get the lab that needs to be updated
-        lab = Lab.objects.filter(course_id=old_course_id)
+        lab = Lab.objects.get(course_id=old_course_id)
 
         # update to new information
-        # lab.course_id = new_course_id
-        # lab.section = new_section
-        # lab.set_days(new_days)
-        # lab.facility_id = new_facility_id
-        # lab.facility_building = new_facility_building
-        # lab.instructor = new_instructor
-        # lab.start_time = new_start_time
-        # lab.end_time = new_end_time
+        lab.course_id = new_course_id
+        lab.section = new_section
+        lab.set_days(new_days)
+        lab.facility_id = new_facility_id
+        lab.facility_building = new_facility_building
+        lab.instructor = new_instructor
+        lab.start_time = new_start_time
+        lab.end_time = new_end_time
 
-        # # save changes to database
-        # lab.save()
+        # save changes to database
+        lab.save()
 
-    return redirect('lo_semester_management')
+    return lo_semester_management(request, submit_value)
 
 
 def lo_new_semester(request):

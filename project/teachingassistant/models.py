@@ -173,3 +173,16 @@ class Holds(models.Model):
 
     # key to TA
     ta = models.OneToOneField(TA, on_delete=models.CASCADE, verbose_name='TA')
+
+
+class ClassTime(models.Model):
+    """
+    Represent a pair of times for a single TA.
+
+    1. Start time = the time their class starts
+    2. End time = the time their class ends
+    """
+
+    ta = models.ForeignKey(TA, on_delete=models.CASCADE)
+    start_time = models.TimeField(auto_now=False, auto_now_add=False)
+    end_time = models.TimeField(auto_now=False, auto_now_add=False)
