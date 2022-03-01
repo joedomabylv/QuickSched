@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from .forms import NewTAForm, NewTAAvailabilityForm
 from .models import TA, Availability, Holds
 from laborganizer.models import Lab
+from teachingassistant.ta_utils import (availability_list_to_tuples)
 
 
 def ta_home(request):
@@ -57,18 +58,19 @@ def ta_info(request):
         experience = request.POST['experience']
         year = request.POST['year']
         availability_list = request.POST.getlist('ta_class_time[]')
-        print(availability_list)
-
-        # to be used in the event of improper datetime for Availability object
-        # default_time = '12:00'
+        availability_list = availability_list_to_tuples(availability_list)
 
         # gather keys
-        # availability_key = request.user.ta_object.availability_key
+        availability_key = request.user.ta_object.availability_key
         holds_key = request.user.ta_object.holds_key
 
         # gather related objects (Holds, Availability)
-        # ta_availability = Availability.objects.get(id=availability_key)
+        ta_availability = Availability.objects.get(id=availability_key)
         ta_holds = Holds.objects.get(id=holds_key)
+
+        # update availability object
+        ta_availability.edit_time(availability_list)
+        print(ta_availability.get_class_times())
 
         # update existing TA object
         request.user.ta_object.first_name = first_name
@@ -77,35 +79,6 @@ def ta_info(request):
         request.user.ta_object.experience = experience
         request.user.ta_object.contraced = False
         request.user.ta_object.year = year
-
-        # ta_availability.monday_start = request.POST.get('monday_start',
-        #                                                 default_time)
-        # ta_availability.monday_end = request.POST.get('monday_end',
-        #                                               default_time)
-        # ta_availability.tuesday_start = request.POST.get('tuesday_start',
-        #                                                  default_time)
-        # ta_availability.tuesday_end = request.POST.get('tuesday_end',
-        #                                                default_time)
-        # ta_availability.wednesday_start = request.POST.get('wednesday_start',
-        #                                                    default_time)
-        # ta_availability.wednesday_end = request.POST.get('wednesday_end',
-        #                                                  default_time)
-        # ta_availability.thursday_start = request.POST.get('thurdsay_start',
-        #                                                   default_time)
-        # ta_availability.thursday_end = request.POST.get('thursday_end',
-        #                                                 default_time)
-        # ta_availability.friday_start = request.POST.get('friday_start',
-        #                                                 default_time)
-        # ta_availability.friday_end = request.POST.get('friday_end',
-        #                                               default_time)
-        # ta_availability.saturday_start = request.POST.get('saturday_start',
-        #                                                   default_time)
-        # ta_availability.saturday_end = request.POST.get('saturday_end',
-        #                                                 default_time)
-        # ta_availability.sunday_start = request.POST.get('sunday_start',
-        #                                                 default_time)
-        # ta_availability.sunday_end = request.POST.get('sunday_end',
-        #                                               default_time)
 
         # TA info has been updated, remove hold
         if ta_holds.incomplete_profile:
@@ -118,7 +91,7 @@ def ta_info(request):
         # save all new changes to the database
         request.user.save()
         request.user.ta_object.save()
-        # ta_availability.save()
+        ta_availability.save()
         ta_holds.save()
 
         context = {
