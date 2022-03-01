@@ -4,7 +4,6 @@
 
 {% block content %}
 
-
 {% for message in messages %}
 <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
   <strong>Message:</strong> {{ message }}
@@ -18,14 +17,30 @@
   <form method="post" action="/teachingassistant/ta_info">
     {% csrf_token %}
 
-    <h1>Personal Information</h1>    
-    {{ new_ta_form.as_p }}
+      <h1>Personal Information</h1>    
+      {{ new_ta_form.as_p }}
 
-    <h1>Availability</h1>
-    {{ new_ta_availability_form.as_p }}
+      <h1>Class Times</h1>
+      <p>Enter times for other classes, when you're <strong>not</strong> available!</p>
 
-    <button class="btn btn-secondary">Submit</button>
+      <label id="class_time_form" for="ta_class_time[]">
+
+	  <div class="input-group mb-3">
+	      <span class="input-group-text">Start Time</span>	    
+	      <input type="time" class="form-control" value="12:00" name="ta_class_time[]" required>
+	      <span class="input-group-text">End Time</span>
+	      <input type="time" class="form-control" value="12:00" name="ta_class_time[]" required>
+	  </div>
+
+      </label>
+      <br>
+      <button type="button" class="mb-3 btn btn-secondary" onclick="new_class_element()">Add another class</button>    
+      <br>
+      <button type="submit" class="btn btn-primary">Submit</button>
   </form>
+
 </div>
+
+<script src="{% static 'teachingassistant/new_class_time.js' %}"></script>
 
 {% endblock %}

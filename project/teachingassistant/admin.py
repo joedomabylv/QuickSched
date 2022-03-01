@@ -1,6 +1,6 @@
 """Admin information for teachingassistant app."""
 from django.contrib import admin
-from .models import TA, Holds, Availability
+from .models import TA, Holds, Availability, ClassTime
 
 
 class TAAdmin(admin.ModelAdmin):
@@ -15,3 +15,4 @@ admin.site.register(TA, TAAdmin)
 # these won't be registered in the final product
 admin.site.register(Holds)
 admin.site.register(Availability)
+admin.site.register(ClassTime)

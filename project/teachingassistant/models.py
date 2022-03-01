@@ -1,5 +1,6 @@
 """Models relating to Teaching Assistants."""
 from django.db import models
+from datetime import datetime
 
 
 class ScorePair(models.Model):
@@ -98,6 +99,32 @@ class TA(models.Model):
                                            blank=True)
 
 
+class ClassTime(models.Model):
+    """
+    Represent a pair of times for a single TA.
+
+    1. Start time = the time their class starts
+    2. End time = the time their class ends
+    """
+
+    class Meta:
+        """Meta information for a ClassTime object."""
+
+        verbose_name = 'Class Time'
+        verbose_name_plural = 'Class Times'
+
+    def __str__(self):
+        """Human readable object name."""
+        return f'{self.start_time}-{self.end_time}'
+
+    # key to TA
+    ta = models.ForeignKey(TA, on_delete=models.CASCADE)
+
+    # times
+    start_time = models.TimeField(auto_now=False, auto_now_add=False)
+    end_time = models.TimeField(auto_now=False, auto_now_add=False)
+
+
 class Availability(models.Model):
     """Object representing a single TA's availability."""
 
@@ -111,34 +138,37 @@ class Availability(models.Model):
         """Human readable object name."""
         return f'{self.ta}\'s Availability'
 
-    monday_start = models.TimeField(auto_now=False, auto_now_add=False,
-                                    blank=True, null=True)
-    monday_end = models.TimeField(auto_now=False, auto_now_add=False,
-                                  blank=True, null=True)
-    tuesday_start = models.TimeField(auto_now=False, auto_now_add=False,
-                                     blank=True, null=True)
-    tuesday_end = models.TimeField(auto_now=False, auto_now_add=False,
-                                   blank=True, null=True)
-    wednesday_start = models.TimeField(auto_now=False, auto_now_add=False,
-                                       blank=True, null=True)
-    wednesday_end = models.TimeField(auto_now=False, auto_now_add=False,
-                                     blank=True, null=True)
-    thursday_start = models.TimeField(auto_now=False, auto_now_add=False,
-                                      blank=True, null=True)
-    thursday_end = models.TimeField(auto_now=False, auto_now_add=False,
-                                    blank=True, null=True)
-    friday_start = models.TimeField(auto_now=False, auto_now_add=False,
-                                    blank=True, null=True)
-    friday_end = models.TimeField(auto_now=False, auto_now_add=False,
-                                  blank=True, null=True)
-    saturday_start = models.TimeField(auto_now=False, auto_now_add=False,
-                                      blank=True, null=True)
-    saturday_end = models.TimeField(auto_now=False, auto_now_add=False,
-                                    blank=True, null=True)
-    sunday_start = models.TimeField(auto_now=False, auto_now_add=False,
-                                    blank=True, null=True)
-    sunday_end = models.TimeField(auto_now=False, auto_now_add=False,
-                                  blank=True, null=True)
+    def delete_times(self):
+        """Delete all the class times for a TA."""
+        print(len(self.class_times.all()))
+
+        # remove the times from the availability object
+        for time in self.class_times.all():
+            print(f'Deleting {time}')
+            self.class_times.remove(time)
+
+        # delete actual ClassTime objects
+        ClassTime.objects.filter(ta=self.ta).delete()
+
+    def edit_time(self, time_list):
+        """Create a new ClassTime object for this TA."""
+        # delete the existing class times, if any
+        self.delete_times()
+
+        # create new class times for each object
+        for new_time in time_list:
+            self.class_times.create(start_time=new_time[0],
+                                    end_time=new_time[1],
+                                    ta=self.ta)
+
+    def get_class_times(self):
+        """Return a dictionary of the TA's class times."""
+        time_list = []
+        for time in self.class_times.all():
+            time_list.append(time.__str__())
+        return time_list
+
+    class_times = models.ManyToManyField(ClassTime)
 
     # key to TA
     ta = models.OneToOneField(TA, on_delete=models.CASCADE)
@@ -173,16 +203,3 @@ class Holds(models.Model):
 
     # key to TA
     ta = models.OneToOneField(TA, on_delete=models.CASCADE, verbose_name='TA')
-
-
-class ClassTime(models.Model):
-    """
-    Represent a pair of times for a single TA.
-
-    1. Start time = the time their class starts
-    2. End time = the time their class ends
-    """
-
-    ta = models.ForeignKey(TA, on_delete=models.CASCADE)
-    start_time = models.TimeField(auto_now=False, auto_now_add=False)
-    end_time = models.TimeField(auto_now=False, auto_now_add=False)
