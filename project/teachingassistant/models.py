@@ -105,6 +105,7 @@ class ClassTime(models.Model):
 
     1. Start time = the time their class starts
     2. End time = the time their class ends
+    3. Days = the days these times are for
     """
 
     class Meta:
@@ -117,12 +118,23 @@ class ClassTime(models.Model):
         """Human readable object name."""
         return f'{self.start_time}-{self.end_time}'
 
+    def join_days(days_list):
+        """Given a Python list of days, join them by commas."""
+        return ','.join(days_list)
+
+    def get_days(self):
+        """Return a Python list of the days attached to this time."""
+        return self.days.split(',')
+
     # key to TA
     ta = models.ForeignKey(TA, on_delete=models.CASCADE)
 
     # times
     start_time = models.TimeField(auto_now=False, auto_now_add=False)
     end_time = models.TimeField(auto_now=False, auto_now_add=False)
+
+    # days for these times
+    days = models.CharField('Days', max_length=10, blank=True, null=True)
 
 
 class Availability(models.Model):
@@ -144,7 +156,6 @@ class Availability(models.Model):
 
         # remove the times from the availability object
         for time in self.class_times.all():
-            print(f'Deleting {time}')
             self.class_times.remove(time)
 
         # delete actual ClassTime objects
@@ -157,8 +168,16 @@ class Availability(models.Model):
 
         # create new class times for each object
         for new_time in time_list:
+            # splice the days from the current index
+            days = new_time[2:]
+
+            # join the days list
+            days = ClassTime.join_days(days)
+
+            # create a new class time object and assign it to this field
             self.class_times.create(start_time=new_time[0],
                                     end_time=new_time[1],
+                                    days=days,
                                     ta=self.ta)
 
     def get_class_times(self):

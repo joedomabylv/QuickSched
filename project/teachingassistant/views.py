@@ -3,7 +3,8 @@ from django.shortcuts import render, redirect
 from .forms import NewTAForm, NewTAAvailabilityForm
 from .models import TA, Availability, Holds
 from laborganizer.models import Lab
-from teachingassistant.ta_utils import (availability_list_to_tuples)
+from teachingassistant.ta_utils import (availability_list_to_tuples,
+                                        parse_availability)
 
 
 def ta_home(request):
@@ -57,8 +58,10 @@ def ta_info(request):
         student_id = request.POST['student_id']
         experience = request.POST['experience']
         year = request.POST['year']
-        availability_list = request.POST.getlist('ta_class_time[]')
-        availability_list = availability_list_to_tuples(availability_list)
+        number_of_classes = int(request.POST.get('submit_button'))
+
+        # parse the input availability
+        availability_list = parse_availability(request, number_of_classes)
 
         # gather keys
         availability_key = request.user.ta_object.availability_key
@@ -70,7 +73,6 @@ def ta_info(request):
 
         # update availability object
         ta_availability.edit_time(availability_list)
-        print(ta_availability.get_class_times())
 
         # update existing TA object
         request.user.ta_object.first_name = first_name

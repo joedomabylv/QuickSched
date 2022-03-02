@@ -23,3 +23,21 @@ def availability_list_to_tuples(availability_list):
             index += 2
         return new_list
     return None
+
+
+def parse_availability(request, total_classes):
+    """
+    Parse through posted objects to get a TA's input availability.
+
+    Takes the request object from Django and pulls POST data based on
+    the total number of classes the TA submitted. The only way this function
+    will be called is when the request is already confirmed to be of
+    type "POST".
+    """
+    index = 0
+    avail_list = []
+    while index <= total_classes:
+        avail = request.POST.getlist(f'ta_class_time_{index}')
+        avail_list.append(avail)
+        index += 1
+    return avail_list
