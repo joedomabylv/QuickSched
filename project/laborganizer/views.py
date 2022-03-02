@@ -12,7 +12,7 @@ Variables used throughout LO dashboard:
 """
 from django.shortcuts import render, redirect
 from .forms import NewSemesterForm
-from teachingassistant.models import TA
+from teachingassistant.models import TA, Holds
 from .models import Semester, Lab
 from django.contrib import messages
 from laborganizer.lo_utils import (get_semester_years,
@@ -163,9 +163,17 @@ def lo_ta_management(request):
         # get all TA's assigned to that semester
         tas = get_tas_by_semester(semester['time'], semester['year'])
 
+        # get all Hold objects by the current ta's
+        holds = []
+        for ta in tas:
+            hold = Holds.objects.filter(ta=ta)
+            if hold is not None:
+                holds.append(hold)
+
         # populate context
         context = {
             'tas': tas,
+            'holds': holds,
             'semester': semester,
         }
 

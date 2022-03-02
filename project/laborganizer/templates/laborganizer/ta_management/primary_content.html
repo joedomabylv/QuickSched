@@ -47,6 +47,25 @@
 			       aria-controls="collapse-{{ forloop.counter }}"
 		    >
 			{{ ta.first_name }} {{ ta.last_name }}
+			<div class="mx-5 col text-end">
+			    {% for hold_object in holds %}
+			    {% for hold in hold_object %}
+			    {% if hold.ta == ta %}
+
+			    {% if hold.incomplete_profile %}
+			    <span class="badge bg-danger">incomplete profile</span>
+			    {% endif %}
+			    {% if hold.update_availability %}
+			    <span class="badge bg-warning">update availability</span>
+			    {% endif %}
+			    {% if hold.update_experience %}
+			    <span class="badge bg-warning">update experience</span>
+			    {% endif %}
+
+			    {% endif %}
+			    {% endfor %}
+			    {% endfor %}
+			</div>
 		    </button>
 		</h2>
 
