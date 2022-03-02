@@ -18,6 +18,10 @@ urlpatterns = [
          name='lo_generate_schedule'),
     path('edit_lab', views.lo_edit_lab, name='lo_edit_lab'),
     path('allow_ta_edit', views.lo_allow_ta_edit, name='lo_allow_ta_edit'),
+    path('assign_to_template', views.lo_assign_to_template,
+         name='lo_assign_to_template'),
+    path('select_schedule_version', views.lo_select_schedule_version,
+         name='lo_select_schedule_version'),
     path('upload/', views.lo_upload, name='lo_upload'),
 ]
 

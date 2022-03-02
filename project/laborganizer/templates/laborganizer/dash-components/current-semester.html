@@ -1,3 +1,5 @@
+{% load static %}
+
 <!--Labs section-->
 <div class="col d-flex flex-column flex-shrink-0 bg-light">
 
@@ -7,99 +9,39 @@
         style="min-height: 72px"
     >
 
-        <!--Left Side Tools-->
-
-        <!--Sort from low to high button-->
-        <div class="d-flex flex-row">
-	    <div class="h-100 mx-1 d-inline-block d-flex">
-		<button
-		    class="btn btn-vtools"
-			   type="button"
-			   id="dropdownSortDown"
-			   data-bs-toggle="dropdown"
-			   aria-expanded="false"
-			   data-bs-placement="left"
-			   title="Sort A-Z 1-9"
-		>
-		    <svg class="bi" width="16" height="16">
-			<use xlink:href="#sort-alpha-down"></use>
-		    </svg>
-		</button>
-		<!--Sort Drop down menue-->
-		<ul class="dropdown-menu" aria-labelledby="dropdownSortDown">
-		    <li><a class="dropdown-item" href="#">Index</a></li>
-		    <li><a class="dropdown-item" href="#">Subject</a></li>
-		    <li><a class="dropdown-item" href="#">Cat Nbr</a></li>
-		    <li><a class="dropdown-item" href="#">Class Nbr</a></li>
-		    <li><a class="dropdown-item" href="#">Class Nbr</a></li>
-		    <li><a class="dropdown-item" href="#">End Time</a></li>
-		    <li><a class="dropdown-item" href="#">Days</a></li>
-		    <li><a class="dropdown-item" href="#">Instrucior</a></li>
-		    <li><a class="dropdown-item" href="#">Assigned GTA</a></li>
-		</ul>
-	    </div>
-
-	    <!--Sorf from high to low button-->
-	    <div class="h-100 mx-1 d-inline-block d-flex">
-		<button
-		    class="btn btn-vtools"
-			   type="button"
-			   id="dropdownSortUp"
-			   data-bs-toggle="dropdown"
-			   aria-expanded="false"
-			   data-bs-placement="left"
-			   title="Sort Z-A 9-1"
-		>
-		    <svg class="bi" width="16" height="16">
-			<use xlink:href="#sort-alpha-up"></use>
-		    </svg>
-		</button>
-		<!--Sort Drop down menue-->
-		<ul class="dropdown-menu" aria-labelledby="dropdownSortUp">
-		    <li><a class="dropdown-item" href="#">Index</a></li>
-		    <li><a class="dropdown-item" href="#">Subject</a></li>
-		    <li><a class="dropdown-item" href="#">Cat Nbr</a></li>
-		    <li><a class="dropdown-item" href="#">Class Nbr</a></li>
-		    <li><a class="dropdown-item" href="#">Class Nbr</a></li>
-		    <li><a class="dropdown-item" href="#">End Time</a></li>
-		    <li><a class="dropdown-item" href="#">Days</a></li>
-		    <li><a class="dropdown-item" href="#">Instructor</a></li>
-		    <li><a class="dropdown-item" href="#">Assigned GTA</a></li>
-		</ul>
-	    </div>
-        </div>
-
         <!--Lab Title-->
-        <div class="d-flex flex-row">
-	    <span class="fs-5 ms-5 px-1"><strong>{{ current_semester.time }}{{ current_semester.year }}</strong></span>
-        </div>
+
+	    <div class="container">
+		<div class="row fs-4 mt-3">
+		    <div class="col-8 text-start">
+			<p class="fw-bold">{{ current_semester.time }}{{ current_semester.year }}</p>
+		    </div>
+		    <div class="col-4 text-end">
+			<form method="post" action="{% url 'lo_select_schedule_version' %}">
+			    {% csrf_token %}
+			    <div class="input-group mb-3">
+				<span class="input-group-text">version</span>
+				<select name="version_number" class="form-select">
+				    <option selected>
+					{{ template_schedule.version_number }}
+				    </option>
+				    {% for version in schedule_versions %}
+				    {% if version != template_schedule.version_number %}
+				    <option value="{{ version }}">{{ version }}</option>
+				    {% endif %}
+				    {% endfor %}
+				</select>
+				<input class="btn btn-outline-secondary" type="submit" value="Go">
+				<input name="semester_year" type="hidden" value="{{ current_semester.year }}">
+				<input name="semester_time" type="hidden" value="{{ current_semester.time }}">
+			    </div>
+			</form>
+		    </div>   
+		</div>
+	    </div>
 
         <!--Right Side tools-->
         <div class="d-flex flex-row px-2">
-	    <!--Recent Semesters selector-->
-	    <!--Display a short selections of 5 most recent semesters-->
-	    <button
-		class="btn btn-vtools"
-		type="button"
-		id="dropdownSemester"
-		data-bs-toggle="dropdown"
-		aria-expanded="false"
-		data-bs-placement="left"
-		title="Recent semesters"
-	    >
-		<svg class="bi" width="16" height="16">
-		    <use xlink:href="#semester"></use>
-		</svg>
-	    </button>
-	    <!--Semeter Drop down menu-->
-	    <ul class="dropdown-menu" aria-labelledby="dropdownSemester">
-		<li><a class="dropdown-item" href="#">2022 Summer</a></li>
-		<li><a class="dropdown-item" href="#">2022 Fall</a></li>
-		<li><a class="dropdown-item" href="#">2021 Winer</a></li>
-		<li><a class="dropdown-item" href="#">2021 Fall</a></li>
-		<li><a class="dropdown-item" href="#">2021 Summer</a></li>
-	    </ul>
-
 	    <!--Filter-->
 	    <form class="container-fluid">
 		<div class="input-group">
@@ -117,6 +59,7 @@
 		</div>
 	    </form>
         </div>
+
     </div>
 
     <!--Table of Lab list-->
@@ -157,16 +100,33 @@
 		    <td>
 			<!--More info button-->
 			<div class="d-grid">
-			    <button
-				type="button"
-				class="btn btn-outline-dark border-0"
-				data-bs-toggle="popover"
-				data-bs-placement="left"
-				title="Email: lol@lol.com"
-				data-bs-content="Score: 20"
-			    >
-				{{ lab.assigned_ta }}
-			    </button>
+			    <form method="post" id="class_{{ forloop.counter }}" action="{% url 'lo_assign_to_template' %}">
+				{% csrf_token %}
+				<select onchange="to_template(this.value, {{ lab.course_id }}, '{{ current_semester.time }}', {{ current_semester.year }}, {{ template_schedule.version_number }})" class="btn btn-outline-dark border-0 form-select">
+				    <option selected>
+					{% if template_schedule %}
+
+					{% for assignment in template_schedule.assignments.all %}
+					{% if assignment.lab == lab %}
+					{{ assignment.ta.first_name }} {{ assignment.ta.last_name }}
+					{% endif %}
+					{% endfor %}
+					
+					{% else %}
+					
+  					    {% if labs.assigned_ta != None %}
+					        {{ lab.assigned_ta }}
+  					    {% else %}
+					        Unassigned
+					    {% endif %}
+					
+					{% endif %}
+				    </option>
+				    {% for ta in tas %}
+				    <option value="{{ ta.student_id }}">{{ ta.first_name }} {{ ta.last_name }}</option>
+				    {% endfor %}
+				</select>
+			    </form>
 			</div>
 		    </td>
 		    <td>
@@ -197,4 +157,8 @@
         </table>
 
     </div>
+
+    <script src="{% static 'laborganizer/assign_to_template.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    
 </div>

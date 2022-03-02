@@ -14,29 +14,24 @@ from django.shortcuts import render, redirect
 from .forms import NewSemesterForm
 from teachingassistant.models import TA, Holds
 from .models import Semester, Lab, AllowTAEdit
+from optimization.models import TemplateSchedule, TemplateAssignment
 from django.contrib import messages
 from laborganizer.lo_utils import (get_semester_years,
                                    get_semester_times,
                                    get_current_semester,
                                    get_tas_by_semester,
-                                   get_labs_by_semester)
+                                   get_labs_by_semester,
+                                   get_most_recent_sched,
+                                   get_all_schedule_version_numbers,
+                                   get_template_schedule)
 
 
-def lo_home(request, selected_semester=None):
+def lo_home(request, selected_semester=None, template_schedule=None):
     """
     Home route for the Lab Organizer dashboard.
 
     Displays data relevant to the active semester based on the time of year.
     """
-    """
-    TODO:
-
-    fix the display of the selections for times/years.
-    we should have it where you select a year first, then
-    it gives you the available times to choose from. i don't know how
-    to do that.
-    """
-
     if selected_semester is None:
         # establish current semester time/year, based on time
         current_semester = get_current_semester()
@@ -44,6 +39,15 @@ def lo_home(request, selected_semester=None):
     else:
         # get the current semester argument
         current_semester = selected_semester
+
+    # check if a template schedule was given
+    if template_schedule is None:
+        # if not, get the most recent version of the current semester
+        template_schedule = get_most_recent_sched(current_semester['time'],
+                                                  current_semester['year'])
+    else:
+        # use the provided template schedule
+        template_schedule = template_schedule
 
     # get all labs for the current semester
     labs = Lab.objects.filter(
@@ -55,14 +59,13 @@ def lo_home(request, selected_semester=None):
     tas = get_tas_by_semester(current_semester['time'],
                               current_semester['year'])
 
-    # # get all existing semester years for selection purposes in the sidebar
-    # all_semester_years = get_semester_years()
-
-    # # get all existing semester times for selection purposes in the sidebar
-    # all_semester_times = get_semester_times()
-
     # get the names of all the semesters for selection purposes
     semester_options = Semester.objects.all()
+
+    # get all template schedule version numbers for selection
+    template_schedule_versions = get_all_schedule_version_numbers(
+        current_semester['time'],
+        current_semester['year'])
 
     # instantiate context variable
     context = {
@@ -70,6 +73,8 @@ def lo_home(request, selected_semester=None):
         'tas': tas,
         'semester_options': semester_options,
         'current_semester': current_semester,
+        'template_schedule': template_schedule,
+        'schedule_versions': template_schedule_versions,
     }
 
     # check if there are no labs in the selected semester
@@ -77,6 +82,42 @@ def lo_home(request, selected_semester=None):
         messages.warning(request, 'No labs in the current semester!')
 
     return render(request, 'laborganizer/dashboard.html', context)
+
+
+def lo_select_schedule_version(request):
+    """Select a new version of a template schedule to display."""
+    if request.method == 'POST':
+        version_number = request.POST.get('version_number')
+        year = request.POST.get('semester_year')
+        time = request.POST.get('semester_time')
+
+        # get that schedule version
+        template_schedule = get_template_schedule(time, year, version_number)
+        return lo_home(request, None, template_schedule)
+
+    return redirect('lo_home')
+
+
+def lo_assign_to_template(request):
+    """Assign the given TA to the given Lab in the template schedule."""
+    if request.method == 'GET':
+        # gather data from GET request
+        student_id = request.GET.get('student_id')
+        course_id = request.GET.get('course_id')
+        time = request.GET.get('time')  # time of the desired semester
+        year = request.GET.get('year')  # year of the desired semester
+        version = request.GET.get('version')  # template schedule version
+
+        # get objects from database
+        ta = TA.objects.get(student_id=student_id)
+        lab = Lab.objects.get(course_id=course_id)
+        template_schedule = get_template_schedule(time, year, version)
+
+        # assign the ta to the selected lab
+        template_schedule.assign(ta, lab)
+        template_schedule.save()
+
+    return redirect('lo_home')
 
 
 def lo_select_semester(request):
@@ -97,7 +138,7 @@ def lo_select_semester(request):
         }
 
         # pass the selected semester to the primary view
-        return lo_home(request, selected_semester)
+        return lo_home(request, selected_semester, None)
 
     return redirect('lo_home')
 

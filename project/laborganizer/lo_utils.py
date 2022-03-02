@@ -2,6 +2,7 @@
 from .models import Semester, Lab
 from datetime import datetime
 from teachingassistant.models import TA
+from optimization.models import TemplateSchedule
 
 
 def get_semester_years():
@@ -72,3 +73,50 @@ def get_labs_by_semester(time, year):
     labs = Lab.objects.filter(semester__semester_time=time,
                               semester__year=year)
     return labs
+
+
+def get_most_recent_sched(time, year):
+    """Get the most recent template schedule based on the given semester."""
+    # get the semester based on the time and year
+    semester = Semester.objects.get(semester_time=time,
+                                    year=year)
+    # grab all the schedule templates by semester
+    template_schedules = TemplateSchedule.objects.filter(semester=semester)
+
+    # find the one with the biggest version number
+    largest_version = 0
+    for schedule in template_schedules:
+        if schedule.version_number > largest_version:
+            largest_version = schedule.version_number
+    return TemplateSchedule.objects.get(semester=semester,
+                                        version_number=largest_version)
+
+
+def get_all_schedule_version_numbers(time, year):
+    """
+    Get the version numbers of all template schedules for the semester.
+
+    Based on time and year.
+    """
+    # get the desired semester
+    semester = Semester.objects.get(semester_time=time,
+                                    year=year)
+
+    # get all template schedules based on semester
+    template_schedules = TemplateSchedule.objects.filter(semester=semester)
+
+    # get the version numbers of all template schedules
+    version_list = []
+    for schedule in template_schedules:
+        version_list.append(schedule.version_number)
+
+    return version_list
+
+
+def get_template_schedule(time, year, version):
+    """Get the template schedule based on semester and version number."""
+    # get the semester object
+    semester = Semester.objects.get(semester_time=time,
+                                    year=year)
+    return TemplateSchedule.objects.get(semester=semester,
+                                        version_number=version)

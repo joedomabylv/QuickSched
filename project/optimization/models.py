@@ -11,9 +11,12 @@ class TemplateAssignment(models.Model):
         """Define human readable object name."""
         return f'{self.lab}, {self.ta}'
 
-    lab = models.ManyToManyField(Lab)
-    ta = models.ManyToManyField(TA)
-    semester = models.ManyToManyField(Semester)
+    lab = models.ForeignKey(Lab, on_delete=models.CASCADE,
+                            blank=True, null=True)
+    ta = models.ForeignKey(TA, on_delete=models.CASCADE,
+                           blank=True, null=True)
+    schedule_key = models.CharField('Schedule Key', max_length=10,
+                                    blank=True, null=True)
 
 
 class TemplateSchedule(models.Model):
@@ -21,32 +24,38 @@ class TemplateSchedule(models.Model):
 
     def __str__(self):
         """Define human readable object name."""
-        return f'Schedule: {self.semester}, v{self.version_number}'
+        return f'{self.semester}, v{self.version_number}'
 
     def assign(self, ta, lab):
         """Create a new assignment for a TA in the template schedule."""
+        # if there is a TA already assigned to the desired lab,
+        # unassign them first
+        self.unassign(lab)
+
         # create a new assignment object
-        new_assignment = TemplateAssignment.create(lab=lab, ta=ta,
-                                                   semester=self.semester)
+        new_assignment = TemplateAssignment.objects.create(lab=lab,
+                                                           ta=ta,
+                                                           schedule_key=self.pk)
+        new_assignment.save()
+
         # add the new object to the existing field
         self.assignments.add(new_assignment)
+
         # save changes
         self.save()
 
-    def unassign(self, ta, lab):
-        """Remove an assignment for a TA within the template schedule."""
-        # remove the TA from the assignments field
-        self.assignments.remove(ta=ta, lab=lab, semester=self.semester)
-        # save changes to overall schedule
-        self.save()
+    def unassign(self, lab):
+        """Remove the assigned TA from the selected lab."""
+        for assignment in self.assignments.all():
+            if assignment.lab == lab:
+                assignment.delete()
+                self.assignments.remove(assignment)
+                self.save()
+                return True
+        return False
 
-        # delete the TemplateAssignment object associated with that TA
-        assignment = TemplateAssignment.objects.get(ta=ta, lab=lab,
-                                                    semester=self.semester)
-        assignment.delete()
-        # save changes to assignment object
-        assignment.save()
 
-    version_number = models.CharField('Schedule Version', max_length=50)
-    semester = models.ManyToManyField(Semester)
-    assignments = models.ManyToManyField(TemplateAssignment)
+    version_number = models.IntegerField('Schedule Version', default=0)
+    semester = models.ForeignKey(Semester, on_delete=models.CASCADE,
+                                 blank=True, null=True)
+    assignments = models.ManyToManyField(TemplateAssignment, blank=True)
