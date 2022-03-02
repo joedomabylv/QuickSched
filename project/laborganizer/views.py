@@ -13,7 +13,7 @@ Variables used throughout LO dashboard:
 from django.shortcuts import render, redirect
 from .forms import NewSemesterForm
 from teachingassistant.models import TA, Holds
-from .models import Semester, Lab
+from .models import Semester, Lab, AllowTAEdit
 from django.contrib import messages
 from laborganizer.lo_utils import (get_semester_years,
                                    get_semester_times,
@@ -258,6 +258,24 @@ def lo_edit_lab(request):
         lab.save()
 
     return lo_semester_management(request, submit_value)
+
+
+def lo_allow_ta_edit(request):
+    """Allow TA's to edit their information form for the requested time."""
+    if request.method == 'POST':
+        date = request.POST.get('date')
+        time = request.POST.get('time')
+
+        if date != '' or time != '':
+            allow_edits = AllowTAEdit.objects.get(pk=1)
+            allow_edits.date = date
+            allow_edits.time = time
+            allow_edits.allowed = True
+            allow_edits.save()
+            messages.success(request, 'TA\'s are allowed to edit their information!')
+        else:
+            messages.warning(request, 'Please select a date and a time!')
+    return redirect('lo_ta_management')
 
 
 def lo_new_semester(request):

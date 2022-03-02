@@ -1,6 +1,6 @@
 """Models relating to Lab Organizers."""
 from django.db import models
-from datetime import date
+from datetime import datetime, date
 from teachingassistant.models import TA
 
 
@@ -103,3 +103,52 @@ class Lab(models.Model):
         null=True,
         blank=True
     )
+
+
+class AllowTAEdit(models.Model):
+    """
+    Boolean flag for TA information edits.
+
+    Acts as a variable that is checked every time a TA tries to edit their
+    own information.
+    """
+
+    class Meta:
+        """Meta information for TA edit object."""
+
+        verbose_name = 'Allow TA Edit'
+        verbose_name_plural = 'Allow TA Edits'
+
+    def __str__(self):
+        """Human readable object name."""
+        return 'Allowance'
+
+    def is_allowed(self):
+        """Check if the current time is after the currently saved time."""
+        # get current datetime information
+        day_and_time = datetime.now()
+
+        # format current datetime information
+        day = day_and_time.strftime('%m/%d/%Y')
+        time = day_and_time.strftime('%H:%M')
+
+        # format saved datetime information
+        saved_day = self.date.strftime('%m/%d/%Y')
+        saved_time = self.time.strftime('%H:%M')
+
+        # if the current time is before the saved time, allow
+        # TA's to edit their information
+        if day < saved_day or time < saved_time:
+            self.allowed = True
+            return True
+        else:
+            # if the saved time is after the current time, do not
+            # allow TA's to edit their information
+            self.allowed = False
+            return False
+
+    allowed = models.BooleanField('Allow TA\'s to edit', default=False)
+    date = models.DateField(auto_now=False, auto_now_add=False,
+                            blank=True, null=True)
+    time = models.TimeField(auto_now=False, auto_now_add=False,
+                            blank=True, null=True)

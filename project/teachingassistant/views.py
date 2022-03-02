@@ -1,8 +1,9 @@
 """Views for TeachingAssistant App."""
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from .forms import NewTAForm, NewTAAvailabilityForm
 from .models import TA, Availability, Holds
-from laborganizer.models import Lab
+from laborganizer.models import Lab, AllowTAEdit
 from teachingassistant.ta_utils import (availability_list_to_tuples,
                                         parse_availability)
 
@@ -39,14 +40,31 @@ def ta_home(request):
 
 
 def ta_account(request):
-    """Directs the user to their TA account status page."""
-    # if the TA has a hold that needs information updated, direct them
-    # with the proper form
-    context = {
-        'title_tag': request.user.first_name + ' ' + request.user.last_name,
-        'new_ta_form': NewTAForm(),
+    """
+    Directs the user to their TA account status page.
+
+    If the TA has a hold that requires them to edit their information or
+    the LO has allowed it, they will be directed to the account page. If not,
+    they will be shown that they don't have permission to edit their
+    information.
+    """
+    # get holds for current ta
+    ta_holds_key = request.user.ta_object.holds_key
+    holds_object = Holds.objects.get(pk=ta_holds_key)
+
+    # get the AllowTAEdit object and check if the LO has allowed TA's to
+    # edit their information
+    allow_object = AllowTAEdit.objects.get(pk=1)
+
+    if holds_object.incomplete_profile or allow_object.is_allowed():
+        context = {
+            'title_tag': request.user.first_name + ' ' + request.user.last_name,
+            'new_ta_form': NewTAForm(),
         }
-    return render(request, 'teachingassistant/new_ta.html', context)
+        return render(request, 'teachingassistant/new_ta.html', context)
+
+    messages.warning(request, 'You\'re not allowed to edit your information!')
+    return redirect('ta_home')
 
 
 def ta_info(request):

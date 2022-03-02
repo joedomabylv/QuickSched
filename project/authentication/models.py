@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from teachingassistant.models import TA, Holds, Availability
 from emailupload.models import EmailInformation
+from laborganizer.models import AllowTAEdit
 
 
 class CustomUserManager(BaseUserManager):
@@ -58,6 +59,10 @@ class CustomUserManager(BaseUserManager):
         user.is_admin = True
         user.is_staff = True
         user.is_superuser = True
+
+        # create object that checks for TA information edit allowance
+        new_allow_ta_edit = AllowTAEdit.objects.create()
+        new_allow_ta_edit.save()
 
         # create empty EmailInformation object
         new_email_info = EmailInformation.objects.create()

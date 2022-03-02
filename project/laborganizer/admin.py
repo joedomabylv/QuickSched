@@ -1,6 +1,6 @@
 """Admin information for laborganizer app."""
 from django.contrib import admin
-from .models import Semester, Lab
+from .models import Semester, Lab, AllowTAEdit
 
 
 class LabAdmin(admin.ModelAdmin):
@@ -12,3 +12,4 @@ class LabAdmin(admin.ModelAdmin):
 
 admin.site.register(Semester)
 admin.site.register(Lab, LabAdmin)
+admin.site.register(AllowTAEdit)

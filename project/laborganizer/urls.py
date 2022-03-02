@@ -17,6 +17,7 @@ urlpatterns = [
     path('generate_schedule/', views.lo_generate_schedule,
          name='lo_generate_schedule'),
     path('edit_lab', views.lo_edit_lab, name='lo_edit_lab'),
+    path('allow_ta_edit', views.lo_allow_ta_edit, name='lo_allow_ta_edit'),
     path('upload/', views.lo_upload, name='lo_upload'),
 ]
 

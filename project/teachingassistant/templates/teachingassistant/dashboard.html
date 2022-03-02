@@ -7,14 +7,7 @@
 <!-- Custom CSS -->
 <link href="{% static 'teachingassistant/dashboard.css' %}" rel="stylesheet">
 
-{% for message in messages %}
-<div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-  <strong>Message:</strong> {{ message }}
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
-</div>
-{% endfor %}
+{% include 'teachingassistant/message.html' %}
 
 <!--Main page-->
 <main class="container-lg">
