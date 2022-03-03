@@ -1,0 +1,79 @@
+<div class="col d-flex flex-column flex-shrink-0 bg-light">
+
+    {% include 'teachingassistant/horizontal_tool_bar.html' %}
+    {% include 'teachingassistant/message.html' %}
+
+    <div class="mt-5 container">
+        <!--From-->
+        <form method="post" action="{% url 'ta_info' %}" class="needs-validation" novalidate>
+            <!--Personal info form-->
+            <div class="row g-3">
+		<div class="col-6">
+		    <label for="first_name" class="form-label">First name</label>
+		    <input type="text" class="form-control" name="first_name" required>
+		    <div class="invalid-feedback">Please provide your first name</div>
+		</div>
+		<div class="col-6">
+		    <label for="last_name" class="form-label">Last name</label>
+		    <input type="text" class="form-control" name="last_name" required>
+		    <div class="invalid-feedback">Please provide your last name</div>
+		</div>
+		<div class="col-6">
+		    <label for="student_id" class="form-label">Student ID</label>
+		    <input type="text" class="form-control" name="student_id" required >
+		    <div class="invalid-feedback">Please provide your student ID</div>
+		</div>
+		<div class="col-6">
+		    <label for="year" class="form-labe">Year</label>
+		    <select class="form-select mt-2" name="year">
+			<option value="FR">Freshman</option>
+			<option value="SO">Sophomore</option>
+			<option value="JR">Junior</option>
+			<option value="SR">Senior</option>
+			<option value="GR">Graduate</option>
+		    </select>
+		</div>
+            </div>
+            <!--Course Time (Time that not avaliable)-->
+            <div class="col-12 d-flex justify-content-between">
+		Course times
+		<a class="btn" href="#" role="button">
+		    <svg width="16" height="16">
+			<use xlink:href="#add"></use>
+		    </svg>
+		</a>
+            </div>
+            <hr />
+            <!--TA Experiences-->
+            <div class="col-12 d-flex justify-content-between">
+		TA Experiences
+		<a class="btn" href="#" role="button">
+		    <svg width="16" height="16">
+			<use xlink:href="#add"></use>
+		    </svg>
+		</a>
+            </div>
+            <hr />
+            <!--Course experience warp up-->
+            <div class="row my-3 border border-1 border-light">
+		<div class="col-5">
+		    <label for="ExperienceCourseID" class="form-label"
+                    >Course Name (MAT121)</label
+					 >
+		    <input
+			type="text"
+			      class="form-control"
+			      id="ExperienceCourseID"
+			      placeholder="eg: MAT121"
+			      value=""
+			      required=""
+		    />
+		</div>
+            </div>
+            <hr class="my-4" />
+            <button class="w-100 btn btn-primary btn-lg" type="submit">
+		Submit
+            </button>
+        </form>
+    </div>
+</div>

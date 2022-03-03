@@ -1,0 +1,56 @@
+{% load static %}
+
+<!--Side bar-->
+<div
+    class="col-auto d-flex justify-content-between flex-column flex-shrink-0 p-3 bg-white border-end"
+>
+    <!--Clickable Icon-->
+    <a
+        href="{% url 'ta_home' %}"
+        class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none"
+    >
+        <img
+            src="{% static 'global/Magisters.svg' %}"
+            alt="Magisters"
+            width="40"
+            height="40"
+            class="bi me-2"
+            viewBox="0 0 16 16"
+        />
+        <span class="fs-4">QuickSched</span>
+    </a>
+    
+    <hr />
+
+    <!--Side Bar Nav-->
+    {% with url_name=request.resolver_match.url_name %}    
+    <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+            <a href="{% url 'ta_home' %}" class="nav-link {% if url_name == 'ta_home' %}active{% else %}link-dark{% endif %}" aria-current="page">
+		<svg class="bi me-2" width="16" height="16">
+                    <use xlink:href="#scheduling"></use>
+		</svg>
+		Schedule
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'ta_account' %}" class="nav-link {% if url_name == 'ta_account' %}active{% else %}link-dark{% endif %}" aria-current="page">
+		<svg class="bi me-2" width="16" height="16">
+                    <use xlink:href="#TA-list"></use>
+		</svg>
+		Account
+            </a>
+        </li>
+    </ul>
+    {% endwith %}
+
+    <hr />
+
+    <!--Sign out button-->
+    <a href="/sign_out" class="btn-signOut link-dark rounded text-decoration-none">
+        <svg class="bi me-2" width="16" height="16">
+            <use xlink:href="#sign-out"></use>
+        </svg>
+        Sign Out
+    </a>
+</div>

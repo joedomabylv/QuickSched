@@ -1,17 +1,18 @@
 {% extends 'teachingassistant/base.html' %}
-{% block title %}QuickSched: Dashboard{% endblock %}
+{% block title %}QuickSched: {{ ta.first_name }} {{ ta.last_name }}{% endblock %}
 {% load static %}
 
 {% block content %}
 
 <!-- Bootstrap and  CSS -->
 <link rel="stylesheet" href="{% static 'teachingassistant/dashboard.css' %}" />
+<link rel="stylesheet" href="{% static 'teachingassistant/account.css' %}" />
 
 <!-- Main content  -->
 <main>
     
     {% include 'teachingassistant/sidebar.html' %}
-    {% include 'teachingassistant/dash_content.html' %}    
+    {% include 'teachingassistant/account/edit_info.html' %}    
     {% include 'teachingassistant/message.html' %}
 
 </main>
@@ -20,5 +21,6 @@
 
 <!--Bootstrap set up -->
 <script src="{% static 'teachingassistant/dashboard.js' %}"></script>
+<script src="{% static 'teachingassistant/account.js' %}"></script>
 
 {% endblock %}

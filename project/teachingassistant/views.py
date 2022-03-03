@@ -61,7 +61,7 @@ def ta_account(request):
             'title_tag': request.user.first_name + ' ' + request.user.last_name,
             'new_ta_form': NewTAForm(),
         }
-        return render(request, 'teachingassistant/new_ta.html', context)
+        return render(request, 'teachingassistant/account/account.html', context)
 
     messages.warning(request, 'You\'re not allowed to edit your information!')
     return redirect('ta_home')

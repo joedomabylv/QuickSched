@@ -1,0 +1,58 @@
+{% extends 'teachingassistant/base.html' %}
+{% block title %}QuickSched: Dashboard{% endblock %}
+{% load static %}
+
+{% block content %}
+
+<!-- Custom CSS -->
+<link href="{% static 'teachingassistant/dashboard.css' %}" rel="stylesheet">
+
+{% include 'teachingassistant/message.html' %}
+
+<!--Main page-->
+<main class="container-lg">
+  <div class="row">
+    <div class="gx-3 col-md-9">
+      <div class="h-80 border bg-light"><h5>Assigned Classes</h5></div>
+      {% if labs %}      
+      <div class="list-group overflow-auto">
+	{% for lab in labs %}
+        <a class="list-group-item list-group-item-action d-flex py-3" aria-current="True">
+          <div class="w-20 justify-content-between">
+	    <h6 class="mb-0 d-flex">{{ lab }}</h6>
+	    <p class="mb-0 d-flex opacity-75">{{ lab.day }} : {{ lab.time }}</p>
+          </div>
+        </a>
+	{% endfor %}
+      </div>
+      {% else %}
+      You don't have any current assignments!
+      {% endif %}
+    </div>
+    
+    <div class="gx-3 col-sm-3">
+      <div class="border bg-light"><h5>Holds</h5></div>
+      <div class="text-start h-80 border bg-white p-2 ">
+	{% if holds %}
+  	  {% for hold in holds %}
+
+	    {% if hold == "incomplete_profile" %}
+	    <p><span class="badge bg-danger">critical</span> Incomplete Profile!</p>
+
+	    {% elif hold == "update_availability" %}
+	    <p><span class="badge bg-warning">required</span> Update Availability!</p>
+
+	    {% elif hold == "update_experience" %}
+	    <p><span class="badge bg-warning">required</span> Update Experience!</p>
+	    {% endif %}
+
+          {% endfor %}
+
+	  {% else %}
+  	  <p><span class="badge bg-success">good</span> No Holds!</p>
+	{% endif %}
+      </div>
+    </div>
+  </div>
+
+{% endblock %}  

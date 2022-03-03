@@ -1,0 +1,15 @@
+body {
+  background-color: #faf1e7;
+}
+
+main {
+  background-color: white;
+}
+
+.container {
+  max-width: 600px;
+}
+
+.btn {
+  padding: 0;
+}
