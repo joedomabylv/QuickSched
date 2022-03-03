@@ -14,7 +14,7 @@ urlpatterns = [
     path('ta_add/', include("emailupload.urls")),
     path('semester_management/', views.lo_semester_management,
          name='lo_semester_management'),
-    path('generate_schedule/', views.lo_generate_schedule,
+    path('generate_schedule', views.lo_generate_schedule,
          name='lo_generate_schedule'),
     path('edit_lab', views.lo_edit_lab, name='lo_edit_lab'),
     path('allow_ta_edit', views.lo_allow_ta_edit, name='lo_allow_ta_edit'),

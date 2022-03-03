@@ -8,7 +8,7 @@
     aria-labelledby="offcanvasTASelector"
 >
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasTASelector">{{ current_semester.time}} {{ current_semester.year }} TA Selector</h5>
+        <h5 class="offcanvas-title" id="offcanvasTASelector">{{ current_semester.time }} {{ current_semester.year }} TA Selector</h5>
         <button
             type="button"
             class="btn-close text-reset"
@@ -122,9 +122,12 @@
 		<!-- End Contracted TA's -->
 
             </div>
+	    <input type="hidden" name="year" value="{{ current_semester.year }}">
+	    <input type="hidden" name="time" value="{{ current_semester.time }}">    
 	    <input class="btn btn-primary" type="submit" value="Submit">
 	</form>
 	<!-- End Greater TA list -->
+	<p class="mt-3">This will generate a new schedule version!</p>	
 	
     </div>
     <!-- End of Canvas Body -->

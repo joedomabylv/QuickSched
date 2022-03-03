@@ -1,101 +1,267 @@
 [
     {
     "model": "teachingassistant.ta",
-    "pk": 100,
+    "pk": 30,
     "fields": {
 	"first_name": "John",
 	"last_name": "Smith",
-	"student_id": "00001",
+	"student_id": "0001",
 	"contracted": true,
-	"experience": "N/A",
-	"year": "SR"
+	"experience": "CS312, CS249, CS480",
+	"year": "SR",
+	"holds_key": 60,
+	"availability_key": 50
     }
     
 },
-    
+
     {
-    "model": "teachingassistant.ta",
-    "pk": 101,
+    "model": "teachingassistant.classtime",
+    "pk": 40,
     "fields": {
-	"first_name": "Zoe",
-	"last_name": "Timberlake",
-	"student_id": "443910",
-	"contracted": false,
-	"experience": "N/A",
-	"year": "FR"
+	"ta": 30,
+	"start_time": "14:00",
+	"end_time": "15:40",
+	"days": "T Th"
     }
 },
 
     {
-    "model": "teachingassistant.ta",
-    "pk": 102,
+    "model": "teachingassistant.classtime",
+    "pk": 41,
     "fields": {
-	"first_name": "Greg",
-	"last_name": "Davis",
-	"student_id": "93901",
-	"contracted": false,
-	"experience": "249",
-	"year": "JR"
+	"ta": 30,
+	"start_time": "12:00",
+	"end_time": "13:15",
+	"days": "M W F"
     }
 },
 
     {
-    "model": "teachingassistant.ta",
-    "pk": 103,
+    "model": "teachingassistant.classtime",
+    "pk": 42,
     "fields": {
-	"first_name": "Travis",
-	"last_name": "Young",
-	"student_id": "10394",
-	"contracted": false,
-	"experience": "465, 126, 136",
-	"year": "GR"
+	"ta": 30,
+	"start_time": "8:00",
+	"end_time": "10:00",
+	"days": "M W Th"
     }
 },
 
     {
-    "model": "teachingassistant.ta",
-    "pk": 104,
+    "model": "teachingassistant.availability",
+    "pk": 50,
     "fields": {
-	"first_name": "Vanessa",
-	"last_name": "Maxis",
-	"student_id": "000002",
-	"contracted": true,
-	"experience": "212, 480",
-	"year": "SO"
+	"class_times": [40, 41, 42],
+	"ta": 30
     }
 },    
 
     {
-    "model": "teachingassistant.availability",
-    "pk": 9999,
-    "fields": {
-	"monday_start": "12:45",
-	"monday_end": "1:00",
-	"tuesday_start": "3:30",
-	"tuesday_end": "4:15",
-	"wednesday_start": "10:00",
-	"wednesday_end": "12:45",
-	"thursday_start": "9:15",
-	"thursday_end": "12:00",
-	"friday_start": "3:00",
-	"friday_end": "5:30",
-	"saturday_start": "12:00",
-	"saturday_end": "1:45",
-	"sunday_start": "6:00",
-	"sunday_end": "9:00",
-	"ta": 100
-    }
-},
-
-    {
     "model": "teachingassistant.holds",
-    "pk": 1234,
+    "pk": 60,
     "fields": {
 	"incomplete_profile": true,
 	"update_availability": false,
 	"update_experience": false,
-	"ta": 100
+	"ta": 30
     }
-}
+},
+
+    {
+    "model": "teachingassistant.ta",
+    "pk": 31,
+    "fields": {
+	"first_name": "Vanessa",
+	"last_name": "Maxis",
+	"student_id": "0002",
+	"contracted": true,
+	"experience": "CS200, CS122, MAT136",
+	"year": "SR",
+	"holds_key": 61,
+	"availability_key": 51
+    }
     
+},
+
+    {
+    "model": "teachingassistant.classtime",
+    "pk": 43,
+    "fields": {
+	"ta": 31,
+	"start_time": "17:00",
+	"end_time": "18:40",
+	"days": "T W"
+    }
+},
+
+    {
+    "model": "teachingassistant.classtime",
+    "pk": 44,
+    "fields": {
+	"ta": 31,
+	"start_time": "12:00",
+	"end_time": "15:15",
+	"days": "M"
+    }
+},
+
+    {
+    "model": "teachingassistant.classtime",
+    "pk": 45,
+    "fields": {
+	"ta": 31,
+	"start_time": "08:00",
+	"end_time": "09:15",
+	"days": "Th F"
+    }
+},
+
+    {
+    "model": "teachingassistant.availability",
+    "pk": 51,
+    "fields": {
+	"class_times": [43, 44, 45],
+	"ta": 31
+    }
+},    
+
+    {
+    "model": "teachingassistant.holds",
+    "pk": 61,
+    "fields": {
+	"incomplete_profile": true,
+	"update_availability": false,
+	"update_experience": false,
+	"ta": 31
+    }
+},
+
+    {
+    "model": "teachingassistant.ta",
+    "pk": 32,
+    "fields": {
+	"first_name": "Travis",
+	"last_name": "Young",
+	"student_id": "0003",
+	"contracted": true,
+	"experience": "CS249, CS126, CS136, CS315",
+	"year": "JR",
+	"holds_key": 62,
+	"availability_key": 52
+    }
+    
+},
+
+    {
+    "model": "teachingassistant.classtime",
+    "pk": 46,
+    "fields": {
+	"ta": 32,
+	"start_time": "12:00",
+	"end_time": "13:40",
+	"days": "M W F"
+    }
+},
+
+    {
+    "model": "teachingassistant.classtime",
+    "pk": 47,
+    "fields": {
+	"ta": 32,
+	"start_time": "14:20",
+	"end_time": "15:15",
+	"days": "M T Th"
+    }
+},
+
+    {
+    "model": "teachingassistant.classtime",
+    "pk": 48,
+    "fields": {
+	"ta": 32,
+	"start_time": "08:00",
+	"end_time": "09:15",
+	"days": "W F"
+    }
+},
+
+    {
+    "model": "teachingassistant.availability",
+    "pk": 52,
+    "fields": {
+	"class_times": [46, 47, 48],
+	"ta": 32
+    }
+},    
+
+    {
+    "model": "teachingassistant.holds",
+    "pk": 62,
+    "fields": {
+	"incomplete_profile": true,
+	"update_availability": false,
+	"update_experience": false,
+	"ta": 32
+    }
+},
+
+    {
+    "model": "teachingassistant.ta",
+    "pk": 33,
+    "fields": {
+	"first_name": "Zoe",
+	"last_name": "Timberlake",
+	"student_id": "0004",
+	"contracted": false,
+	"experience": "CS200, CS465, CS460",
+	"year": "GR",
+	"holds_key": 63,
+	"availability_key": 53
+    }
+    
+},
+
+    {
+    "model": "teachingassistant.classtime",
+    "pk": 49,
+    "fields": {
+	"ta": 33,
+	"start_time": "13:00",
+	"end_time": "13:40",
+	"days": "T Th"
+    }
+},
+
+    {
+    "model": "teachingassistant.classtime",
+    "pk": 410,
+    "fields": {
+	"ta": 33,
+	"start_time": "10:25",
+	"end_time": "12:00",
+	"days": "M T"
+    }
+},
+
+    {
+    "model": "teachingassistant.availability",
+    "pk": 53,
+    "fields": {
+	"class_times": [49, 410],
+	"ta": 33
+    }
+},    
+
+    {
+    "model": "teachingassistant.holds",
+    "pk": 63,
+    "fields": {
+	"incomplete_profile": true,
+	"update_availability": false,
+	"update_experience": false,
+	"ta": 33
+    }
+}    
+        
 ]

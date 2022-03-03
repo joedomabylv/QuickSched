@@ -1,6 +1,5 @@
 """Models relating to Teaching Assistants."""
 from django.db import models
-from datetime import datetime
 
 
 class ScorePair(models.Model):
@@ -12,6 +11,16 @@ class ScorePair(models.Model):
 
     score_catalog_id = models.CharField('Catalog ID for score', max_length=10)
     score = models.IntegerField('Score')
+
+    # semester this ScorePair is assigned to
+    semester = models.ForeignKey("laborganizer.Semester",
+                                 on_delete=models.CASCADE,
+                                 blank=True,
+                                 null=True)
+
+    # key to the schedule this score belongs to
+    schedule_key = models.CharField('Schedule Key', max_length=10,
+                                    blank=True, null=True)
 
 
 class TA(models.Model):
@@ -57,6 +66,82 @@ class TA(models.Model):
             lab_list.append(lab.__str__())
         return ', '.join(lab_list)
 
+    def score_exists(self, lab, schedule_key):
+        """
+        Check if a score already exists for a TA for a given lab.
+
+        If a score exists, return the ScorePair object, otherwise
+        return None.
+        """
+        for score in self.scores.all():
+            if (score.score_catalog_id == lab.catalog_id and
+                score.semester == lab.semester and
+                score.schedule_key == schedule_key):
+                # found a matching ScorePair
+                return score
+        # did not find a matching ScorePair
+        return None
+
+    def get_score(self, lab, schedule_key):
+        """Get the score of a given lab, if it exits."""
+        score_pair = self.score_exists(lab, schedule_key)
+        if score_pair is None:
+            return None
+        return score_pair.score
+
+    def assign_score(self, score, lab, schedule_key):
+        """Assign a ScorePair object for a given lab."""
+        # if a current ScorePair exists for this lab, update it
+        score_pair = self.score_exists(lab, schedule_key)
+
+        # check if the score exists
+        if score_pair is None:
+            # it does not, create a new ScorePair
+            new_score = ScorePair.objects.create(score_catalog_id=lab.catalog_id,
+                                                 score=score,
+                                                 semester=lab.semester,
+                                                 schedule_key=schedule_key)
+            # save changes to database
+            self.scores.add(new_score)
+            new_score.save()
+        else:
+            # score exists, update it
+            score_pair.score = score
+            score_pair.save()
+
+        # save all ScorePair changes
+        self.save()
+
+    def get_experience(self):
+        """Return a Python list of tuples of all experience."""
+        experience = self.experience.split(',')
+        experience_list = []
+        for course in experience:
+            subject = ''
+            catalog_id = ''
+            for character in course:
+                # check if the character is a number
+                if character >= '0' and character <= '9':
+                    # add it to the catalog id
+                    catalog_id += character
+                elif character != ' ':
+                    # character is a letter
+                    subject += character
+            experience_list.append((subject, catalog_id))
+        return experience_list
+
+    def get_availability(self):
+        """Return a formatted dictionary of all TA availabilty."""
+        avail = {}
+        availability = Availability.objects.get(pk=self.availability_key)
+        for index, class_time in enumerate(availability.class_times.all()):
+            avail[str(index)] = {
+                'days': class_time.get_days(),
+                'start_time': class_time.start_time,
+                'end_time': class_time.end_time
+            }
+        return avail
+
     # define choice variable
     YEAR = (
         ('FR', 'Freshman'),
@@ -76,10 +161,10 @@ class TA(models.Model):
 
     contracted = models.BooleanField('Contracted', blank=True, null=True)
 
-    # experience needs to be configured to account for whatever
-    # we want to display experience/relevant skills as
-    experience = models.CharField('TA\'s experience', max_length=100,
-                                  blank=True)
+    # stored as a comma delimited list starting with the subject followed by
+    # the catalog id, i.e.
+    # (CS126, MAT305, CS249)
+    experience = models.TextField('TA\'s experience', blank=True)
 
     year = models.CharField('TA\'s current year', max_length=2,
                             choices=YEAR, blank=True)
@@ -152,8 +237,6 @@ class Availability(models.Model):
 
     def delete_times(self):
         """Delete all the class times for a TA."""
-        print(len(self.class_times.all()))
-
         # remove the times from the availability object
         for time in self.class_times.all():
             self.class_times.remove(time)
@@ -181,7 +264,7 @@ class Availability(models.Model):
                                     ta=self.ta)
 
     def get_class_times(self):
-        """Return a dictionary of the TA's class times."""
+        """Return a list of the TA's class times."""
         time_list = []
         for time in self.class_times.all():
             time_list.append(time.__str__())

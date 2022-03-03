@@ -11,10 +11,8 @@ Variables used throughout LO dashboard:
 'current_semester': used to display which semester is currently chosen/active
 """
 from django.shortcuts import render, redirect
-from .forms import NewSemesterForm
 from teachingassistant.models import TA, Holds
 from .models import Semester, Lab, AllowTAEdit
-from optimization.models import TemplateSchedule, TemplateAssignment
 from django.contrib import messages
 from laborganizer.lo_utils import (get_semester_years,
                                    get_semester_times,
@@ -24,6 +22,8 @@ from laborganizer.lo_utils import (get_semester_years,
                                    get_most_recent_sched,
                                    get_all_schedule_version_numbers,
                                    get_template_schedule)
+from optimization.optimization_utils import (generate_by_selection,
+                                             propogate_schedule)
 
 
 def lo_home(request, selected_semester=None, template_schedule=None):
@@ -149,42 +149,36 @@ def lo_select_semester(request):
 
 
 def lo_generate_schedule(request):
-    """View for generating TA schedule via LO command, from the TA Selector."""
+    """
+    View for generating TA schedule via LO command, from the TA Selector.
+
+    Generate a new version of a TemplateSchedule object.
+    """
     if request.method == 'POST':
         # get the student id's of all selected TA's
         ta_ids = request.POST.getlist('checks[]')
-        print(ta_ids)
+        year = request.POST.get('year')
+        time = request.POST.get('time')
 
-        # get the current semester
-        # NOTE: THIS CURRENTLY GETS THE CURRENT SEMESTER BASED ON REAL TIME,
-        #       NOT A SEMESTER CHOSEN BY THE LO
-        # current_semester = get_current_semester()
+        selected_semester = {
+            'time': time,
+            'year': year
+        }
+
+        # gather a list of all selected TA's
+        tas = []
+        for ta_id in ta_ids:
+            tas.append(TA.objects.get(student_id=ta_id))
+
+        # gather all labs for the selected semester
+        labs = get_labs_by_semester(selected_semester['time'],
+                                    selected_semester['year'])
 
         # using those TA's, populate a TemplateSchedule object from
         # optimization.models
-        # generate_by_selection()
+        template_schedule = generate_by_selection(tas, labs, selected_semester)
 
-        # get all the labs from the generated schedule
-        # labs = labs.from.that.schedule
-
-        # get all TA's for the currently selected semester
-        # tas = get_tas_by_semester(time, year)
-
-        # get all existing semester years for selection purposes in the sidebar
-        all_semester_years = get_semester_years()
-
-        # get all existing semester times for selection purposes in the sidebar
-        all_semester_times = get_semester_times()
-
-        context = {
-            # 'labs': labs,
-            # 'tas': tas,
-            'semester_years': all_semester_years,
-            'semester_times': all_semester_times,
-            # 'current_semester': current_semester,
-        }
-
-        return render(request, 'laborganizer/dashboard.html', context)
+        return lo_home(request, selected_semester, template_schedule)
 
     # not a POST request, direct to default view
     return redirect('lo_home')

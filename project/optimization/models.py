@@ -2,6 +2,7 @@
 from django.db import models
 from laborganizer.models import Lab, Semester
 from teachingassistant.models import TA
+from optimization.optimization_primary import (initialization)
 
 
 class TemplateAssignment(models.Model):
@@ -25,6 +26,45 @@ class TemplateSchedule(models.Model):
     def __str__(self):
         """Define human readable object name."""
         return f'{self.semester}, v{self.version_number}'
+
+    def initialize(self, tas, labs):
+        """Initialize this template schedule."""
+        # give scores to all given TA's for this template
+        initialization(tas, labs, self.id)
+        # loop through all given labs
+        for lab in labs:
+            # find the TA with the highest score given to this lab
+            highest_scoring_tas = self.get_highest_scoring_tas(tas, lab)
+            if len(highest_scoring_tas) > 0:
+                # if there are multiple TA's with the same score for a lab,
+                # assign the first TA
+                self.assign(highest_scoring_tas[0], lab)
+
+    def get_highest_scoring_tas(self, tas, lab):
+        """
+        Get the highest scoring TA/TA's for a given lab for this schedule.
+
+        Return a list of all TA's with the highest score for the lab.
+        NOTE: returning list in the event that multiple TA's have the
+              same score
+        """
+        # determine the highest score
+        max_score = 0
+        ta_list = []
+        for ta in tas:
+            for score in ta.scores.filter(score_catalog_id=lab.catalog_id,
+                                          schedule_key=self.id):
+                if score.score > max_score:
+                    max_score = score.score
+
+        # get all the TA's with that score
+        for ta in tas:
+            for score in ta.scores.filter(score_catalog_id=lab.catalog_id,
+                                          schedule_key=self.id):
+                if score.score == max_score:
+                    ta_list.append(ta)
+
+        return ta_list
 
     def assign(self, ta, lab):
         """Create a new assignment for a TA in the template schedule."""
@@ -53,7 +93,6 @@ class TemplateSchedule(models.Model):
                 self.save()
                 return True
         return False
-
 
     version_number = models.IntegerField('Schedule Version', default=0)
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE,

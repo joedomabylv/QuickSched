@@ -1,34 +1,75 @@
 [
     {
     "model": "laborganizer.semester",
-    "pk": 1,
+    "pk": 10,
     "fields": {
-	"year": "2022",
+	"year": 2022,
 	"semester_time": "SPR"
     }
 },
 
     {
-    "model": "laborganizer.semester",
-    "pk": 2,
+    "model": "optimization.templateschedule",
+    "pk": 70,
     "fields": {
-	"year": "2022",
+	"semester": 10
+    }
+},
+
+    {
+    "model": "laborganizer.semester",
+    "pk": 11,
+    "fields": {
+	"year": 2022,
 	"semester_time": "SUM"
     }
 },
 
     {
-    "model": "laborganizer.semester",
-    "pk": 3,
+    "model": "optimization.templateschedule",
+    "pk": 71,
     "fields": {
-	"year": "2023",
+	"semester": 11
+    }
+},    
+
+    {
+    "model": "laborganizer.semester",
+    "pk": 12,
+    "fields": {
+	"year": 2023,
 	"semester_time": "WNT"
     }
 },
 
     {
+    "model": "optimization.templateschedule",
+    "pk": 72,
+    "fields": {
+	"semester": 12
+    }
+},    
+
+    {
+    "model": "laborganizer.semester",
+    "pk": 13,
+    "fields": {
+	"year": 2023,
+	"semester_time": "SPR"
+    }
+},
+
+    {
+    "model": "optimization.templateschedule",
+    "pk": 73,
+    "fields": {
+	"semester": 13
+    }
+},    
+
+    {
     "model": "laborganizer.lab",
-    "pk": 10,
+    "pk": 20,
     "fields": {
 	"class_name": "Computer Science 1",
 	"subject": "CS",
@@ -39,16 +80,16 @@
 	"facility_id": "069",
 	"facility_building": "Engineering",
 	"instructor": "McAddis, C.",
-	"start_time": "11:10AM",
-	"end_time": "12:20PM",
+	"start_time": "11:10",
+	"end_time": "12:20",
 	"staffed": false,
-	"semester": 2
+	"semester": 10
     }
 },
 
     {
     "model": "laborganizer.lab",
-    "pk": 11,
+    "pk": 21,
     "fields": {
 	"class_name": "Data Structures",
 	"subject": "CS",
@@ -59,16 +100,16 @@
 	"facility_id": "069",
 	"facility_building": "Engineering",
 	"instructor": "Leverington, M.",
-	"start_time": "4:00PM",
-	"end_time": "5:30PM",
+	"start_time": "16:00",
+	"end_time": "17:30",
 	"staffed": false,
-	"semester": 1
+	"semester": 10
     }
 },
 
     {
     "model": "laborganizer.lab",
-    "pk": 12,
+    "pk": 22,
     "fields": {
 	"class_name": "Web Programming",
 	"subject": "CS",
@@ -79,16 +120,56 @@
 	"facility_id": "069",
 	"facility_building": "Engineering",
 	"instructor": "McAddis, C.",
-	"start_time": "2:20PM",
-	"end_time": "3:30PM",
+	"start_time": "14:20",
+	"end_time": "15:30",
 	"staffed": false,
-	"semester": 1
+	"semester": 10
     }
 },
 
     {
     "model": "laborganizer.lab",
-    "pk": 13,
+    "pk": 23,
+    "fields": {
+	"class_name": "Web Programming II",
+	"subject": "CS",
+	"catalog_id": "312",	
+	"course_id": "2943",
+	"section": "001",
+	"days": "M F",
+	"facility_id": "069",
+	"facility_building": "Engineering",
+	"instructor": "Amresh, A.",
+	"start_time": "12:45",
+	"end_time": "14:00",
+	"staffed": false,
+	"semester": 11
+    }
+},
+
+    {
+    "model": "laborganizer.lab",
+    "pk": 24,
+    "fields": {
+	"class_name": "Operating Systems",
+	"subject": "CS",
+	"catalog_id": "480",	
+	"course_id": "4911",
+	"section": "001",
+	"days": "T Th",
+	"facility_id": "069",
+	"facility_building": "Engineering",
+	"instructor": "Leverington, M.",
+	"start_time": "13:45",
+	"end_time": "15:00",
+	"staffed": false,
+	"semester": 11
+    }
+},
+
+    {
+    "model": "laborganizer.lab",
+    "pk": 25,
     "fields": {
 	"class_name": "Computer Networks",
 	"subject": "CS",
@@ -99,11 +180,131 @@
 	"facility_id": "069",
 	"facility_building": "Engineering",
 	"instructor": "Otte, W.",
-	"start_time": "12:45PM",
-	"end_time": "2:00PM",
+	"start_time": "12:45",
+	"end_time": "14:00",
 	"staffed": false,
-	"semester": 3
+	"semester": 11
+    }
+},
+
+    {
+    "model": "laborganizer.lab",
+    "pk": 26,
+    "fields": {
+	"class_name": "Computer Science II",
+	"subject": "CS",
+	"catalog_id": "136",	
+	"course_id": "1888",
+	"section": "001",
+	"days": "M W F",
+	"facility_id": "069",
+	"facility_building": "Engineering",
+	"instructor": "Leverington, M.",
+	"start_time": "16:00",
+	"end_time": "17:15",
+	"staffed": false,
+	"semester": 12
+    }
+},
+
+    {
+    "model": "laborganizer.lab",
+    "pk": 27,
+    "fields": {
+	"class_name": "Computer Architecture",
+	"subject": "CS",
+	"catalog_id": "200",	
+	"course_id": "0909",
+	"section": "002",
+	"days": "T Th F",
+	"facility_id": "069",
+	"facility_building": "Engineering",
+	"instructor": "Beverly, D.",
+	"start_time": "12:45",
+	"end_time": "15:15",
+	"staffed": false,
+	"semester": 12
+    }
+},
+
+    {
+    "model": "laborganizer.lab",
+    "pk": 28,
+    "fields": {
+	"class_name": "Distributed Systems",
+	"subject": "CS",
+	"catalog_id": "465",	
+	"course_id": "8766",
+	"section": "001",
+	"days": "M W F",
+	"facility_id": "069",
+	"facility_building": "Engineering",
+	"instructor": "Otte, W.",
+	"start_time": "08:00",
+	"end_time": "09:15",
+	"staffed": false,
+	"semester": 12
+    }
+},
+
+    {
+    "model": "laborganizer.lab",
+    "pk": 29,
+    "fields": {
+	"class_name": "Computing Tools I",
+	"subject": "CS",
+	"catalog_id": "122",	
+	"course_id": "8752",
+	"section": "001",
+	"days": "M F",
+	"facility_id": "069",
+	"facility_building": "Engineering",
+	"instructor": "Domabyl V, J.",
+	"start_time": "10:45",
+	"end_time": "11:50",
+	"staffed": false,
+	"semester": 13
+    }
+},
+
+    {
+    "model": "laborganizer.lab",
+    "pk": 210,
+    "fields": {
+	"class_name": "Computing Tools II",
+	"subject": "CS",
+	"catalog_id": "222",	
+	"course_id": "8252",
+	"section": "001",
+	"days": "M T",
+	"facility_id": "069",
+	"facility_building": "Engineering",
+	"instructor": "Liddell, A.",
+	"start_time": "10:45",
+	"end_time": "11:50",
+	"staffed": false,
+	"semester": 13
+    }
+},
+
+    {
+    "model": "laborganizer.lab",
+    "pk": 211,
+    "fields": {
+	"class_name": "Automata Theory",
+	"subject": "CS",
+	"catalog_id": "315",	
+	"course_id": "1104",
+	"section": "001",
+	"days": "M W F",
+	"facility_id": "069",
+	"facility_building": "Engineering",
+	"instructor": "Doerry, E.",
+	"start_time": "14:45",
+	"end_time": "17:50",
+	"staffed": false,
+	"semester": 13
     }
 }
-
+    
 ]
