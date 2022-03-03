@@ -91,9 +91,14 @@ def lo_select_schedule_version(request):
         year = request.POST.get('semester_year')
         time = request.POST.get('semester_time')
 
+        selected_semester = {
+            'time': time,
+            'year': year
+        }
+
         # get that schedule version
         template_schedule = get_template_schedule(time, year, version_number)
-        return lo_home(request, None, template_schedule)
+        return lo_home(request, selected_semester, template_schedule)
 
     return redirect('lo_home')
 
@@ -131,7 +136,7 @@ def lo_select_semester(request):
         semester = request.POST.get('selected_semester')
         year = semester[3:]
         time = semester[:3]
-        print(year, time)
+
         selected_semester = {
             'time': time,
             'year': year,
@@ -261,6 +266,22 @@ def lo_semester_management(request, selected_semester=None):
                   context)
 
 
+def lo_propogate_schedule(request):
+    """Propogate the desired template schedule to the live version."""
+    if request.method == 'POST':
+        year = request.POST.get('year')
+        time = request.POST.get('time')
+        version = request.POST.get('version')
+
+        template_schedule = get_template_schedule(time, year, version)
+        # import optimization utils and use that propogate_schedule function
+
+        messages.success(request, f'Successfully uploaded version {version}!')
+        return redirect('lo_home')
+    messages.warning(request, f'Failed to upload version {version}')
+    return redirect('lo_home')
+
+
 def lo_edit_lab(request):
     """Update lab information for a single lab."""
     if request.method == 'POST':
@@ -276,8 +297,6 @@ def lo_edit_lab(request):
 
         # get the name of the lab from the submit button
         submit_value = request.POST.get('submit')
-
-        print(submit_value)
 
         # get the previous course ID for database lookup
         old_course_id = request.POST.get('old_course_id')

@@ -8,7 +8,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     # 'lo' prefix = lab organizer
     path('', views.lo_home, name='lo_home'),
-    path('select_semester/', views.lo_select_semester,
+    path('select_semester', views.lo_select_semester,
          name='lo_select_semester'),
     path('ta_management/', views.lo_ta_management, name='lo_ta_management'),
     path('ta_add/', include("emailupload.urls")),
@@ -22,6 +22,8 @@ urlpatterns = [
          name='lo_assign_to_template'),
     path('select_schedule_version', views.lo_select_schedule_version,
          name='lo_select_schedule_version'),
+    path('propogate_schedule', views.lo_propogate_schedule,
+         name='lo_propogate_schedule'),
     path('upload/', views.lo_upload, name='lo_upload'),
 ]
 
