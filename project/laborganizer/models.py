@@ -19,7 +19,7 @@ class Semester(models.Model):
 
     def __str__(self):
         """Human readable class name, for admin site."""
-        return self.semester_time + self.year
+        return self.semester_time + str(self.year)
 
     TIMES = (
         ('SPR', 'Spring'),
@@ -45,7 +45,7 @@ class Semester(models.Model):
 
     YEARS = get_10_years()
 
-    year = models.CharField('Calendar year', max_length=5, choices=YEARS)
+    year = models.IntegerField('Calendar year', choices=YEARS)
     semester_time = models.CharField('Time held', max_length=3, choices=TIMES)
 
 
