@@ -1,7 +1,6 @@
 """Models relating to Lab Organizers."""
 from django.db import models
 from datetime import datetime, date
-from teachingassistant.models import TA
 
 
 class Semester(models.Model):
@@ -163,8 +162,8 @@ class AllowTAEdit(models.Model):
     time = models.TimeField(auto_now_add=True)
 
 class History(models.Model):
-    ta_1 = models.ManyToManyField(TA, blank=True, related_name='ta_1')
-    ta_2 = models.ManyToManyField(TA, blank=True, related_name='ta_2')
+    ta_1 = models.ManyToManyField("teachingassistant.TA", blank=True, related_name='ta_1')
+    ta_2 = models.ManyToManyField("teachingassistant.TA", blank=True, related_name='ta_2')
     lab_1 = models.ManyToManyField(Lab, blank=True, related_name='lab_1')
     lab_2 = models.ManyToManyField(Lab, blank=True, related_name='lab_2')
 

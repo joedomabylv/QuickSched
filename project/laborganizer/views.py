@@ -12,7 +12,7 @@ Variables used throughout LO dashboard:
 """
 from django.shortcuts import render, redirect
 from teachingassistant.models import TA, Holds
-from .models import Semester, Lab, AllowTAEdit
+from .models import Semester, Lab, AllowTAEdit, History
 from django.contrib import messages
 from laborganizer.lo_utils import (get_semester_years,
                                    get_semester_times,
