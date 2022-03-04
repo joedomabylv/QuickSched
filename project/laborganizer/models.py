@@ -1,6 +1,7 @@
 """Models relating to Lab Organizers."""
 from django.db import models
 from datetime import datetime, date
+from teachingassistant.models import TA
 
 
 class Semester(models.Model):
@@ -79,6 +80,17 @@ class Lab(models.Model):
         """Convert the stored end time fo a lab."""
         return str(self.end_time)
 
+    #TODO This must switch via the template schedule, instead of directly switching via the database
+    def confirm_switch(self, other_lab, TA1, TA2):
+        self.assigned_ta = None
+        other_lab.assigned_ta = None
+        self.save()
+        other_lab.save()
+        self.assigned_ta = TA2
+        other_lab.assigned_ta = TA1
+        self.save()
+        other_lab.save()
+
     class_name = models.CharField("Class name", default="N/A", max_length=50)
     subject = models.CharField("Subject", max_length=10)
     catalog_id = models.CharField("Catalog ID", max_length=10)
@@ -147,5 +159,17 @@ class AllowTAEdit(models.Model):
             return False
 
     allowed = models.BooleanField('Allow TA\'s to edit', default=False)
-    date = models.DateField(auto_now_add=True)
-    time = models.TimeField(auto_now_add=True)
+    date = models.DateField(auto_now=False, auto_now_add=False,
+                            blank=True, null=True)
+    time = models.TimeField(auto_now=False, auto_now_add=False,
+                            blank=True, null=True)
+
+
+class History(models.Model):
+    ta_1 = models.ManyToManyField(TA, blank=True, related_name='ta_1')
+    ta_2 = models.ManyToManyField(TA, blank=True, related_name='ta_2')
+    lab_1 = models.ManyToManyField(Lab, blank=True, related_name='lab_1')
+    lab_2 = models.ManyToManyField(Lab, blank=True, related_name='lab_2')
+
+    def undo_bilateral_switch(self):
+        self.lab_1.first().confirm_switch(self.lab_2.first(), self.ta_1.first(), self.ta_2.first())

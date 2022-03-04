@@ -24,14 +24,19 @@ from laborganizer.lo_utils import (get_semester_years,
                                    get_template_schedule)
 from optimization.optimization_utils import (generate_by_selection,
                                              propogate_schedule)
+from django.http import JsonResponse
+import json
 
 
 def lo_home(request, selected_semester=None, template_schedule=None):
     """
     Home route for the Lab Organizer dashboard.
 
+
     Displays data relevant to the active semester based on the time of year.
     """
+
+
     if selected_semester is None:
         # establish current semester time/year, based on time
         current_semester = get_current_semester()
@@ -39,6 +44,19 @@ def lo_home(request, selected_semester=None, template_schedule=None):
     else:
         # get the current semester argument
         current_semester = selected_semester
+
+    # Handles get request required for generating switches
+    if request.GET.get('lab_name') is not None:
+        catalog_id = request.GET.get('lab_name')
+        response = lo_generate_switches(catalog_id, current_semester)
+        return JsonResponse(response, status=200)
+
+    # Handles get request required for confirming switches
+    if request.GET.get('swap') is not None:
+        switch_data = request.GET.get('swap').split()
+        switch_data.pop(0)
+        lo_confirm_switch(switch_data)
+        messages.success(request, "Switch confirmed!")
 
     # check if a template schedule was given
     if template_schedule is None:
@@ -67,6 +85,9 @@ def lo_home(request, selected_semester=None, template_schedule=None):
         current_semester['time'],
         current_semester['year'])
 
+    # get all history nodes that are active
+    last_history = History.objects.last()
+
     # instantiate context variable
     context = {
         'labs': labs,
@@ -75,6 +96,7 @@ def lo_home(request, selected_semester=None, template_schedule=None):
         'current_semester': current_semester,
         'template_schedule': template_schedule,
         'schedule_versions': template_schedule_versions,
+        'history': last_history
     }
 
     # check if there are no labs in the selected semester
@@ -83,6 +105,132 @@ def lo_home(request, selected_semester=None, template_schedule=None):
 
     return render(request, 'laborganizer/dashboard.html', context)
 
+
+def lo_generate_switches(catalog_id, current_semester):
+
+    # NOTE This version of the function assumes that all Labs are assigned a TA
+    # In the future, we will want to implement a dummy TA so that there are no None Types in the database
+
+    contender_number = 3 #TODO make this a global variable
+
+    # Initialize:
+    # - General TA List
+    # - The top contenders for the switch
+    # - The potential scores for labs the current TA could switch to
+    # - Current lab
+    ta_list, top_contenders = [], []
+    relevant_lab_scores = {}
+    curr_semester = current_semester # If I do not have this useless alias, it throws a bug and I do not know why for the life of me
+    sem_tuple = (curr_semester["time"], curr_semester["year"])
+
+    # filter possible ta's by the semester selected
+    for ta in TA.objects.all():
+        is_in_sem = False
+        for sem in ta.get_all_assigned_semesters():
+            if (sem_tuple[0] == sem[0] and sem_tuple[1] == sem[1]):
+                is_in_sem = True
+        if is_in_sem:
+            ta_list.append(ta)
+
+    # set vars for the objects selected via the switch button
+    current_lab = Lab.objects.get(catalog_id=catalog_id)
+    current_ta = None
+    for ta in ta_list:
+        if ta.get_all_assigned_labs()[2:5] == catalog_id:
+            current_ta = ta
+    current_score = current_ta.scores.get(score_catalog_id=catalog_id).score
+    ta_list.remove(current_ta)
+
+    # This will sort the TA's from highest to lowest score for this specific lab then take the top 3
+    ta_list.sort(key=lambda x: x.scores.get(score_catalog_id=catalog_id).score, reverse=True)
+    top_contenders = ta_list[:contender_number]
+
+
+    # Generate the score table for the current TA, and how the TA would potentially fit into the contenders' labs
+    # If it is none, then fill it with dummy data again
+    for ta in top_contenders:
+        lab_key = ta.get_all_assigned_labs()[2:5]
+        if lab_key != "":
+            lab_score = current_ta.scores.get(score_catalog_id=lab_key).score
+        else:
+            lab_score = 0
+        relevant_lab_scores[lab_key] = lab_score
+
+    # # Generate the necessary switches, and check if a three-way switch is necessary
+    # for catalog_id in relevant_lab_scores:
+    #     if relevant_lab_scores[catalog_id] < 0 and current_ta is not None:
+    #         switch_possible, best_contender, best_contender_lab = \
+    #             generate_three_way_switch(catalog_id, current_ta, lab.catalog_id)
+    #         if switch_possible:
+
+    switch_names, switches = [], []
+    index = 0
+
+    for ta1 in top_contenders:
+        lab1_key = current_lab.catalog_id
+        lab2_key = ta1.get_all_assigned_labs()[2:5]
+        ta2 = current_ta
+
+        # TODO These scores must be queried relative to the current schedule template
+        score1 = ta.scores.get(score_catalog_id=current_lab.catalog_id).score
+        score2 = relevant_lab_scores[lab2_key]
+        section1 = current_lab.section
+        if lab2_key == "":
+            section2 = None
+        else:
+            lab2_obj = Lab.objects.get(catalog_id=lab2_key)
+            section2 = lab2_obj.section
+
+        switches.append({"lab1": "CS" + lab1_key,
+                         "lab2": "CS" + lab2_key,
+                          "TA1": ta1.first_name,
+                          "TA2": ta2.first_name,
+                       "score1": score1,
+                         "score2": relevant_lab_scores[lab2_key],
+                         "section1": current_lab.section,
+                         "section2": lab2_obj.section})
+
+        switch_names.append("switch_" + str(index + 1))
+
+        index += 1
+
+    response = dict(zip(switch_names, switches))
+    print(json.dumps(response, sort_keys=False, indent=4))
+
+    return response
+
+def lo_confirm_switch(switch_data):
+
+    # Prepare data for the switch to occur
+    switch_dict = {
+        "TA1": switch_data[0],
+        "TA2": switch_data[4],
+        "Lab1": switch_data[1][3:6],
+        "Lab2": switch_data[5][3:6]
+    }
+
+    first_lab = Lab.objects.get(catalog_id=switch_dict["Lab1"])
+    second_lab = Lab.objects.get(catalog_id=switch_dict["Lab2"])
+
+    # TODO These must be assigned via the templates
+    # first_ta = first_lab.assigned_ta
+    # second_ta = second_lab.assigned_ta
+
+    node_id = len(History.objects.all()) + 1
+
+    node = History(id=node_id)
+    node.save()
+    node.ta_1.set([first_ta])
+    node.ta_2.set([second_ta])
+    node.lab_1.set([first_lab])
+    node.lab_2.set([second_lab])
+    node.save()
+
+    if (len(History.objects.all()) > 10):
+        History.objects.first().delete()
+
+    # Confirm the switch on the database side
+    first_lab.confirm_switch(second_lab, first_ta, second_ta)
 
 def lo_select_schedule_version(request):
     """Select a new version of a template schedule to display."""
@@ -321,11 +469,9 @@ def lo_allow_ta_edit(request):
         time = request.POST.get('time')
 
         if date != '' or time != '':
-            allow_edits = AllowTAEdit.objects.all()[0]
-            print(allow_edits.date, allow_edits.time)
+            allow_edits = AllowTAEdit.objects.get(pk=1)
             allow_edits.date = date
             allow_edits.time = time
-            print(allow_edits.date, allow_edits.time)
             allow_edits.allowed = True
             allow_edits.save()
             messages.success(request, 'TA\'s are allowed to edit their information!')
