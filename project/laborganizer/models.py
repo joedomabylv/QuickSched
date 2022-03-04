@@ -1,7 +1,6 @@
 """Models relating to Lab Organizers."""
 from django.db import models
 from datetime import datetime, date
-from teachingassistant.models import TA
 
 
 class Semester(models.Model):
@@ -148,7 +147,5 @@ class AllowTAEdit(models.Model):
             return False
 
     allowed = models.BooleanField('Allow TA\'s to edit', default=False)
-    date = models.DateField(auto_now=False, auto_now_add=False,
-                            blank=True, null=True)
-    time = models.TimeField(auto_now=False, auto_now_add=False,
-                            blank=True, null=True)
+    date = models.DateField(auto_now_add=True)
+    time = models.TimeField(auto_now_add=True)

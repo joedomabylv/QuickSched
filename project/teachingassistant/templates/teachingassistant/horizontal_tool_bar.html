@@ -4,11 +4,29 @@
     style="min-height: 72px"
 >
 
-    <!--Left Side Tools-->
+    <div class="container  fs-4">
+	<div class="row">
+	    <div class="col-6 text-start">
+		{% if holds.incomplete_profile  %}
+		Welcome to QuickSched!
+		{% else %}
+		Hello, {{ ta.first_name }}.
+		{% endif %}
+	    </div>
+	    <div class="col-6 text-end">
+		{% if holds.incomplete_profile %}
+		<span class="badge bg-danger" date-toggle="tooltip" title="Head to the \'Account\' tab to complete your profile!">incomplete profile</span>
+		{% endif %}
 
-    <!--Lab Title-->
-    <div class="d-flex flex-row">
-	<span class="fs-5 px-3">{{ current_semester.time }}{{ current_semester.year }}NAME</span>
+		{% if holds.update_availability %}
+		<span class="badge bg-warning" date-toggle="tooltip" title="Head to the 'Account' tab to update your availability!">update availability</span>
+		{% endif %}
+
+		{% if holds.update_experience %}
+		<span class="badge bg-warning" date-toggle="tooltip" title="Head to the 'Account' tab to update your experience!">update experience</span>
+		{% endif %}
+	    </div>
+	</div>
     </div>
 
 </div>

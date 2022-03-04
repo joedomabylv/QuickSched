@@ -1,6 +1,6 @@
 """Models relating to Teaching Assistants."""
 from django.db import models
-
+from laborganizer.models import Semester
 
 class ScorePair(models.Model):
     """A score pair representing a course catalog ID and a TA's score."""
@@ -47,7 +47,7 @@ class TA(models.Model):
         """
         Get a list of all semesters this TA is assigned to.
 
-        Return a Python list of tuples with index 0 begin the time and
+        Return a Python list of tuples with index 0 being the time and
         index 1 being the year, i.e. ('SPR', 2022).
         """
         semester_list = []
@@ -65,6 +65,17 @@ class TA(models.Model):
         for lab in self.assigned_labs.all():
             lab_list.append(lab.__str__())
         return ', '.join(lab_list)
+
+    def get_assigned_labs(self, semester):
+        """Get all assigned labs for the given semester."""
+        semester = Semester.objects.get(semester_time=semester['time'],
+                                        year=semester['year'])
+
+        lab_list = []
+        for lab in self.assigned_labs.all():
+            if lab.semester == semester:
+                lab_list.append(lab)
+        return lab_list
 
     def score_exists(self, lab, schedule_key):
         """

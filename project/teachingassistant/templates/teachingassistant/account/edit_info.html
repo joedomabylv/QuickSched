@@ -1,28 +1,32 @@
-<div class="col d-flex flex-column flex-shrink-0 bg-light">
+{% load static %}
+<div class="col d-flex flex-column flex-shrink-0 bg-light" style="overflow-y: scroll;">
 
     {% include 'teachingassistant/horizontal_tool_bar.html' %}
     {% include 'teachingassistant/message.html' %}
 
-    <div class="mt-5 container">
-        <!--From-->
+    <div class="my-5 container">
+
         <form method="post" action="{% url 'ta_info' %}" class="needs-validation" novalidate>
-            <!--Personal info form-->
+	    {% csrf_token %}
             <div class="row g-3">
 		<div class="col-6">
 		    <label for="first_name" class="form-label">First name</label>
 		    <input type="text" class="form-control" name="first_name" required>
 		    <div class="invalid-feedback">Please provide your first name</div>
 		</div>
+
 		<div class="col-6">
 		    <label for="last_name" class="form-label">Last name</label>
 		    <input type="text" class="form-control" name="last_name" required>
 		    <div class="invalid-feedback">Please provide your last name</div>
 		</div>
+
 		<div class="col-6">
 		    <label for="student_id" class="form-label">Student ID</label>
 		    <input type="text" class="form-control" name="student_id" required >
 		    <div class="invalid-feedback">Please provide your student ID</div>
 		</div>
+
 		<div class="col-6">
 		    <label for="year" class="form-labe">Year</label>
 		    <select class="form-select mt-2" name="year">
@@ -34,46 +38,84 @@
 		    </select>
 		</div>
             </div>
-            <!--Course Time (Time that not avaliable)-->
-            <div class="col-12 d-flex justify-content-between">
-		Course times
-		<a class="btn" href="#" role="button">
-		    <svg width="16" height="16">
-			<use xlink:href="#add"></use>
-		    </svg>
-		</a>
-            </div>
-            <hr />
-            <!--TA Experiences-->
-            <div class="col-12 d-flex justify-content-between">
-		TA Experiences
-		<a class="btn" href="#" role="button">
-		    <svg width="16" height="16">
-			<use xlink:href="#add"></use>
-		    </svg>
-		</a>
-            </div>
-            <hr />
-            <!--Course experience warp up-->
+
             <div class="row my-3 border border-1 border-light">
-		<div class="col-5">
-		    <label for="ExperienceCourseID" class="form-label"
-                    >Course Name (MAT121)</label
-					 >
-		    <input
-			type="text"
-			      class="form-control"
-			      id="ExperienceCourseID"
-			      placeholder="eg: MAT121"
-			      value=""
-			      required=""
-		    />
+		<div class="col-12">
+		    <div class="container">
+			<div class="row">
+			    <div class="col-6">
+				<label for="experience" class="form-label">Previous Experience</label>
+			    </div>
+			</div>
+		    </div>
+		    <input type="text" class="form-control" name="experience" placeholder="eg: MAT121, CS249, CYB404...">
 		</div>
             </div>
+	    
+            <!--Course Time (Time that not avaliable)-->
+	    <div class="container">
+		<div class="row">
+		    <div class="col-6">
+			<label for="ta_class_time_0">Course times</label>
+		    </div>
+		    <div class="col-6 text-end">
+			<button class="btn" type="button" onclick="new_class_element()" role="button">
+			    <svg width="16" height="16">
+				<use xlink:href="#add"></use>
+			    </svg>
+			</button>
+		    </div>
+		</div>
+	    </div>
+
+	    <div class="container mt-3">
+		<div class="row">
+		    <div class="col-12">
+			<div class="input-group">
+			    <span class="input-group-text">Start and end time</span>
+			    <input type="time" class="form-control" value="12:00" name="ta_class_time_0" required>
+			    <input type="time" class="form-control" value="12:00" name="ta_class_time_0" required>
+			</div>
+		    </div>
+		</div>
+		
+		<!-- Day Selection -->
+		<div id="class_input_form">
+		    <div class="row">
+			<div class="col-12 mt-1">
+			    <div class="form-check form-check-inline">
+				<input class="form-check-input" type="checkbox" id="monday-check" value=p"M" name="ta_class_time_0">
+				<label class="form-check-label" for="monday-check">M</label>
+			    </div>
+			    <div class="form-check form-check-inline">
+				<input class="form-check-input" type="checkbox" id="tuesday-check" value="T" name="ta_class_time_0">
+				<label class="form-check-label" for="tuesday-check">T</label>
+			    </div>
+			    <div class="form-check form-check-inline">
+				<input class="form-check-input" type="checkbox" id="wednesday-check" value="W" name="ta_class_time_0">
+				<label class="form-check-label" for="wednesday-check">W</label>
+			    </div>
+			    <div class="form-check form-check-inline">
+				<input class="form-check-input" type="checkbox" id="thursday-check" value="Th" name="ta_class_time_0">
+				<label class="form-check-label" for="thursday-check">Th</label>
+			    </div>
+			    <div class="form-check form-check-inline">
+				<input class="form-check-input" type="checkbox" id="friday-check" value="F" name="ta_class_time_0">
+				<label class="form-check-label" for="friday-check">F</label>
+			    </div>
+			</div>
+		    </div>
+		</div>
+		<!-- End Day Selection -->
+
+	    </div>
+
             <hr class="my-4" />
-            <button class="w-100 btn btn-primary btn-lg" type="submit">
+            <button class="w-100 btn btn-primary btn-lg" type="submit" name="submit_button" id="submit_button" value="0">
 		Submit
             </button>
         </form>
     </div>
 </div>
+
+<script src="{% static 'teachingassistant/new_class_time.js' %}"></script>

@@ -321,9 +321,11 @@ def lo_allow_ta_edit(request):
         time = request.POST.get('time')
 
         if date != '' or time != '':
-            allow_edits = AllowTAEdit.objects.get(pk=1)
+            allow_edits = AllowTAEdit.objects.all()[0]
+            print(allow_edits.date, allow_edits.time)
             allow_edits.date = date
             allow_edits.time = time
+            print(allow_edits.date, allow_edits.time)
             allow_edits.allowed = True
             allow_edits.save()
             messages.success(request, 'TA\'s are allowed to edit their information!')

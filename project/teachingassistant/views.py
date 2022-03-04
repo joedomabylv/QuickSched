@@ -4,34 +4,31 @@ from django.contrib import messages
 from .forms import NewTAForm, NewTAAvailabilityForm
 from .models import TA, Availability, Holds
 from laborganizer.models import Lab, AllowTAEdit
-from teachingassistant.ta_utils import (availability_list_to_tuples,
-                                        parse_availability)
+from teachingassistant.ta_utils import (parse_availability)
+from laborganizer.lo_utils import (get_current_semester)
 
 
 def ta_home(request):
     """Directs the user to the TA dashboard."""
-    context = {}
-
     # check if the user is authenticated before taking them to their homepage
     if request.user.is_authenticated:
-        # get any holds on a TA's account
-        all_holds = Holds.objects.all()
-        for holds in all_holds:
-            # loop through all Holds objects, compare against the
-            # student ID of the user
-            if (holds.ta.student_id == request.user.ta_object.student_id or
-                holds.ta.student_id is None):
-                holds_list = []
-                if holds.incomplete_profile:
-                    holds_list.append('incomplete_profile')
-                if holds.update_availability:
-                    holds_list.append('update_availability')
-                if holds.update_experience:
-                    holds_list.append('update_experience')
-                context['holds'] = holds_list
+        # get the TA object assigned to the current user
+        ta = request.user.ta_object
 
-        # get all labs a TA is assigned to
-        all_labs = Lab.objects.all()
+        # get any holds on a TA's account
+        holds = Holds.objects.get(pk=ta.holds_key)
+
+        # get any labs the TA is assigned to for the current semester
+        semester = get_current_semester()
+        labs = ta.get_assigned_labs(semester)
+
+
+        context = {
+            'ta': ta,
+            'holds': holds,
+            'semester': semester,
+            'labs': labs,
+        }
 
         return render(request, 'teachingassistant/dashboard.html', context)
 
@@ -54,7 +51,9 @@ def ta_account(request):
 
     # get the AllowTAEdit object and check if the LO has allowed TA's to
     # edit their information
-    allow_object = AllowTAEdit.objects.get(pk=1)
+    allow_object = AllowTAEdit.objects.all()[0]
+
+    print(holds_object.incomplete_profile, allow_object.is_allowed())
 
     if holds_object.incomplete_profile or allow_object.is_allowed():
         context = {
@@ -114,10 +113,7 @@ def ta_info(request):
         ta_availability.save()
         ta_holds.save()
 
-        context = {
-            'first_name': request.user.first_name,
-        }
-
-        return render(request, 'teachingassistant/new_ta_success.html', context)
+        messages.success(request, 'Your information has been updated! Thank you!')
+        return redirect('ta_home')
 
     return redirect('authentication/sign_in')
