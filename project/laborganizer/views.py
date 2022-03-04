@@ -469,7 +469,7 @@ def lo_allow_ta_edit(request):
         time = request.POST.get('time')
 
         if date != '' or time != '':
-            allow_edits = AllowTAEdit.objects.get(pk=1)
+            allow_edits = AllowTAEdit.objects.all()[0]
             allow_edits.date = date
             allow_edits.time = time
             allow_edits.allowed = True

@@ -159,11 +159,8 @@ class AllowTAEdit(models.Model):
             return False
 
     allowed = models.BooleanField('Allow TA\'s to edit', default=False)
-    date = models.DateField(auto_now=False, auto_now_add=False,
-                            blank=True, null=True)
-    time = models.TimeField(auto_now=False, auto_now_add=False,
-                            blank=True, null=True)
-
+    date = models.DateField(auto_now_add=True)
+    time = models.TimeField(auto_now_add=True)
 
 class History(models.Model):
     ta_1 = models.ManyToManyField(TA, blank=True, related_name='ta_1')
