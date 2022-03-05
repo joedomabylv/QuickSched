@@ -2,6 +2,7 @@
 from django.db import models
 from laborganizer.models import Semester
 
+
 class ScorePair(models.Model):
     """A score pair representing a course catalog ID and a TA's score."""
 
@@ -77,6 +78,15 @@ class TA(models.Model):
                 lab_list.append(lab)
         return lab_list
 
+    def get_assignments_from_template(self, schedule):
+        """Get all the labs a TA is assigned to based on a template schedule."""
+        # get the template schedule
+        assignment_list = []
+        for assignment in schedule.assignments.all():
+            if assignment.ta == self:
+                assignment_list.append(assignment.lab)
+        return assignment_list
+
     def score_exists(self, lab, schedule_key):
         """
         Check if a score already exists for a TA for a given lab.
@@ -87,7 +97,7 @@ class TA(models.Model):
         for score in self.scores.all():
             if (score.score_catalog_id == lab.catalog_id and
                 score.semester == lab.semester and
-                score.schedule_key == schedule_key):
+                int(score.schedule_key) == schedule_key):
                 # found a matching ScorePair
                 return score
         # did not find a matching ScorePair

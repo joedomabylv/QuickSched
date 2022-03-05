@@ -72,23 +72,12 @@ class Lab(models.Model):
         self.save()
 
     def get_start_time(self):
-        """Convert the stored start time fo a lab."""
+        """Convert the stored start time of a lab."""
         return str(self.start_time)
 
     def get_end_time(self):
-        """Convert the stored end time fo a lab."""
+        """Convert the stored end time of a lab."""
         return str(self.end_time)
-
-    #TODO This must switch via the template schedule, instead of directly switching via the database
-    def confirm_switch(self, other_lab, TA1, TA2):
-        self.assigned_ta = None
-        other_lab.assigned_ta = None
-        self.save()
-        other_lab.save()
-        self.assigned_ta = TA2
-        other_lab.assigned_ta = TA1
-        self.save()
-        other_lab.save()
 
     class_name = models.CharField("Class name", default="N/A", max_length=50)
     subject = models.CharField("Subject", max_length=10)
@@ -161,11 +150,18 @@ class AllowTAEdit(models.Model):
     date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True)
 
+
 class History(models.Model):
-    ta_1 = models.ManyToManyField("teachingassistant.TA", blank=True, related_name='ta_1')
-    ta_2 = models.ManyToManyField("teachingassistant.TA", blank=True, related_name='ta_2')
+    """History stack for swapped TA's."""
+
+    def undo_bilateral_switch(self, template_schedule,
+                              from_assignment, to_assignment):
+        """Undo a switch."""
+        template_schedule.swap_assignments(from_assignment, to_assignment)
+
+    ta_1 = models.ManyToManyField("teachingassistant.TA",
+                                  blank=True, related_name='ta_1')
+    ta_2 = models.ManyToManyField("teachingassistant.TA",
+                                  blank=True, related_name='ta_2')
     lab_1 = models.ManyToManyField(Lab, blank=True, related_name='lab_1')
     lab_2 = models.ManyToManyField(Lab, blank=True, related_name='lab_2')
-
-    def undo_bilateral_switch(self):
-        self.lab_1.first().confirm_switch(self.lab_2.first(), self.ta_1.first(), self.ta_2.first())

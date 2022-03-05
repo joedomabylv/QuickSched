@@ -16,7 +16,7 @@ $(document).ready(function(){
                 </div> \
               <div class="col"> \
                 <div class="d-flex justify-content-center p-2"> \
-                  ' + response[key].TA1 + ' (' + response[key].lab1 + '-' + response[key].section1 + ') Score: ' + response[key].score1 + '\
+                  ' + response[key].to_ta + ' (' + response[key].to_lab + ') Score: ' + response[key].to_score + '\
                 </div> \
                 <div class="d-flex justify-content-center"> \
                   <svg class="bi" width="16" height="16"> \
@@ -24,7 +24,7 @@ $(document).ready(function(){
                   </svg> \
                 </div> \
                 <div class="d-flex justify-content-center p-2"> \
-                  ' + response[key].TA2 + ' (' + response[key].lab2 + '-' + response[key].section2 + ') Score: ' + response[key].score2 + '\
+                  ' + response[key].from_ta + ' (' + response[key].from_lab + ') Score: ' + response[key].from_score + '\
                 </div> \
               </div> \
             </div> \

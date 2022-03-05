@@ -94,6 +94,20 @@ class TemplateSchedule(models.Model):
                 return True
         return False
 
+    def swap_assignments(self, from_assignment, to_assignment):
+        """Swap two TA's assignments in this template."""
+        temp_ta = to_assignment.ta
+        to_assignment.ta = from_assignment.ta
+        from_assignment.ta = temp_ta
+        to_assignment.save()
+        from_assignment.save()
+
+    def get_assignment_from_id(self, course_id):
+        """Get an assignment based on a given course ID."""
+        for assignment in self.assignments.all():
+            if assignment.lab.course_id == course_id:
+                return assignment
+
     version_number = models.IntegerField('Schedule Version', default=0)
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE,
                                  blank=True, null=True)
