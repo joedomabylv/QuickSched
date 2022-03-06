@@ -21,7 +21,10 @@ from laborganizer.lo_utils import (get_current_semester,
                                    get_all_schedule_version_numbers,
                                    get_template_schedule,
                                    get_top_scoring_contenders,
-                                   get_top_scoring_labs)
+                                   get_top_scoring_labs,
+                                   get_deviation_score,
+                                   grade_deviation_score)
+
 from optimization.optimization_utils import (generate_by_selection,
                                              propogate_schedule)
 from django.http import JsonResponse
@@ -63,6 +66,7 @@ def lo_home(request, selected_semester=None, template_schedule=None):
     if request.GET.get('swap') is not None:
         switch_data = request.GET.get('swap').split()
         switch_data.pop(0)
+        print(switch_data)
         lo_confirm_switch(switch_data, template_schedule)
         messages.success(request, "Switch confirmed!")
 
@@ -125,33 +129,57 @@ def lo_generate_switches(course_id, current_semester, template_schedule):
             selected_ta = assignment.ta
     current_score = selected_ta.get_score(selected_lab, template_schedule.id)
 
-    # get the top scoring contenders based on assignment scores
-    top_contenders = get_top_scoring_contenders(tas,
-                                                selected_lab,
-                                                template_schedule,
-                                                selected_ta,
-                                                contender_number)
+    # remove selected ta so that it is not compared against itself
+    tas = list(tas)
+    tas.remove(selected_ta)
 
-    # check if there are no top contenders, i.e. no need to check for any
-    # switches
-    if len(top_contenders) == 0:
-        # temp pass because i dont know whats supposed to come out of this
-        return {'no': 'switches'}
+    # calculate the deviation score for each relevant TA
+    deviation_scores = []
+    for ta in tas:
+        score = get_deviation_score(ta, selected_ta, selected_lab,
+                                                current_score, template_schedule)
+        deviation_scores.append((score, ta.student_id))
 
-    # get the selected TA's scores from all labs that other contenders
-    # have scores for
-    relevant_labs = get_top_scoring_labs(top_contenders, template_schedule)
-    for lab in relevant_labs:
-        lab_key = lab.course_id
-        lab_score = selected_ta.get_score(lab, template_schedule.id)
-        relevant_lab_scores[lab_key] = lab_score
+    # sort the list of TA's based on their deviation score instead of their fitness score
+    deviation_scores.sort(key=lambda x: x[0])
+
+    # Take the top N scores with their respective student ids
+    top_contenders = deviation_scores[0:contender_number]
+
+    # # get the top scoring contenders based on assignment scores
+    # top_contenders = get_top_scoring_contenders(tas,
+    #                                             selected_lab,
+    #                                             template_schedule,
+    #                                             selected_ta,
+    #                                             contender_number)
+
+    # # check if there are no top contenders, i.e. no need to check for any
+    # # switches
+    # if len(top_contenders) == 0:
+    #     # temp pass because i dont know whats supposed to come out of this
+    #     return {'no': 'switches'}
+
+    # # get the selected TA's scores from all labs that other contenders
+    # # have scores for
+    # relevant_labs = get_top_scoring_labs(top_contenders, template_schedule)
+    # for lab in relevant_labs:
+    #     lab_key = lab.course_id
+    #     lab_score = selected_ta.get_score(lab, template_schedule.id)
+    #     relevant_lab_scores[lab_key] = lab_score
 
     switch_names = []
     switches = []
     index = 0
 
     # determine which TA's we can switch the selected TA to
-    for to_ta in top_contenders:
+    for ta in top_contenders:
+
+        # find ta object with student id
+        to_ta = TA.objects.get(student_id=ta[1])
+
+        # find grade of deviation score
+        grade = grade_deviation_score(ta[0])
+
         # possible labs we're switching to based on the current template
         to_labs = to_ta.get_assignments_from_template(template_schedule)
 
@@ -159,16 +187,14 @@ def lo_generate_switches(course_id, current_semester, template_schedule):
         if len(to_labs) > 0:
             to_lab = to_labs[0]
 
-            # get the score the TA we could switch to has for the selected lab
-            to_score = to_ta.get_score(selected_lab, template_schedule.id)
-
             switches.append({
                 "to_lab": to_lab.subject + to_lab.catalog_id + ':' + to_lab.course_id,
                 "from_lab": selected_lab.subject + selected_lab.catalog_id + ':' + selected_lab.course_id,
                 "to_ta": to_ta.first_name + ':' + to_ta.student_id,
                 "from_ta": selected_ta.first_name + ':' + selected_ta.student_id,
-                "to_score": to_score,
-                "from_score": current_score,
+                "deviation_score": ta[0],
+                "score_color": grade,
+                "switch_id": index + 1
             })
 
             switch_names.append("switch_" + str(index + 1))
@@ -176,6 +202,7 @@ def lo_generate_switches(course_id, current_semester, template_schedule):
             index += 1
 
     response = dict(zip(switch_names, switches))
+    print(json.dumps(response, indent=4))
     return response
 
 
@@ -185,8 +212,8 @@ def lo_confirm_switch(switch_data, template_schedule):
     switch_dict = {
         "first_ta": switch_data[0],  # format <first_name>:<student_id>
         "first_course": switch_data[1],  # format: <subject><catalog_id>:<course_id>
-        "second_ta": switch_data[4],  # format <first_name>:<student_id>
-        "second_course": switch_data[5]  # format: <subject><catalog_id>:<course_id>
+        "second_ta": switch_data[2],  # format <first_name>:<student_id>
+        "second_course": switch_data[3]  # format: <subject><catalog_id>:<course_id>
     }
 
     # extract the student ID from the desired TA's

@@ -163,3 +163,39 @@ def get_top_scoring_labs(tas, template_schedule):
             if assignment not in lab_list:
                 lab_list.append(assignment)
     return lab_list
+
+def get_deviation_score(potential_ta, selected_ta, selected_lab, current_score, template_schedule):
+    # NOTE This algorithm assumes that the initially generated schedule is the best possible schedule, and
+    # anything deviating from such is a downgrade. This function calculates how much the respective
+    # scores are straying away from the original scores, and returning that value of gaps.
+    # The higher the difference, the worse of a choice it should be.
+
+    pt_labs = potential_ta.get_assignments_from_template(template_schedule)
+    pt_potential_score = potential_ta.get_score(selected_lab, template_schedule.id)
+    st_current_score = current_score
+
+    # if the potential ta doesnt have an assignment, just return the difference between st and pt scores
+    if len(pt_labs) == 0:
+        return abs(pt_potential_score - st_current_score)
+
+    else:
+        pt_lab = pt_labs[0]
+        pt_current_score = potential_ta.get_score(selected_lab, template_schedule.id)
+        st_potential_score = selected_ta.get_score(pt_lab, template_schedule.id)
+
+        gap_1 = abs(st_current_score - st_potential_score)
+        gap_2 = abs(pt_current_score - pt_potential_score)
+
+        return gap_1 + gap_2
+
+def grade_deviation_score(score):
+    if score < 20:
+        return "score5"
+    elif score < 40:
+        return "score4"
+    elif score < 60:
+        return "score3"
+    elif score < 80:
+        return "score2"
+    elif score < 100:
+        return "score1"
