@@ -9,14 +9,14 @@ $(document).ready(function(){
       success: function(response) {
         for(var key in response) {
           $("#switches-list").append(
-            '<a href="#" id="switch" class="list-group-item list-group-item-action switch"> \
+            '<a href="#" id="switch" class="list-group-item list-group-item-action switch '+ response[key].score_color + '"> \
               <div class="row align-items-center "> \
                 <div class="col-1"> \
-                  <h1 class="ms-2 d-flex justify-content-center">1</h1> \
+                  <h1 class="ms-2 d-flex justify-content-center">' + response[key].switch_id + '</h1> \
                 </div> \
               <div class="col"> \
                 <div class="d-flex justify-content-center p-2"> \
-                  ' + response[key].to_ta + ' (' + response[key].to_lab + ') Score: ' + response[key].to_score + '\
+                  ' + response[key].to_ta + ' (' + response[key].to_lab + ') \
                 </div> \
                 <div class="d-flex justify-content-center"> \
                   <svg class="bi" width="16" height="16"> \
@@ -24,7 +24,7 @@ $(document).ready(function(){
                   </svg> \
                 </div> \
                 <div class="d-flex justify-content-center p-2"> \
-                  ' + response[key].from_ta + ' (' + response[key].from_lab + ') Score: ' + response[key].from_score + '\
+                  ' + response[key].from_ta + ' (' + response[key].from_lab + ') <br /> Deviation Score: ' + response[key].deviation_score + '\
                 </div> \
               </div> \
             </div> \
