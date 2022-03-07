@@ -72,11 +72,11 @@ class Lab(models.Model):
         self.save()
 
     def get_start_time(self):
-        """Convert the stored start time fo a lab."""
+        """Convert the stored start time of a lab."""
         return str(self.start_time)
 
     def get_end_time(self):
-        """Convert the stored end time fo a lab."""
+        """Convert the stored end time of a lab."""
         return str(self.end_time)
 
     class_name = models.CharField("Class name", default="N/A", max_length=50)
@@ -149,3 +149,19 @@ class AllowTAEdit(models.Model):
     allowed = models.BooleanField('Allow TA\'s to edit', default=False)
     date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True)
+
+
+class History(models.Model):
+    """History stack for swapped TA's."""
+
+    def undo_bilateral_switch(self, template_schedule,
+                              from_assignment, to_assignment):
+        """Undo a switch."""
+        template_schedule.swap_assignments(from_assignment, to_assignment)
+
+    ta_1 = models.ManyToManyField("teachingassistant.TA",
+                                  blank=True, related_name='ta_1')
+    ta_2 = models.ManyToManyField("teachingassistant.TA",
+                                  blank=True, related_name='ta_2')
+    lab_1 = models.ManyToManyField(Lab, blank=True, related_name='lab_1')
+    lab_2 = models.ManyToManyField(Lab, blank=True, related_name='lab_2')

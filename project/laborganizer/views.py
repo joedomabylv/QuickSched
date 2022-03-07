@@ -12,18 +12,23 @@ Variables used throughout LO dashboard:
 """
 from django.shortcuts import render, redirect
 from teachingassistant.models import TA, Holds
-from .models import Semester, Lab, AllowTAEdit
+from .models import Semester, Lab, AllowTAEdit, History
 from django.contrib import messages
-from laborganizer.lo_utils import (get_semester_years,
-                                   get_semester_times,
-                                   get_current_semester,
+from laborganizer.lo_utils import (get_current_semester,
                                    get_tas_by_semester,
                                    get_labs_by_semester,
                                    get_most_recent_sched,
                                    get_all_schedule_version_numbers,
-                                   get_template_schedule)
+                                   get_template_schedule,
+                                   get_top_scoring_contenders,
+                                   get_top_scoring_labs,
+                                   get_deviation_score,
+                                   grade_deviation_score)
+
 from optimization.optimization_utils import (generate_by_selection,
                                              propogate_schedule)
+from django.http import JsonResponse
+import json
 
 
 def lo_home(request, selected_semester=None, template_schedule=None):
@@ -49,6 +54,22 @@ def lo_home(request, selected_semester=None, template_schedule=None):
         # use the provided template schedule
         template_schedule = template_schedule
 
+    # Handles get request required for generating switches
+    if request.GET.get('lab_name') is not None:
+        catalog_id = request.GET.get('lab_name')
+        response = lo_generate_switches(catalog_id,
+                                        current_semester,
+                                        template_schedule)
+        return JsonResponse(response, status=200)
+
+    # Handles get request required for confirming switches
+    if request.GET.get('swap') is not None:
+        switch_data = request.GET.get('swap').split()
+        switch_data.pop(0)
+        print(switch_data)
+        lo_confirm_switch(switch_data, template_schedule)
+        messages.success(request, "Switch confirmed!")
+
     # get all labs for the current semester
     labs = Lab.objects.filter(
         semester__semester_time=current_semester['time'],
@@ -67,6 +88,9 @@ def lo_home(request, selected_semester=None, template_schedule=None):
         current_semester['time'],
         current_semester['year'])
 
+    # get all history nodes that are active
+    last_history = History.objects.last()
+
     # instantiate context variable
     context = {
         'labs': labs,
@@ -75,6 +99,7 @@ def lo_home(request, selected_semester=None, template_schedule=None):
         'current_semester': current_semester,
         'template_schedule': template_schedule,
         'schedule_versions': template_schedule_versions,
+        'history': last_history
     }
 
     # check if there are no labs in the selected semester
@@ -82,6 +107,150 @@ def lo_home(request, selected_semester=None, template_schedule=None):
         messages.warning(request, 'No labs in the current semester!')
 
     return render(request, 'laborganizer/dashboard.html', context)
+
+
+def lo_generate_switches(course_id, current_semester, template_schedule):
+    """Generate all available switches for a lab at LO command."""
+    contender_number = 3  # TODO make this a global variable
+
+    # initialize variables
+    top_contenders = []
+    relevant_lab_scores = {}
+
+    # gather all TA's based on the currently selected semester
+    tas = get_tas_by_semester(current_semester['time'],
+                              current_semester['year'])
+
+    # get the selected lab based on course ID
+    selected_lab = Lab.objects.get(course_id=course_id)
+    selected_ta = None
+    for assignment in template_schedule.assignments.all():
+        if assignment.lab.course_id == course_id:
+            selected_ta = assignment.ta
+    current_score = selected_ta.get_score(selected_lab, template_schedule.id)
+
+    # remove selected ta so that it is not compared against itself
+    tas = list(tas)
+    tas.remove(selected_ta)
+
+    # calculate the deviation score for each relevant TA
+    deviation_scores = []
+    for ta in tas:
+        score = get_deviation_score(ta, selected_ta, selected_lab,
+                                                current_score, template_schedule)
+        deviation_scores.append((score, ta.student_id))
+
+    # sort the list of TA's based on their deviation score instead of their fitness score
+    deviation_scores.sort(key=lambda x: x[0])
+
+    # Take the top N scores with their respective student ids
+    top_contenders = deviation_scores[0:contender_number]
+
+    # # get the top scoring contenders based on assignment scores
+    # top_contenders = get_top_scoring_contenders(tas,
+    #                                             selected_lab,
+    #                                             template_schedule,
+    #                                             selected_ta,
+    #                                             contender_number)
+
+    # # check if there are no top contenders, i.e. no need to check for any
+    # # switches
+    # if len(top_contenders) == 0:
+    #     # temp pass because i dont know whats supposed to come out of this
+    #     return {'no': 'switches'}
+
+    # # get the selected TA's scores from all labs that other contenders
+    # # have scores for
+    # relevant_labs = get_top_scoring_labs(top_contenders, template_schedule)
+    # for lab in relevant_labs:
+    #     lab_key = lab.course_id
+    #     lab_score = selected_ta.get_score(lab, template_schedule.id)
+    #     relevant_lab_scores[lab_key] = lab_score
+
+    switch_names = []
+    switches = []
+    index = 0
+
+    # determine which TA's we can switch the selected TA to
+    for ta in top_contenders:
+
+        # find ta object with student id
+        to_ta = TA.objects.get(student_id=ta[1])
+
+        # find grade of deviation score
+        grade = grade_deviation_score(ta[0])
+
+        # possible labs we're switching to based on the current template
+        to_labs = to_ta.get_assignments_from_template(template_schedule)
+
+        # check for one lab we could switch into
+        if len(to_labs) > 0:
+            to_lab = to_labs[0]
+
+            switches.append({
+                "to_lab": to_lab.subject + to_lab.catalog_id + ':' + to_lab.course_id,
+                "from_lab": selected_lab.subject + selected_lab.catalog_id + ':' + selected_lab.course_id,
+                "to_ta": to_ta.first_name + ':' + to_ta.student_id,
+                "from_ta": selected_ta.first_name + ':' + selected_ta.student_id,
+                "deviation_score": ta[0],
+                "score_color": grade,
+                "switch_id": index + 1
+            })
+
+            switch_names.append("switch_" + str(index + 1))
+
+            index += 1
+
+    response = dict(zip(switch_names, switches))
+    print(json.dumps(response, indent=4))
+    return response
+
+
+def lo_confirm_switch(switch_data, template_schedule):
+    """Confirm a switch within the database according to the template."""
+    # Prepare data for the switch to occur
+    switch_dict = {
+        "first_ta": switch_data[0],  # format <first_name>:<student_id>
+        "first_course": switch_data[1],  # format: <subject><catalog_id>:<course_id>
+        "second_ta": switch_data[2],  # format <first_name>:<student_id>
+        "second_course": switch_data[3]  # format: <subject><catalog_id>:<course_id>
+    }
+
+    # extract the student ID from the desired TA's
+    first_student_id = switch_dict['first_ta'].split(':')[1]
+    second_student_id = switch_dict['second_ta'].split(':')[1]
+
+    # get the desired TA's based on their student ID
+    from_ta = TA.objects.get(student_id=first_student_id)
+    to_ta = TA.objects.get(student_id=second_student_id)
+
+    # extract the course ID from the desired labs
+    first_course_id = switch_dict['first_course'].split(':')[1].replace(')', '')
+    second_course_id = switch_dict['second_course'].split(':')[1].replace(')', '')
+
+    # get the desired lab assignments from the template schedule
+    from_assignment = template_schedule.get_assignment_from_id(first_course_id)
+    to_assignment = template_schedule.get_assignment_from_id(second_course_id)
+
+    # get the desired labs based on course ID
+    from_lab = Lab.objects.get(course_id=first_course_id)
+    to_lab = Lab.objects.get(course_id=second_course_id)
+
+    node_id = len(History.objects.all()) + 1
+
+    node = History(id=node_id)
+    node.save()
+    node.ta_1.set([from_ta])
+    node.ta_2.set([to_ta])
+    node.lab_1.set([from_lab])
+    node.lab_2.set([to_lab])
+    node.save()
+
+    if (len(History.objects.all()) > 10):
+        History.objects.first().delete()
+
+    # Confirm the switch on the database side
+    template_schedule.swap_assignments(from_assignment, to_assignment)
 
 
 def lo_select_schedule_version(request):
@@ -322,10 +491,8 @@ def lo_allow_ta_edit(request):
 
         if date != '' or time != '':
             allow_edits = AllowTAEdit.objects.all()[0]
-            print(allow_edits.date, allow_edits.time)
             allow_edits.date = date
             allow_edits.time = time
-            print(allow_edits.date, allow_edits.time)
             allow_edits.allowed = True
             allow_edits.save()
             messages.success(request, 'TA\'s are allowed to edit their information!')

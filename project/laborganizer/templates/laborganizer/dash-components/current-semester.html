@@ -36,7 +36,7 @@
 				<input name="semester_time" type="hidden" value="{{ current_semester.time }}">
 			    </div>
 			</form>
-		    </div>   
+		    </div>
 		</div>
 	    </div>
 
@@ -111,15 +111,15 @@
 					{{ assignment.ta.first_name }} {{ assignment.ta.last_name }}
 					{% endif %}
 					{% endfor %}
-					
+
 					{% else %}
-					
+
   					    {% if labs.assigned_ta != None %}
 					        {{ lab.assigned_ta }}
   					    {% else %}
 					        Unassigned
 					    {% endif %}
-					
+
 					{% endif %}
 				    </option>
 				    {% for ta in tas %}
@@ -134,10 +134,11 @@
 			<div class="d-grid">
 			    <button
 				type="button"
-				class="btn btn-outline-dark border-0"
+				class="btn btn-outline-dark border-0 switch-btn"
 				type="button"
-				class="btn btn-outline-dark border-0"
+				class="btn btn-outline-dark border-0 switch-btn"
 				data-bs-toggle="offcanvas"
+				id="{{ lab.course_id }}"
 				data-bs-target="#offcanvasOperations"
 				aria-controls="offcanvasOperations"
 			    >
@@ -160,5 +161,5 @@
 
     <script src="{% static 'laborganizer/assign_to_template.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-    
+
 </div>

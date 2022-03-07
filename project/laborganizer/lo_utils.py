@@ -5,34 +5,34 @@ from teachingassistant.models import TA
 from optimization.models import TemplateSchedule
 
 
-def get_semester_years():
-    """
-    Get a list of all existing semester years with no duplicates.
+# def get_semester_years():
+#     """
+#     Get a list of all existing semester years with no duplicates.
 
-    When the LO goes to select a new semester from the sidebar, only display
-    each available year (2022, 2023, etc.) once.
-    """
-    semesters = Semester.objects.all()
-    year_list = []
-    for semester in semesters:
-        if semester.year not in year_list:
-            year_list.append(semester.year)
-    return year_list
+#     When the LO goes to select a new semester from the sidebar, only display
+#     each available year (2022, 2023, etc.) once.
+#     """
+#     semesters = Semester.objects.all()
+#     year_list = []
+#     for semester in semesters:
+#         if semester.year not in year_list:
+#             year_list.append(semester.year)
+#     return year_list
 
 
-def get_semester_times():
-    """
-    Get a list of all existing semester times with no duplicates.
+# def get_semester_times():
+#     """
+#     Get a list of all existing semester times with no duplicates.
 
-    When the LO goes to select a new semester from the sidebar, only display
-    each available time (SPR, WNT, etc.) once.
-    """
-    semesters = Semester.objects.all()
-    time_list = []
-    for semester in semesters:
-        if semester.semester_time not in time_list:
-            time_list.append(semester.semester_time)
-    return time_list
+#     When the LO goes to select a new semester from the sidebar, only display
+#     each available time (SPR, WNT, etc.) once.
+#     """
+#     semesters = Semester.objects.all()
+#     time_list = []
+#     for semester in semesters:
+#         if semester.semester_time not in time_list:
+#             time_list.append(semester.semester_time)
+#     return time_list
 
 
 def get_current_semester():
@@ -120,3 +120,82 @@ def get_template_schedule(time, year, version):
                                     year=year)
     return TemplateSchedule.objects.get(semester=semester,
                                         version_number=version)
+
+def get_max_score(tas, lab, template_schedule):
+    """Get the max score for a single lab against a set of TA's."""
+    max_score = 0
+    for ta in tas:
+        current_score = ta.get_score(lab, template_schedule.id)
+        if current_score > max_score:
+            max_score = current_score
+    return max_score
+
+
+def get_top_scoring_contenders(tas, lab, template_schedule, selected_ta, limit):
+    """
+    Get the top scores for a template_schedule based on the pper limit.
+
+    Return a list of tuples in the format:
+    [(ta, score), (ta, score), ...]
+    """
+    max_score = get_max_score(tas, lab, template_schedule)
+    top_contenders = []
+    for ta in tas:
+        # check if we've reached the limit of desired contenders
+        if len(top_contenders) < limit:
+            current_score = ta.get_score(lab, template_schedule.id)
+            # check if the scores are equivalent and we're not adding
+            # the selected TA to the list
+            # (we don't want to compare possible switches with the
+            #  same TA)
+            if (current_score == max_score and
+                ta.student_id != selected_ta.student_id):
+                top_contenders.append(ta)
+    return top_contenders
+
+
+def get_top_scoring_labs(tas, template_schedule):
+    """Generate a list of all labs that a list of TA's are assigned to."""
+    lab_list = []
+    for ta in tas:
+        assignments = ta.get_assignments_from_template(template_schedule)
+        for assignment in assignments:
+            if assignment not in lab_list:
+                lab_list.append(assignment)
+    return lab_list
+
+def get_deviation_score(potential_ta, selected_ta, selected_lab, current_score, template_schedule):
+    # NOTE This algorithm assumes that the initially generated schedule is the best possible schedule, and
+    # anything deviating from such is a downgrade. This function calculates how much the respective
+    # scores are straying away from the original scores, and returning that value of gaps.
+    # The higher the difference, the worse of a choice it should be.
+
+    pt_labs = potential_ta.get_assignments_from_template(template_schedule)
+    pt_potential_score = potential_ta.get_score(selected_lab, template_schedule.id)
+    st_current_score = current_score
+
+    # if the potential ta doesnt have an assignment, just return the difference between st and pt scores
+    if len(pt_labs) == 0:
+        return abs(pt_potential_score - st_current_score)
+
+    else:
+        pt_lab = pt_labs[0]
+        pt_current_score = potential_ta.get_score(selected_lab, template_schedule.id)
+        st_potential_score = selected_ta.get_score(pt_lab, template_schedule.id)
+
+        gap_1 = abs(st_current_score - st_potential_score)
+        gap_2 = abs(pt_current_score - pt_potential_score)
+
+        return gap_1 + gap_2
+
+def grade_deviation_score(score):
+    if score < 20:
+        return "score5"
+    elif score < 40:
+        return "score4"
+    elif score < 60:
+        return "score3"
+    elif score < 80:
+        return "score2"
+    elif score < 100:
+        return "score1"
