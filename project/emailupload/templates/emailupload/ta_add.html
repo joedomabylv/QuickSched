@@ -1,16 +1,18 @@
 {% extends 'emailupload/base.html' %}
-{% block title %}QuickSched: TA{% endblock %}
+{% block title %}QuickSched: Email Upload{% endblock %}
 {% load static %}
 
 {% block content %}
 
-<h1>Upload email roster file</h1>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <input class="form-control" type="file" name="document">
-    <button class="m-4 btn btn-primary" type="submit">Upload CSV File</button>
-</form>
-<a class="btn btn-secondary" href="{% url 'lo_ta_management' %}">Go Back</a>
-<a class="btn btn-secondary" href="{% url 'lo_home' %}">Go Home</a>
+<div class="mt-5 w-50 mx-auto" id="email_upload">
+    <img height="150" width="150" src="{% static 'global/Magisters.svg' %}">
+    <h1 class="mt-4">Upload email CSV file</h1>
+    <form method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+	<input class="form-control" type="file" name="document">
+	<button class="m-4 btn btn-primary" type="submit">Upload CSV File</button>
+    </form>
+    <a class="btn btn-secondary" href="{% url 'lo_home' %}">Go Home</a>
+</div>
 
 {% endblock %}
