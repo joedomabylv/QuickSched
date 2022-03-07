@@ -1,12 +1,9 @@
 """Primary optimization function/functions."""
 
 
-def calculate_score(ta, lab, template_id):
+def calculate_score(ta, lab, template_id, priority_bonus=0):
     """Calculate the score for a TA for a given lab."""
     total_score = 0
-
-    # get the weight of an experience score, hardcoded for now
-    EXP_WEIGHT = 10
 
     ta_experience = ta.get_experience()
 
@@ -18,7 +15,7 @@ def calculate_score(ta, lab, template_id):
         experience_id = experience[1]
         if (experience_subject == lab.subject
             and experience_id == lab.catalog_id):
-            total_score += EXP_WEIGHT
+            total_score += priority_bonus
 
     # check if the TA has the availability to teach the lab
     for time in ta_availability.values():
@@ -29,7 +26,7 @@ def calculate_score(ta, lab, template_id):
     ta.assign_score(total_score, lab, template_id)
 
 
-def initialization(tas, labs, template_id):
+def initialization(tas, labs, template_id, priority_bonus=0):
     """
     Primary initialization function for all TA scores.
 
@@ -38,7 +35,7 @@ def initialization(tas, labs, template_id):
     # calculate all scores
     for lab in labs:
         for ta in tas:
-            calculate_score(ta, lab, template_id)
+            calculate_score(ta, lab, template_id, priority_bonus)
 
 
 def recalc_scores(ta, labs):

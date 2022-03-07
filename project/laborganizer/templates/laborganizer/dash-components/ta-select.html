@@ -124,11 +124,49 @@
             </div>
 	    <input type="hidden" name="year" value="{{ current_semester.year }}">
 	    <input type="hidden" name="time" value="{{ current_semester.time }}">    
+		<!-- End Greater TA list -->
+		<br>
+		<p class="mt-3">How prioritized will TA's with proper experience be?</p>
+		<!-- Experience priority selection -->
+		<input
+			class="form-check-input"
+			type="radio"
+			value="low"
+			id="low"
+			name="priority"
+		/>
+		<label class="form-check-label w-100" for="priority">
+			Low Priority
+		</label>
+
+		<input
+			class="form-check-input"
+			type="radio"
+			value="high"
+			id="high"
+			name="priority"
+		/>
+		<label class="form-check-label w-100" for="priority">
+			High Priority
+		</label>
+
+		<input
+			class="form-check-input"
+			type="radio"
+			value="none"
+			id="none"
+			name="priority"
+			checked
+		/>
+		<label class="form-check-label w-100" for="priority">
+			No Priority
+		</label>
+
+		<br><br>
 	    <input class="btn btn-primary" type="submit" value="Submit">
+		<p class="mt-3">This will generate a new schedule version!</p>
 	</form>
-	<!-- End Greater TA list -->
-	<p class="mt-3">This will generate a new schedule version!</p>	
-	
+
     </div>
     <!-- End of Canvas Body -->
     
