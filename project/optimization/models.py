@@ -27,10 +27,10 @@ class TemplateSchedule(models.Model):
         """Define human readable object name."""
         return f'{self.semester}, v{self.version_number}'
 
-    def initialize(self, tas, labs):
+    def initialize(self, tas, labs, priority_bonus=0):
         """Initialize this template schedule."""
         # give scores to all given TA's for this template
-        initialization(tas, labs, self.id)
+        initialization(tas, labs, self.id, priority_bonus)
         # loop through all given labs
         for lab in labs:
             # find the TA with the highest score given to this lab

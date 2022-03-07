@@ -324,6 +324,18 @@ def lo_generate_schedule(request):
     Generate a new version of a TemplateSchedule object.
     """
     if request.method == 'POST':
+
+        #NOTE The priority bonus is subject to change in further iterations
+        # I didnt hardcode the values in the html so they could be easily changed here
+        priority_value_table = {
+            'none': 0,
+            'low': 10,
+            'high': 20
+        }
+
+        priority = request.POST.get('priority')
+        priority_bonus = priority_value_table[priority]
+
         # get the student id's of all selected TA's
         ta_ids = request.POST.getlist('checks[]')
         year = request.POST.get('year')
@@ -345,7 +357,7 @@ def lo_generate_schedule(request):
 
         # using those TA's, populate a TemplateSchedule object from
         # optimization.models
-        template_schedule = generate_by_selection(tas, labs, selected_semester)
+        template_schedule = generate_by_selection(tas, labs, selected_semester, priority_bonus)
 
         return lo_home(request, selected_semester, template_schedule)
 

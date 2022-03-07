@@ -4,7 +4,7 @@ from .models import TemplateSchedule
 from laborganizer.lo_utils import (get_most_recent_sched)
 
 
-def generate_by_selection(tas, labs, semester):
+def generate_by_selection(tas, labs, semester, priority_bonus=0):
     """
     Generate a template schedule based on LO TA selection.
 
@@ -28,7 +28,7 @@ def generate_by_selection(tas, labs, semester):
         semester=semester)
 
     # assign scores to all given TA's for given Labs
-    new_template_schedule.initialize(tas, labs)
+    new_template_schedule.initialize(tas, labs, priority_bonus)
 
     # save new template to databse
     new_template_schedule.save()
