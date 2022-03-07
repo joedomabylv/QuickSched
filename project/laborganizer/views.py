@@ -89,7 +89,7 @@ def lo_home(request, selected_semester=None, template_schedule=None):
         current_semester['year'])
 
     # get all history nodes that are active
-    last_history = History.objects.last()
+    history = History.objects.all()
 
     # instantiate context variable
     context = {
@@ -99,7 +99,7 @@ def lo_home(request, selected_semester=None, template_schedule=None):
         'current_semester': current_semester,
         'template_schedule': template_schedule,
         'schedule_versions': template_schedule_versions,
-        'history': last_history
+        'history': history
     }
 
     # check if there are no labs in the selected semester
