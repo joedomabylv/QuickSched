@@ -3,16 +3,87 @@
     {% include 'teachingassistant/horizontal_tool_bar.html' %}
     {% include 'teachingassistant/message.html' %}
 
-    <div class="mt-3" id="assigned_labs">
+    {% if labs %}
+    <div class="w-75 mx-auto mt-3" id="assigned_labs">
 	<h3>{{ semester.time }}{{ semester.year }} Labs</h3>
+	<p>{{ labs|length }} assignments</p>
 
-	<ul class="list-group">
+	<div class="accordion" id="accordionLabs">
 	    {% for lab in labs %}
-	    <li class="list-group-item">
-		{{ lab.subject }}{{ lab.catalog_id }}
-	    </li>
+
+	    <div class="accordion-item">
+
+		<h2 class="accordion-header" id="heading:{{ forloop.counter }}">
+		    <button
+			class="accordion-button collapsed"
+			       type="button"
+			       data-bs-toggle="collapse"
+			       data-bs-target="#collapse-{{ forloop.counter }}"
+			       aria-expanded="false"
+			       aria-controls="collapse-{{ forloop.counter }}"
+		    >
+			{{ lab }}
+		    </button>
+		</h2>
+
+		<div
+		    id="collapse-{{ forloop.counter }}"
+		    class="accordion-collapse collapse"
+		    aria-labelledby="heading:{{ forloop.counter }}"
+		    data-bs-parent="#accordionTA"
+		>
+		    <div class="accordion-body">
+
+			<div class="container">
+
+			    <div class="row">
+
+				<div class="col">
+				    <strong>Days: </strong> {{ lab.get_days }}
+				</div>
+
+				<div class="col">
+				    <strong>Section: </strong> {{ lab.section }}
+				</div>				
+
+			    </div>
+			    <hr>
+			    <div class="row">
+
+				<div class="col">
+				    <strong>Building: </strong> {{ lab.facility_building }}, ID: {{ lab.facility_id }}
+				</div>
+
+				<div class="col">
+				    <strong>Primary Instructor: </strong> {{ lab.instructor }}
+				</div>				
+
+			    </div>
+			    <hr>
+			    <div class="row">
+
+				<div class="col">
+				    <strong>Start time: </strong> {{ lab.start_time }}
+				</div>
+
+				<div class="col">
+				    <strong>End time: </strong> {{ lab.end_time }}
+				</div>				
+
+			    </div>			    
+
+			</div>
+
+		    </div>
+		</div>
+		    
+	    </div>
+
 	    {% endfor %}
-	</ul>
+	</div>
     </div>
+    {% else %}
+    <h4 class="mt-5">You don't have any assignments!</h4>
+    {% endif %}
     
 </div>

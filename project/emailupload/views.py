@@ -178,4 +178,4 @@ def confirm_emails(request):
                   returning_accounts, fail_silently=True)
 
     messages.success(request, 'Success!')
-    return render(request, 'laborganizer/dashboard.html')
+    return redirect('lo_home')

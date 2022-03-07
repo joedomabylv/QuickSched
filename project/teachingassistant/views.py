@@ -62,7 +62,7 @@ def ta_account(request):
         }
         return render(request, 'teachingassistant/account/account.html', context)
 
-    messages.warning(request, 'You\'re not allowed to edit your information!')
+    messages.warning(request, 'You\'re not allowed to edit your information! Please contact your course organizer.')
     return redirect('ta_home')
 
 

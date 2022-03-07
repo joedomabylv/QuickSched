@@ -116,12 +116,6 @@ def sign_in(request):
     if request.method == 'POST':
         email = request.POST['email']
         pass1 = request.POST['pass1']
-
-        """
-            This only authenticates when the user enters their actual username,
-            which might be different than their email. JOE changed the input
-            form in sign_in.html to allow non-emails
-        """
         user = authenticate(email=email, password=pass1)
 
         if user is not None:

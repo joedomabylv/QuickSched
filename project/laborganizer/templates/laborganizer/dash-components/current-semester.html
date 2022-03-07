@@ -15,7 +15,7 @@
 		<div class="row fs-4 mt-3">
 		    <div class="col-8 text-start">
 			<p class="fw-bold">{{ current_semester.time }}{{ current_semester.year }}</p>
-		    </div>
+		    </div>		    
 		    <div class="col-4 text-end">
 			<form method="post" action="{% url 'lo_select_schedule_version' %}">
 			    {% csrf_token %}
@@ -52,9 +52,9 @@
 		    </span>
 		    <input
 			class="form-control me-2"
-			       type="search"
-			       placeholder="Type to filter..."
-			       aria-label="filter"
+			type="search"
+			placeholder="Type to filter..."
+			aria-label="filter"
 		    />
 		</div>
 	    </form>
@@ -63,6 +63,7 @@
     </div>
 
     <!--Table of Lab list-->
+    {% include 'laborganizer/message.html' %}    
     <div class="overflow-auto">
         <table
 	    class="table table-hover table-bordered text-center align-middle overflow-auto"
