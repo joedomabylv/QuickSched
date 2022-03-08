@@ -154,8 +154,7 @@ class AllowTAEdit(models.Model):
 class History(models.Model):
     """History stack for swapped TA's."""
 
-    def undo_bilateral_switch(self, template_schedule,
-                              from_assignment, to_assignment):
+    def undo_bilateral_switch(self, template_schedule, from_assignment, to_assignment):
         """Undo a switch."""
         template_schedule.swap_assignments(from_assignment, to_assignment)
 
