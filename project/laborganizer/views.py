@@ -202,7 +202,6 @@ def lo_generate_switches(course_id, current_semester, template_schedule):
             index += 1
 
     response = dict(zip(switch_names, switches))
-    print(json.dumps(response, indent=4))
     return response
 
 

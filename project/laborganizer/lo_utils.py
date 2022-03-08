@@ -5,36 +5,6 @@ from teachingassistant.models import TA
 from optimization.models import TemplateSchedule
 
 
-# def get_semester_years():
-#     """
-#     Get a list of all existing semester years with no duplicates.
-
-#     When the LO goes to select a new semester from the sidebar, only display
-#     each available year (2022, 2023, etc.) once.
-#     """
-#     semesters = Semester.objects.all()
-#     year_list = []
-#     for semester in semesters:
-#         if semester.year not in year_list:
-#             year_list.append(semester.year)
-#     return year_list
-
-
-# def get_semester_times():
-#     """
-#     Get a list of all existing semester times with no duplicates.
-
-#     When the LO goes to select a new semester from the sidebar, only display
-#     each available time (SPR, WNT, etc.) once.
-#     """
-#     semesters = Semester.objects.all()
-#     time_list = []
-#     for semester in semesters:
-#         if semester.semester_time not in time_list:
-#             time_list.append(semester.semester_time)
-#     return time_list
-
-
 def get_current_semester():
     """Try and guess which semester is currently going on based on the time."""
     current_month = datetime.now().month
@@ -176,6 +146,9 @@ def get_deviation_score(potential_ta, selected_ta, selected_lab, current_score, 
 
     # if the potential ta doesnt have an assignment, just return the difference between st and pt scores
     if len(pt_labs) == 0:
+        # sometimes the returned score is None, this is a bug
+        if pt_potential_score is None:
+            return 0
         return abs(pt_potential_score - st_current_score)
 
     else:
