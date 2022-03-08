@@ -62,6 +62,22 @@ def lo_home(request, selected_semester=None, template_schedule=None):
                                         template_schedule)
         return JsonResponse(response, status=200)
 
+
+    # Handles get request required for undoing changes
+    if request.GET.get('undo') is not None:
+        node = History.objects.last()
+
+        to_assignment, from_assignment = None, None
+        for assignment in template_schedule.assignments.all():
+            if assignment.ta == node.ta_1.first():
+                from_assignment = assignment
+            elif assignment.ta == node.ta_2.first():
+                to_assignment = assignment
+
+        node.undo_bilateral_switch(template_schedule, from_assignment, to_assignment)
+        node.delete()
+
+
     # Handles get request required for confirming switches
     if request.GET.get('swap') is not None:
         switch_data = request.GET.get('swap').split()
@@ -89,7 +105,7 @@ def lo_home(request, selected_semester=None, template_schedule=None):
         current_semester['year'])
 
     # get all history nodes that are active
-    last_history = History.objects.last()
+    history = History.objects.all()
 
     # instantiate context variable
     context = {
@@ -99,7 +115,7 @@ def lo_home(request, selected_semester=None, template_schedule=None):
         'current_semester': current_semester,
         'template_schedule': template_schedule,
         'schedule_versions': template_schedule_versions,
-        'history': last_history
+        'history': history
     }
 
     # check if there are no labs in the selected semester

@@ -19,13 +19,25 @@
         ></button>
     </div>
     <div class="offcanvas-body">
+        <!--Redo button-->
+        <div class="col-2">
+            <button type="button"
+                    class="btn btn-outline-secondary py-2 undo"
+                    value="{{history.id}}"
+                    >
+            <svg class="bi" width="16" height="16">
+            <use xlink:href="#redo"></use>
+            </svg>
+        </button>
+        </div>
+        <br>
         <ul class="list-group">
             {% if history %}
-                {% with history as node %}
+                {% for node in history reversed %}
                 <li class="list-group-item container">
             <div class="row align-items-center">
                 <div class="col-1">
-                <h1 class="ms-2 d-flex justify-content-center">5</h1>
+                <h1 class="ms-2 d-flex justify-content-center">{{node.id}}</h1>
                 </div>
                 <div class="col">
                 <!--Change history description-->
@@ -53,20 +65,9 @@
                     {% endfor %}
                 </div>
                 </div>
-                <!--Redo button-->
-                <div class="col-2">
-                    <button type="button"
-                            class="btn btn-outline-secondary py-2 undo"
-                            value="{{history.id}}"
-                            >
-                    <svg class="bi" width="16" height="16">
-                    <use xlink:href="#redo"></use>
-                    </svg>
-                </button>
-                </div>
             </div>
                 </li>
-                {% endwith %}
+                {% endfor %}
                 {% endif %}
             </ul>
         </div>
