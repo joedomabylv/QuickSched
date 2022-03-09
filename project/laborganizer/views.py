@@ -29,6 +29,7 @@ from django.http import JsonResponse
 
 
 def lo_home(request, selected_semester=None, template_schedule=None):
+
     """
     Home route for the Lab Organizer dashboard.
 
@@ -123,6 +124,7 @@ def lo_home(request, selected_semester=None, template_schedule=None):
 
 
 def lo_generate_switches(course_id, current_semester, template_schedule):
+
     """Generate all available switches for a lab at LO command."""
     contender_number = 3  # TODO make this a global variable
 

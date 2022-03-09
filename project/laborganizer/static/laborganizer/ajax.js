@@ -1,7 +1,7 @@
 $(document).ready(function(){
   $(".switch-btn").click(function(){
     $.ajax({
-      url: '',
+      url: '/laborganizer/',
       type: 'get',
       data: {
           lab_name: this.id
