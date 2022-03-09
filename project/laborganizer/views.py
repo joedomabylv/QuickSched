@@ -20,15 +20,12 @@ from laborganizer.lo_utils import (get_current_semester,
                                    get_most_recent_sched,
                                    get_all_schedule_version_numbers,
                                    get_template_schedule,
-                                   get_top_scoring_contenders,
-                                   get_top_scoring_labs,
                                    get_deviation_score,
                                    grade_deviation_score)
 
 from optimization.optimization_utils import (generate_by_selection,
                                              propogate_schedule)
 from django.http import JsonResponse
-import json
 
 
 def lo_home(request, selected_semester=None, template_schedule=None):
@@ -67,15 +64,16 @@ def lo_home(request, selected_semester=None, template_schedule=None):
     if request.GET.get('undo') is not None:
         node = History.objects.last()
 
-        to_assignment, from_assignment = None, None
-        for assignment in template_schedule.assignments.all():
-            if assignment.ta == node.ta_1.first():
-                from_assignment = assignment
-            elif assignment.ta == node.ta_2.first():
-                to_assignment = assignment
+        if node is not None:
+            to_assignment, from_assignment = None, None
+            for assignment in template_schedule.assignments.all():
+                if assignment.ta == node.ta_1.first():
+                    from_assignment = assignment
+                elif assignment.ta == node.ta_2.first():
+                    to_assignment = assignment
 
-        node.undo_bilateral_switch(template_schedule, from_assignment, to_assignment)
-        node.delete()
+                    node.undo_bilateral_switch(template_schedule, from_assignment, to_assignment)
+                    node.delete()
 
 
     # Handles get request required for confirming switches
@@ -463,8 +461,14 @@ def lo_propogate_schedule(request):
         time = request.POST.get('time')
         version = request.POST.get('version')
 
-        template_schedule = get_template_schedule(time, year, version)
+        # get all TA's assigned to this semester
+        all_tas = get_tas_by_semester(time, year)
+
+        # get the template schedule object
+        schedule = get_template_schedule(time, year, version)
+
         # import optimization utils and use that propogate_schedule function
+        propogate_schedule(schedule, all_tas)
 
         messages.success(request, f'Successfully uploaded version {version}!')
         return redirect('lo_home')

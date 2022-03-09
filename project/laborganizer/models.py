@@ -79,6 +79,19 @@ class Lab(models.Model):
         """Convert the stored end time of a lab."""
         return str(self.end_time)
 
+    def unassign_ta(self, all_tas):
+        """Unassign any TA that is assigned to this lab."""
+        # loop through all TA's
+        for ta in all_tas:
+            # loop through all of the TA's assignments
+            for lab in ta.assigned_labs.all():
+                # check if there's a match
+                if lab.course_id == self.course_id:
+                    # remove the lab from that TA
+                    ta.assigned_labs.remove(lab)
+                    # save changes
+                    ta.save()
+
     class_name = models.CharField("Class name", default="N/A", max_length=50)
     subject = models.CharField("Subject", max_length=10)
     catalog_id = models.CharField("Catalog ID", max_length=10)

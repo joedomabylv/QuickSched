@@ -163,6 +163,17 @@ class TA(models.Model):
             }
         return avail
 
+    def assign_to_lab(self, lab, all_tas):
+        """Assign this TA to the given lab."""
+        # unassign any previously assigned TA
+        lab.unassign_ta(all_tas)
+
+        # assign this TA
+        self.assigned_labs.add(lab)
+
+        # save changes
+        self.save()
+
     # define choice variable
     YEAR = (
         ('FR', 'Freshman'),

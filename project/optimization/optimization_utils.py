@@ -34,6 +34,9 @@ def generate_by_selection(tas, labs, semester, priority_bonus=0):
     new_template_schedule.save()
 
 
-def propogate_schedule(template_schedule):
+def propogate_schedule(template_schedule, all_tas):
     """Propogate the TemplateSchedule object to the live schedule."""
-    pass
+    for assignment in template_schedule.assignments.all():
+        assignment.ta.assign_to_lab(assignment.lab, all_tas)
+
+    # check if all the labs in the semester have a TA assigned to them
