@@ -11,30 +11,37 @@
             <div class="row g-3">
 		<div class="col-6">
 		    <label for="first_name" class="form-label">First name</label>
-		    <input type="text" class="form-control" name="first_name" required>
+		    <input type="text" class="form-control" name="first_name"
+			   {% if ta.first_name != "missing" %}
+			   value="{{ ta.first_name }}"
+			   {% endif %}
+			   required>
 		    <div class="invalid-feedback">Please provide your first name</div>
 		</div>
 
 		<div class="col-6">
 		    <label for="last_name" class="form-label">Last name</label>
-		    <input type="text" class="form-control" name="last_name" required>
+		    <input type="text" class="form-control" name="last_name"
+			   {% if ta.last_name != "missing" %}
+			   value="{{ ta.last_name }}"
+			   {% endif %}
+			   required>
 		    <div class="invalid-feedback">Please provide your last name</div>
 		</div>
 
 		<div class="col-6">
 		    <label for="student_id" class="form-label">Student ID</label>
-		    <input type="text" class="form-control" name="student_id" required >
+		    <input type="text" class="form-control" name="student_id" value="{{ ta.student_id }}" required >
 		    <div class="invalid-feedback">Please provide your student ID</div>
 		</div>
-
 		<div class="col-6">
 		    <label for="year" class="form-labe">Year</label>
 		    <select class="form-select mt-2" name="year">
-			<option value="FR">Freshman</option>
-			<option value="SO">Sophomore</option>
-			<option value="JR">Junior</option>
-			<option value="SR">Senior</option>
-			<option value="GR">Graduate</option>
+			<option value="FR" {% if ta.year == "FR" %}selected{% endif %}>Freshman</option>
+			<option value="SO" {% if ta.year == "SO" %}selected{% endif %}>Sophomore</option>
+			<option value="JR" {% if ta.year == "JR" %}selected{% endif %}>Junior</option>
+			<option value="SR" {% if ta.year == "SR" %}selected{% endif %}>Senior</option>
+			<option value="GR" {% if ta.year == "GR" %}selected{% endif %}>Graduate</option>
 		    </select>
 		</div>
             </div>
@@ -48,7 +55,13 @@
 			    </div>
 			</div>
 		    </div>
-		    <input type="text" class="form-control" name="experience" placeholder="eg: MAT121, CS249, CYB404...">
+		    {{ ta.get_experience|length }}
+		    <input type="text" class="form-control" name="experience"
+			   {% if ta.get_experience|length == 0 %}
+			   placeholder="eg: MAT121, CS249, CYB404..."
+			   {% else %}
+			   value="{{ ta.experience }}"
+		           {% endif%}>
 		</div>
             </div>
 	    

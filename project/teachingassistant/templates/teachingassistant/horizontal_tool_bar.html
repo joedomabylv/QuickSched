@@ -7,10 +7,10 @@
     <div class="container  fs-4">
 	<div class="row">
 	    <div class="col-6 text-start">
-		{% if holds.incomplete_profile or not holds  %}
-		Welcome!
+		{% if holds.incomplete_profile or not holds %}
+		Hello!
 		{% else %}
-		Hello, {{ ta.first_name }}.
+		Hello, {{ ta.first_name }}!
 		{% endif %}
 	    </div>
 	    <div class="col-6 text-end">

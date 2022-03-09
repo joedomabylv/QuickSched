@@ -59,6 +59,7 @@ def ta_account(request):
         context = {
             'title_tag': request.user.first_name + ' ' + request.user.last_name,
             'new_ta_form': NewTAForm(),
+            'ta': request.user.ta_object,
         }
         return render(request, 'teachingassistant/account/account.html', context)
 
