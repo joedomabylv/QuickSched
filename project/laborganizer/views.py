@@ -65,17 +65,15 @@ def lo_home(request, selected_semester=None, template_schedule=None):
         node = History.objects.last()
 
         if node is not None:
-          to_assignment, from_assignment = None, None
-          for assignment in template_schedule.assignments.all():
-              if assignment.ta == node.ta_1.first():
-                  from_assignment = assignment
-              elif assignment.ta == node.ta_2.first():
-                  to_assignment = assignment
+            to_assignment, from_assignment = None, None
+            for assignment in template_schedule.assignments.all():
+                if assignment.ta == node.ta_1.first():
+                    from_assignment = assignment
+                elif assignment.ta == node.ta_2.first():
+                    to_assignment = assignment
 
-          node.undo_bilateral_switch(template_schedule, from_assignment, to_assignment)
-          node.delete()
-
-
+            node.undo_bilateral_switch(template_schedule, from_assignment, to_assignment)
+            node.delete()
 
     # Handles get request required for confirming switches
     if request.GET.get('swap') is not None:
