@@ -150,7 +150,7 @@ class AllowTAEdit(models.Model):
 
         # if the current time is before the saved time, allow
         # TA's to edit their information
-        if day < saved_day or time < saved_time:
+        if day <= saved_day and time < saved_time:
             self.allowed = True
             return True
         else:
