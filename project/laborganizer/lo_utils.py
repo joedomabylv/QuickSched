@@ -176,5 +176,3 @@ def grade_deviation_score(score):
         return "score3"
     elif score < 80:
         return "score2"
-    elif score < 100:
-        return "score1"
