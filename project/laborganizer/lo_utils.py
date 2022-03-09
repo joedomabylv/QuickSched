@@ -146,15 +146,21 @@ def get_deviation_score(potential_ta, selected_ta, selected_lab, current_score, 
 
     # if the potential ta doesnt have an assignment, just return the difference between st and pt scores
     if len(pt_labs) == 0:
-        # sometimes the returned score is None, this is a bug
-        if pt_potential_score is None:
-            return 0
-        return abs(pt_potential_score - st_current_score)
 
+        # NOTE temporary bug fix
+        if pt_potential_score is None or st_current_score is None:
+            return 0
+
+        return abs(pt_potential_score - st_current_score)
     else:
         pt_lab = pt_labs[0]
         pt_current_score = potential_ta.get_score(selected_lab, template_schedule.id)
         st_potential_score = selected_ta.get_score(pt_lab, template_schedule.id)
+
+        # NOTE temporary bug fix
+        if pt_potential_score is None or st_current_score is None \
+           or pt_current_score is None or st_potential_score is None:
+            return 0
 
         gap_1 = abs(st_current_score - st_potential_score)
         gap_2 = abs(pt_current_score - pt_potential_score)
