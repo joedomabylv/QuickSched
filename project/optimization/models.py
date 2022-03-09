@@ -4,12 +4,14 @@ from laborganizer.models import Lab, Semester
 from teachingassistant.models import TA
 from optimization.optimization_primary import (initialization)
 
+
 class TemplateAssignment(models.Model):
     """Non-propogated TA assignments for use in the template schedule."""
 
     def __str__(self):
         """Define human readable object name."""
         return f'{self.lab}, {self.ta}'
+
     lab = models.ForeignKey(Lab, on_delete=models.CASCADE,
                             blank=True, null=True)
     ta = models.ForeignKey(TA, on_delete=models.CASCADE,
@@ -25,83 +27,134 @@ class TemplateSchedule(models.Model):
         """Define human readable object name."""
         return f'{self.semester}, v{self.version_number}'
 
-    def get_ta_by_name(self, ta_first_name, ta_last_name):
-        """Get a TA by their name."""
-        ta_list = TA.objects.all()
-
-        for current_ta in ta_list:
-            if current_ta.first_name == ta_first_name:
-                if current_ta.last_name == ta_last_name:
-                    return current_ta
-        return None
 
     def lab_has_an_assignment(self, lab):
-        """Check if a lab has an assignemnt in this schedule."""
         assignments = self.assignments.all()
-        try:
-            assignments.get(lab=lab)
-            return True
-        except:
-            return False
-
+        for assignment in assignments:
+            if assignment.lab == lab:
+                return True
+        return False
     def get_lab_assignment(self, lab):
-        """Get the assignment of a lab."""
         assignments = self.assignments.all()
 
         if self.lab_has_an_assignment(lab):
             lab_assignment = assignments.get(lab=lab)
             return lab_assignment
 
+    """get other labs score"""
+    """Function: Check if a given ta has a lab assigned to them"""
     def ta_assigned_to_lab(self, ta):
-        """Check if a TA has an assignment in this schedule."""
         assignments = self.assignments.all()
         for assignment in assignments:
-            temp = str(assignment).split(", ")
-            temp = temp[1].split(" ")
-            ta_of_interest = self.get_ta_by_name(temp[1], temp[2])
-            if ta_of_interest == ta:
+            if assignment.ta == ta:
                 return True
         return False
 
     def all_labs_have_assignment(self, labs):
-        """Check if all labs in a given semester have assignments."""
+
         for lab in labs:
             if not self.lab_has_an_assignment(lab):
                 return False
         return True
 
     def get_ta_lab_assignment(self, ta):
-        """Get the assignment of a TA."""
         assignments = self.assignments.all()
+        ta_assignments = []
         for assignment in assignments:
-            temp = str(assignment).split(", ")
-            temp = temp[1].split(" ")
-            ta_of_interest = self.get_ta_by_name(temp[1], temp[2])
-            if ta_of_interest == ta:
-                return assignment
-        return None
-
+            if assignment.ta == ta:
+                ta_assignments.append(assignment)
+        return ta_assignments
     def get_lab_object_from_assignment(self, assignment):
-        """Get the lab object of an assignment."""
         lab_object = assignment.lab
         return lab_object
 
+    """Function: Check if all tas taken in are assigned to a lab"""
     def all_tas_assigned_to_lab(self, ta_list):
-        """Check if all TA's have an assignment in this schedule."""
+        if ta_list == []:
+            return True
         for ta in ta_list:
             if not self.ta_assigned_to_lab(ta):
                 return False
         return True
 
     def get_ta_score_for_lab(self, ta, lab):
-        """Get the score of a TA for a lab in this schedule."""
         all_scores = ta.scores.all()
+
         lab_assignment = self.get_lab_assignment(lab)
         score_for_lab = all_scores.get(score_catalog_id=lab.catalog_id, semester=lab.semester, schedule_key = lab_assignment.schedule_key)
         return score_for_lab
 
+    def assign_all_tas_from_list(self, ta_list, lab_list):
+            #loop through the labs
+            contracted_tas = []
+            uncontracted_tas = []
+            for ta in ta_list:
+                if ta.contracted:
+                    contracted_tas.append(ta)
+                else:
+                    uncontracted_tas.append(ta)
+
+            while not self.all_tas_assigned_to_lab(ta_list):
+                while not self.all_tas_assigned_to_lab(contracted_tas):
+                    for lab in lab_list:
+                        if not self.all_tas_assigned_to_lab(contracted_tas):
+                            if not self.lab_has_an_assignment(lab):
+                                while not self.lab_has_an_assignment(lab):
+                                    # get list of highest scoring tas for lab
+                                    highest_scoring_tas = self.get_highest_scoring_tas(contracted_tas, lab)
+                                    # if all of the highest scoring tas are already assigned
+                                    while self.all_tas_assigned_to_lab(highest_scoring_tas):
+                                        # create new highest scoring ta list with old highest scoreres removed
+                                        new_ta_list = self.remove_tas_from_list(contracted_tas , highest_scoring_tas)
+                                        highest_scoring_tas = self.get_highest_scoring_tas(contracted_tas, lab)
+
+                                    #loop through highest scoring tas
+                                    if highest_scoring_tas != []:
+                                        for ta in highest_scoring_tas:
+                                            if not self.lab_has_an_assignment(lab):
+                                                #if the ta is not already assigned
+                                                if not self.ta_assigned_to_lab(ta):
+                                                    self.assign(ta, lab)
+
+                while not self.all_tas_assigned_to_lab(uncontracted_tas):
+                    for lab in lab_list:
+                        if not self.all_tas_assigned_to_lab(uncontracted_tas):
+                            if not self.lab_has_an_assignment(lab):
+                                while not self.lab_has_an_assignment(lab):
+                                    # get list of highest scoring tas for lab
+                                    highest_scoring_tas = self.get_highest_scoring_tas(uncontracted_tas, lab)
+                                    # if all of the highest scoring tas are already assigned
+                                    while self.all_tas_assigned_to_lab(highest_scoring_tas):
+                                        # create new highest scoring ta list with old highest scoreres removed
+                                        new_ta_list = self.remove_tas_from_list(uncontracted_tas , highest_scoring_tas)
+                                        highest_scoring_tas = self.get_highest_scoring_tas(uncontracted_tas, lab)
+
+                                    #loop through highest scoring tas
+                                    if highest_scoring_tas != []:
+                                        for ta in highest_scoring_tas:
+                                            if not self.lab_has_an_assignment(lab):
+                                                #if the ta is not already assigned
+                                                if not self.ta_assigned_to_lab(ta):
+                                                    self.assign(ta, lab)
+            for lab in lab_list:
+                highest_scoring_tas = self.get_highest_scoring_tas(contracted_tas, lab)
+                num_assignments = 1
+                for ta in highest_scoring_tas:
+                    num_assignments = len(self.get_ta_lab_assignment(ta))
+                    if num_assignments < 2:
+                        if not self.lab_has_an_assignment(lab):
+                            self.assign(ta, lab)
+            for lab in lab_list:
+                highest_scoring_tas = self.get_highest_scoring_tas(uncontracted_tas, lab)
+                num_assignments = 1
+                for ta in highest_scoring_tas:
+                    num_assignments = len(self.get_ta_lab_assignment(ta))
+                    if num_assignments < 2:
+                        if not self.lab_has_an_assignment(lab):
+                            self.assign(ta, lab)
+
+
     def remove_tas_from_list(self, ta_list, tas_being_removed):
-        """Remove a TA from a Python list."""
         new_ta_list = []
         for ta in ta_list:
             for compar_ta in tas_being_removed:
@@ -109,97 +162,16 @@ class TemplateSchedule(models.Model):
                     new_ta_list.append(ta)
         return new_ta_list
 
-    def initialize(self, tas, labs, priority_bonus=0):
+        
+    def initialize(self, tas, labs, priority_bonus = 0):
         """Initialize this template schedule."""
         # give scores to all given TA's for this template
         initialization(tas, labs, self.id, priority_bonus)
 
-        contracted_tas = []
-        uncontracted_tas = []
-        for ta in tas:
-            if ta.contracted:
-                contracted_tas.append(ta)
-            else:
-                uncontracted_tas.append(ta)
+        self.assign_all_tas_from_list(tas, labs)
 
-        # loop until all labs have a ta assigned
-        while not self.all_labs_have_assignment(labs):
-            # loop through all the Labs
-            for lab in labs:
-                # find a list of the highest scoring tas for a lab (if there
-                # are multiple tas with the highest score)
-                highest_scoring_tas = self.get_highest_scoring_tas(
-                    contracted_tas, lab)
-                # loop until lab is assigned
-                while not self.lab_has_an_assignment(lab):
-                    if self.all_tas_assigned_to_lab(contracted_tas):
-                        if self.all_tas_assigned_to_lab(uncontracted_tas):
-                            if self.lab_has_an_assignment(lab) is False:
-                                self.assign(highest_scoring_tas[0], lab)
-                        else:
-                            highest_scoring_tas = self.get_highest_scoring_tas(
-                                uncontracted_tas, lab)
 
-                    # loop through the highest scoring TAs until a TA
-                    # is assigned
-                    for ta in highest_scoring_tas:
-                        if not self.lab_has_an_assignment(lab):
-                            # if the Ta is not already assigned to a lab
-                            if not self.ta_assigned_to_lab(ta):
-                                # Assign them to the current lab
-                                self.assign(ta, lab)
 
-                    # loop through highest scoring TAs
-                    if self.lab_has_an_assignment(lab) is False:
-                        for ta in highest_scoring_tas:
-                            # if TA already assigned to a lab that is different
-                            # than the current lab
-                            if self.ta_assigned_to_lab(ta):
-                                other_lab_assignment = self.get_ta_lab_assignment(highest_scoring_tas[0])
-                                other_lab = self.get_lab_object_from_assignment(other_lab_assignment)
-                                self.assign(ta, lab)
-
-                                # Get scores for both labs
-                                all_scores = highest_scoring_tas[0].scores.all()
-                                other_lab_score = self.get_ta_score_for_lab(ta, other_lab)
-                                current_lab = lab
-                                current_lab_score = self.get_ta_score_for_lab(ta, current_lab)
-                                # compare the two labs scores
-
-                                # if ta score for current lab is greater
-                                # then lab they are being placed
-                                if current_lab_score.score > other_lab_score.score:
-                                    # Unassign Ta from old lab
-                                    self.unassign(other_lab)
-
-                                    # Assign the TA to the current lab
-                                    self.assign(ta, lab)
-
-                                if current_lab_score.score <= other_lab_score.score:
-
-                                    self.unassign(current_lab)
-                                # otherwise the ta score for the old lab is
-                                # greater then  or equal to the current lab and
-                                # we move on to the next ta
-
-                    # If the end of loop is reached and the lab still doesn't
-                    # have an assignment generate a new highest scoring ta list
-                    # with all old highest scores removed
-                    new_ta_list = self.remove_tas_from_list(tas, highest_scoring_tas)
-                    highest_scoring_tas = self.get_highest_scoring_tas(new_ta_list, lab)
-
-        # loop through all given labs
-        for lab in labs:
-            # find the TA with the highest score given to this lab
-            highest_scoring_tas = self.get_highest_scoring_tas(tas, lab)
-            if len(highest_scoring_tas) > 0:
-                # if there are multiple TA's with the same score for a lab,
-                # assign the first TA
-                self.assign(highest_scoring_tas[0], lab)
-                # #assigning best scoring tas regardless of if they are already
-                # assigned or not
-                if not self.lab_has_an_assignment(lab):
-                    self.assign(highest_scoring_tas[0], lab)
 
     def get_highest_scoring_tas(self, tas, lab):
         """
@@ -210,19 +182,21 @@ class TemplateSchedule(models.Model):
               same score
         """
         # determine the highest score
-        max_score = 0
+        max_score = -99999
         ta_list = []
         for ta in tas:
             for score in ta.scores.filter(score_catalog_id=lab.catalog_id,
                                           schedule_key=self.id):
                 if score.score > max_score:
                     max_score = score.score
+
         # get all the TA's with that score
         for ta in tas:
             for score in ta.scores.filter(score_catalog_id=lab.catalog_id,
                                           schedule_key=self.id):
                 if score.score == max_score:
                     ta_list.append(ta)
+
         return ta_list
 
     def assign(self, ta, lab):
@@ -230,13 +204,16 @@ class TemplateSchedule(models.Model):
         # if there is a TA already assigned to the desired lab,
         # unassign them first
         self.unassign(lab)
+
         # create a new assignment object
         new_assignment = TemplateAssignment.objects.create(lab=lab,
                                                            ta=ta,
                                                            schedule_key=self.pk)
         new_assignment.save()
+
         # add the new object to the existing field
         self.assignments.add(new_assignment)
+
         # save changes
         self.save()
 
