@@ -22,7 +22,7 @@
 			    <input type="hidden" name="version" value="{{ template_schedule.version_number }}">
 			    <input type="hidden" name="year" value="{{ current_semester.year }}">
 			    <input type="hidden" name="time" value="{{ current_semester.time }}">
-			    <button class="btn btn-primary" id="possible-spinner" onclick="replace_with_spinner()">Propogate</button>
+			    <button class="btn btn-primary" id="possible-spinner" onclick="replace_with_spinner(this)" title="Propogate version {{ template_schedule.version_number }} to the live schedule!">Propogate</button>
 			</form>
 		    </div>
 		    <div class="col-5 text-end">
