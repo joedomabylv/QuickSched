@@ -94,28 +94,28 @@ class TemplateSchedule(models.Model):
                 else:
                     uncontracted_tas.append(ta)
 
-            while not self.all_tas_assigned_to_lab(ta_list):
-                while not self.all_tas_assigned_to_lab(contracted_tas):
-                    for lab in lab_list:
-                        if not self.all_tas_assigned_to_lab(contracted_tas):
-                            if not self.lab_has_an_assignment(lab):
-                                while not self.lab_has_an_assignment(lab):
-                                    # get list of highest scoring tas for lab
+            while not self.all_tas_assigned_to_lab(contracted_tas):
+                for lab in lab_list:
+                    if not self.all_tas_assigned_to_lab(contracted_tas):
+                        if not self.lab_has_an_assignment(lab):
+                            while not self.lab_has_an_assignment(lab):
+                                # get list of highest scoring tas for lab
+                                highest_scoring_tas = self.get_highest_scoring_tas(contracted_tas, lab)
+                                # if all of the highest scoring tas are already assigned
+                                while self.all_tas_assigned_to_lab(highest_scoring_tas):
+                                    # create new highest scoring ta list with old highest scoreres removed
+                                    new_ta_list = self.remove_tas_from_list(contracted_tas , highest_scoring_tas)
                                     highest_scoring_tas = self.get_highest_scoring_tas(contracted_tas, lab)
-                                    # if all of the highest scoring tas are already assigned
-                                    while self.all_tas_assigned_to_lab(highest_scoring_tas):
-                                        # create new highest scoring ta list with old highest scoreres removed
-                                        new_ta_list = self.remove_tas_from_list(contracted_tas , highest_scoring_tas)
-                                        highest_scoring_tas = self.get_highest_scoring_tas(contracted_tas, lab)
 
-                                    #loop through highest scoring tas
-                                    if highest_scoring_tas != []:
-                                        for ta in highest_scoring_tas:
-                                            if not self.lab_has_an_assignment(lab):
-                                                #if the ta is not already assigned
-                                                if not self.ta_assigned_to_lab(ta):
-                                                    self.assign(ta, lab)
+                                #loop through highest scoring tas
+                                if highest_scoring_tas != []:
+                                    for ta in highest_scoring_tas:
+                                        if not self.lab_has_an_assignment(lab):
+                                            #if the ta is not already assigned
+                                            if not self.ta_assigned_to_lab(ta):
+                                                self.assign(ta, lab)
 
+            if not self.all_labs_have_assignment(lab_list):
                 while not self.all_tas_assigned_to_lab(uncontracted_tas):
                     for lab in lab_list:
                         if not self.all_tas_assigned_to_lab(uncontracted_tas):
@@ -136,6 +136,7 @@ class TemplateSchedule(models.Model):
                                                 #if the ta is not already assigned
                                                 if not self.ta_assigned_to_lab(ta):
                                                     self.assign(ta, lab)
+
             for lab in lab_list:
                 highest_scoring_tas = self.get_highest_scoring_tas(contracted_tas, lab)
                 num_assignments = 1
@@ -144,6 +145,7 @@ class TemplateSchedule(models.Model):
                     if num_assignments < 2:
                         if not self.lab_has_an_assignment(lab):
                             self.assign(ta, lab)
+                            
             for lab in lab_list:
                 highest_scoring_tas = self.get_highest_scoring_tas(uncontracted_tas, lab)
                 num_assignments = 1
@@ -162,7 +164,7 @@ class TemplateSchedule(models.Model):
                     new_ta_list.append(ta)
         return new_ta_list
 
-        
+
     def initialize(self, tas, labs, priority_bonus = 0):
         """Initialize this template schedule."""
         # give scores to all given TA's for this template
