@@ -2,7 +2,7 @@
 .idea
 *.log
 tmp/
-*.sqlite3
+db.sqlite3
 .env
 *.csv
 *.pyc

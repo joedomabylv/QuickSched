@@ -159,30 +159,11 @@ def lo_generate_switches(course_id, current_semester, template_schedule):
     # Take the top N scores with their respective student ids
     top_contenders = deviation_scores[0:contender_number]
 
-    # # get the top scoring contenders based on assignment scores
-    # top_contenders = get_top_scoring_contenders(tas,
-    #                                             selected_lab,
-    #                                             template_schedule,
-    #                                             selected_ta,
-    #                                             contender_number)
-
-    # # check if there are no top contenders, i.e. no need to check for any
-    # # switches
-    # if len(top_contenders) == 0:
-    #     # temp pass because i dont know whats supposed to come out of this
-    #     return {'no': 'switches'}
-
-    # # get the selected TA's scores from all labs that other contenders
-    # # have scores for
-    # relevant_labs = get_top_scoring_labs(top_contenders, template_schedule)
-    # for lab in relevant_labs:
-    #     lab_key = lab.course_id
-    #     lab_score = selected_ta.get_score(lab, template_schedule.id)
-    #     relevant_lab_scores[lab_key] = lab_score
-
     switch_names = []
     switches = []
     index = 0
+
+    print(top_contenders)
 
     # determine which TA's we can switch the selected TA to
     for ta in top_contenders:
