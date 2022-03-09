@@ -247,6 +247,8 @@ def lo_confirm_switch(switch_data, template_schedule):
     # Confirm the switch on the database side
     template_schedule.swap_assignments(from_assignment, to_assignment)
 
+    return redirect('lo_home')
+
 
 def lo_select_schedule_version(request):
     """Select a new version of a template schedule to display."""
@@ -354,7 +356,7 @@ def lo_generate_schedule(request):
         # optimization.models
         template_schedule = generate_by_selection(tas, labs, selected_semester, priority_bonus)
 
-        return lo_home(request, selected_semester, template_schedule)
+        lo_home(request, selected_semester, template_schedule)
 
     # not a POST request, direct to default view
     return redirect('lo_home')

@@ -39,7 +39,7 @@ $(document).ready(function(){
 $(document).ready(function(){
   $(document).on('click', 'a.switch', (function(){
     $.ajax({
-      url: '',
+      url: '/laborganizer/',
       type: 'get',
       data: {
         swap: $(this).children().text()
