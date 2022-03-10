@@ -193,3 +193,12 @@ ul {
   color: #fff;
   background-color: var(--bs-blue);
 }
+
+.highlight {
+  background-color: #ff9632;
+}
+
+.sortBtn{
+  cursor: pointer;
+  user-select: none;
+}

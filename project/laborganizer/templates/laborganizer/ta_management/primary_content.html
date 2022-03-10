@@ -2,139 +2,141 @@
 
     {% include 'laborganizer/ta_management/horizontal_tool_bar.html' %}
     {% include 'laborganizer/message.html' %}    
-
-    <div class="m-5 text-start">
-	<h3>Allow TA Edit</h3>
-	<p>TA's will be allowed to edit their own information until this date and time!</p>
-	<form method="post" action="{% url 'lo_allow_ta_edit' %}">
-	    {% csrf_token %}
-	    <div class="input-group">
-		<span class="input-group-text">Date & Time</span>
-		<input type="date" name="date" class="form-control">
-		<input type="time" name="time" class="form-control">
-	    </div>
-	    <input class="mt-2 btn btn-primary" type="submit">
-	</form>	
-    </div>
-    
-    <div class="m-5 text-start">
-	<h3>Select Semester</h3>
-	<form method="post" action="{% url 'lo_ta_management' %}">
-	    {% csrf_token %}
-	    <select class="form-select" aria-label="Default select example" name="chosen_semester">
-		{% if semester_options %}
-		<option disabled selected>Select a semester</option>
-		{% for semester in semester_options %}
-		<option value="{{ semester }}">{{ semester }}</option>
-		{% endfor %}
-		{% endif %}
-	    </select>
-	    <input class="mt-2 btn btn-primary" type="submit" value="Choose Semester">
-	</form>
-    </div>
-    
-    {% if tas %}
-
-    <div class="mx-5">
-
-	<div class="container">
-	    <div class="row">
-		<h3 class="col text-start">{{ semester.time }}{{ semester.year }}</h3>
-		<h3 class="col text-end">Total TA's: {{ tas|length }}</h3>
-	    </div>
-	</div>
-
-
-	<div class="accordion" id="accordionTA">
-	    
-	    {% for ta in tas %}
-
-	    <div class="accordion-item">
-
-		<h2 class="accordion-header" id="heading:{{ forloop.counter }}">
-		    <button
-			class="accordion-button collapsed"
-			       type="button"
-			       data-bs-toggle="collapse"
-			       data-bs-target="#collapse-{{ forloop.counter }}"
-			       aria-expanded="false"
-			       aria-controls="collapse-{{ forloop.counter }}"
-		    >
-			{{ ta.first_name }} {{ ta.last_name }}
-			<div class="mx-5 col text-end">
-			    {% for hold_object in holds %}
-			    {% for hold in hold_object %}
-			    {% if hold.ta == ta %}
-
-			    {% if hold.incomplete_profile %}
-			    <span class="badge bg-danger">incomplete profile</span>
-			    {% endif %}
-			    {% if hold.update_availability %}
-			    <span class="badge bg-warning">update availability</span>
-			    {% endif %}
-			    {% if hold.update_experience %}
-			    <span class="badge bg-warning">update experience</span>
-			    {% endif %}
-
-			    {% endif %}
-			    {% endfor %}
-			    {% endfor %}
-			</div>
-		    </button>
-		</h2>
-
-		<div
-		    id="collapse-{{ forloop.counter }}"
-		    class="accordion-collapse collapse"
-		    aria-labelledby="heading:{{ forloop.counter }}"
-		    data-bs-parent="#accordionTA"
-		>
-		    
-		    <div class="accordion-body">
+	<!-- Main content warp-->
+	<div style="overflow-y: scroll;">
+    <div class="m-5 text-start" >
+			<h3>Allow TA Edit</h3>
+			<p>TA's will be allowed to edit their own information until this date and time!</p>
+			<form method="post" action="{% url 'lo_allow_ta_edit' %}">
+					{% csrf_token %}
+					<div class="input-group">
+				<span class="input-group-text">Date & Time</span>
+				<input type="date" name="date" class="form-control">
+				<input type="time" name="time" class="form-control">
+					</div>
+					<input class="mt-2 btn btn-primary" type="submit">
+			</form>	
+				</div>
+				
+				<div class="m-5 text-start">
+			<h3>Select Semester</h3>
+			<form method="post" action="{% url 'lo_ta_management' %}">
+					{% csrf_token %}
+					<select class="form-select" aria-label="Default select example" name="chosen_semester">
+				{% if semester_options %}
+				<option disabled selected>Select a semester</option>
+				{% for semester in semester_options %}
+				<option value="{{ semester }}">{{ semester }}</option>
+				{% endfor %}
+				{% endif %}
+					</select>
+					<input class="mt-2 btn btn-primary" type="submit" value="Choose Semester">
+			</form>
+				</div>
+				
+				{% if tas %}
+		
+				<div class="mx-5">
+		
 			<div class="container">
-			    <div class="row">
-				<div class="col-4">
-				    <strong>Year: </strong>{{ ta.year }}
-				</div>
-				<div class="col-4">
-				    <strong>ID: </strong>{{ ta.student_id }}
-				</div>				
-				<div class="col-4">
-				    <strong>Contracted: </strong>
-				    {% if ta.contracted %}
-				    Yes
-				    {% else %}
-				    No
-				    {% endif %}
-				</div>		
-			    </div>
-			    <hr>
-			    <div class="mt-3 row">
-				<div class="col text-start">
-				    <strong>Assignments: </strong>{{ ta.get_all_assigned_labs }}
-				</div>
-			    </div>
+					<div class="row">
+				<h3 class="col text-start">{{ semester.time }}{{ semester.year }}</h3>
+				<h3 class="col text-end">Total TA's: {{ tas|length }}</h3>
+					</div>
 			</div>
-		    </div>
-
-		</div>
-
-	    </div>
-
-	    {% endfor %}
-
+		
+		
+			<div class="accordion" id="accordionTA">
+					
+					{% for ta in tas %}
+		
+					<div class="accordion-item">
+		
+				<h2 class="accordion-header" id="heading:{{ forloop.counter }}">
+						<button
+					class="accordion-button collapsed"
+								 type="button"
+								 data-bs-toggle="collapse"
+								 data-bs-target="#collapse-{{ forloop.counter }}"
+								 aria-expanded="false"
+								 aria-controls="collapse-{{ forloop.counter }}"
+						>
+					{{ ta.first_name }} {{ ta.last_name }}
+					<div class="mx-5 col text-end">
+							{% for hold_object in holds %}
+							{% for hold in hold_object %}
+							{% if hold.ta == ta %}
+		
+							{% if hold.incomplete_profile %}
+							<span class="badge bg-danger">incomplete profile</span>
+							{% endif %}
+							{% if hold.update_availability %}
+							<span class="badge bg-warning">update availability</span>
+							{% endif %}
+							{% if hold.update_experience %}
+							<span class="badge bg-warning">update experience</span>
+							{% endif %}
+		
+							{% endif %}
+							{% endfor %}
+							{% endfor %}
+					</div>
+						</button>
+				</h2>
+		
+				<div
+						id="collapse-{{ forloop.counter }}"
+						class="accordion-collapse collapse"
+						aria-labelledby="heading:{{ forloop.counter }}"
+						data-bs-parent="#accordionTA"
+				>
+						
+						<div class="accordion-body">
+					<div class="container">
+							<div class="row">
+						<div class="col-4">
+								<strong>Year: </strong>{{ ta.year }}
+						</div>
+						<div class="col-4">
+								<strong>ID: </strong>{{ ta.student_id }}
+						</div>				
+						<div class="col-4">
+								<strong>Contracted: </strong>
+								{% if ta.contracted %}
+								Yes
+								{% else %}
+								No
+								{% endif %}
+						</div>		
+							</div>
+							<hr>
+							<div class="mt-3 row">
+						<div class="col text-start">
+								<strong>Assignments: </strong>{{ ta.get_all_assigned_labs }}
+						</div>
+							</div>
+					</div>
+						</div>
+		
+				</div>
+		
+					</div>
+		
+					{% endfor %}
+		
+			</div>
+			
+				</div>	
+		
+				{% else %}
+		
+				<div class="">
+			No TA's to display!
+				</div>
+		
+				{% endif %}
+		
+				<a class="btn btn-primary m-5" href="{% url 'eu_upload' %}">Click here to upload a new roster of TA's</a>
 	</div>
-	
-    </div>	
-
-    {% else %}
-
-    <div class="">
-	No TA's to display!
-    </div>
-
-    {% endif %}
-
-    <a class="btn btn-primary m-5" href="{% url 'eu_upload' %}">Click here to upload a new roster of TA's</a>    
 
 </div>
