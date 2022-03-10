@@ -64,6 +64,8 @@
 			type="search"
 			placeholder="Type to filter..."
 			aria-label="filter"
+			onkeyup="filterFuntion()"
+			id = "tablefilter"
 		    />
 		</div>
 	    </form>
@@ -80,21 +82,21 @@
 	    <thead>
 		<tr>
 		    <!--Table headers-->
-		    <th scope="col">#</th>
-		    <th scope="col">Subject</th>
-		    <th scope="col">Catalog ID</th>
-		    <th scope="col">Section</th>
-		    <th scope="col">Course ID</th>
-		    <th scope="col">Start Time</th>
-		    <th scope="col">End Time</th>
-		    <th scope="col">Days</th>
-		    <th scope="col">Instructor</th>
-		    <th scope="col">TA</th>
+		    <th class="sortBtn" title="Sort by index" scope="col" onclick="sortTable(-1)">#</th>
+		    <th class="sortBtn" title="Sort by subject" scope="col" onclick="sortTable(0)">Subject</th>
+		    <th class="sortBtn" title="Sort by catalog ID" scope="col" onclick="sortTable(1)">Catalog ID</th>
+		    <th class="sortBtn" title="Sort by section" scope="col" onclick="sortTable(2)">Section</th>
+		    <th class="sortBtn" title="Sort by course ID" scope="col" onclick="sortTable(3)">Course ID</th>
+		    <th class="sortBtn" title="Sort by start Time" scope="col" onclick="sortTable(4)">Start Time</th>
+		    <th class="sortBtn" title="Sort by end Time" scope="col" onclick="sortTable(5)">End Time</th>
+		    <th class="sortBtn" title="Sort by days" scope="col" onclick="sortTable(6)">Days</th>
+		    <th class="sortBtn" title="Sort by instructor" scope="col" onclick="sortTable(7)">Instructor</th>
+		    <th class="sortBtn" title="Sort by TA" scope="col" onclick="sortTable(8)">TA</th>
 		    <th scope="col">Switch</th>
 		</tr>
 	    </thead>
 	    {% if labs %}
-	    <tbody>
+	    <tbody id="labTable">
 		{% for lab in labs %}
 		<tr>
 		    <!--Table rows-->
@@ -170,6 +172,7 @@
     </div>
 
     <script src="{% static 'laborganizer/assign_to_template.js' %}"></script>
+		<script src="{% static 'laborganizer/dashboard.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 
 </div>
