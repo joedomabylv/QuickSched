@@ -1,6 +1,6 @@
 """Models for optimized schedules."""
 from django.db import models
-from laborganizer.models import Lab, Semester
+from laborganizer.models import Semester, Lab
 from teachingassistant.models import TA
 from optimization.optimization_primary import (initialization)
 
@@ -247,3 +247,20 @@ class TemplateSchedule(models.Model):
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE,
                                  blank=True, null=True)
     assignments = models.ManyToManyField(TemplateAssignment, blank=True)
+
+class History(models.Model):
+    """History stack for swapped TA's."""
+
+    def undo_bilateral_switch(self, template_schedule, from_assignment, to_assignment):
+        """Undo a switch."""
+        template_schedule.swap_assignments(from_assignment, to_assignment)
+
+    ta_1 = models.ManyToManyField("teachingassistant.TA",
+                                  blank=True, related_name='ta_1')
+    ta_2 = models.ManyToManyField("teachingassistant.TA",
+                                  blank=True, related_name='ta_2')
+    lab_1 = models.ManyToManyField(Lab, blank=True, related_name='lab_1')
+    lab_2 = models.ManyToManyField(Lab, blank=True, related_name='lab_2')
+
+    temp_sched = models.ForeignKey(TemplateSchedule, on_delete=models.CASCADE, related_name='his_nodes', null=True)
+    relative_node_id = models.IntegerField(null=True)

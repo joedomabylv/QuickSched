@@ -164,16 +164,3 @@ class AllowTAEdit(models.Model):
     time = models.TimeField(auto_now_add=True)
 
 
-class History(models.Model):
-    """History stack for swapped TA's."""
-
-    def undo_bilateral_switch(self, template_schedule, from_assignment, to_assignment):
-        """Undo a switch."""
-        template_schedule.swap_assignments(from_assignment, to_assignment)
-
-    ta_1 = models.ManyToManyField("teachingassistant.TA",
-                                  blank=True, related_name='ta_1')
-    ta_2 = models.ManyToManyField("teachingassistant.TA",
-                                  blank=True, related_name='ta_2')
-    lab_1 = models.ManyToManyField(Lab, blank=True, related_name='lab_1')
-    lab_2 = models.ManyToManyField(Lab, blank=True, related_name='lab_2')
