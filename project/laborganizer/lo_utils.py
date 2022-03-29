@@ -168,11 +168,12 @@ def get_deviation_score(potential_ta, selected_ta, selected_lab, current_score, 
         return gap_1 + gap_2
 
 def grade_deviation_score(score):
+    print(score)
     if score < 20:
         return "score5"
     elif score < 40:
-        return "score4"
-    elif score < 60:
         return "score3"
-    elif score < 80:
-        return "score2"
+    elif score < 60:
+        return "score4"
+    else:
+        return "score1"

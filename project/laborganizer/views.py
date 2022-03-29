@@ -12,7 +12,8 @@ Variables used throughout LO dashboard:
 """
 from django.shortcuts import render, redirect
 from teachingassistant.models import TA, Holds
-from .models import Semester, Lab, AllowTAEdit, History
+from .models import Semester, Lab, AllowTAEdit
+from optimization.models import History
 from django.contrib import messages
 from laborganizer.lo_utils import (get_current_semester,
                                    get_tas_by_semester,
@@ -63,7 +64,7 @@ def lo_home(request, selected_semester=None, template_schedule=None):
 
     # Handles get request required for undoing changes
     if request.GET.get('undo') is not None:
-        node = History.objects.last()
+        node = template_schedule.his_nodes.last()
 
         if node is not None:
             to_assignment, from_assignment = None, None
@@ -103,7 +104,7 @@ def lo_home(request, selected_semester=None, template_schedule=None):
         current_semester['year'])
 
     # get all history nodes that are active
-    history = History.objects.all()
+    history = template_schedule.his_nodes.all()
 
     # instantiate context variable
     context = {
@@ -231,18 +232,21 @@ def lo_confirm_switch(switch_data, template_schedule):
     from_lab = Lab.objects.get(course_id=first_course_id)
     to_lab = Lab.objects.get(course_id=second_course_id)
 
-    node_id = len(History.objects.all()) + 1
+    relative_node_id = len(template_schedule.his_nodes.all()) + 1
+    abs_node_id = len(History.objects.all()) + 1
 
-    node = History(id=node_id)
+    node = History(id=abs_node_id)
     node.save()
+    node.relative_node_id = relative_node_id
     node.ta_1.set([from_ta])
     node.ta_2.set([to_ta])
     node.lab_1.set([from_lab])
     node.lab_2.set([to_lab])
+    node.temp_sched = template_schedule
     node.save()
 
-    if (len(History.objects.all()) > 10):
-        History.objects.first().delete()
+    if (len(template_schedule.his_nodes.all()) > 10):
+        template_schedule.his_nodes.first().delete()
 
     # Confirm the switch on the database side
     template_schedule.swap_assignments(from_assignment, to_assignment)
