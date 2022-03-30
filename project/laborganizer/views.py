@@ -22,7 +22,9 @@ from laborganizer.lo_utils import (get_current_semester,
                                    get_all_schedule_version_numbers,
                                    get_template_schedule,
                                    get_deviation_score,
-                                   grade_deviation_score)
+                                   grade_deviation_score,
+                                   semester_exists,
+                                   handle_semester_csv)
 
 from optimization.optimization_utils import (generate_by_selection,
                                              propogate_schedule)
@@ -30,7 +32,6 @@ from django.http import JsonResponse
 
 
 def lo_home(request, selected_semester=None, template_schedule=None):
-
     """
     Home route for the Lab Organizer dashboard.
 
@@ -125,7 +126,6 @@ def lo_home(request, selected_semester=None, template_schedule=None):
 
 
 def lo_generate_switches(course_id, current_semester, template_schedule):
-
     """Generate all available switches for a lab at LO command."""
     contender_number = 3  # TODO make this a global variable
 
@@ -326,7 +326,7 @@ def lo_generate_schedule(request):
     """
     if request.method == 'POST':
 
-        #NOTE The priority bonus is subject to change in further iterations
+        # NOTE The priority bonus is subject to change in further iterations
         # I didnt hardcode the values in the html so they could be easily changed here
         priority_value_table = {
             'none': 0,
@@ -523,30 +523,30 @@ def lo_allow_ta_edit(request):
 def lo_new_semester(request):
     """Handle the new semester form submitted by a user."""
     if request.method == "POST":
-        new_year = request.POST.get('year')
-        new_semester_time = request.POST['semester_time']
+        year = request.POST.get('selected_year')
+        time = request.POST.get('selected_time')
 
-    current_semesters = Semester.objects.all()
+        # check if the requested semester already exists
+        if semester_exists(year, time):
+            messages.warning(request, f'A semester for {time}{year} already exists!')
 
-    semester_exists = False
-
-    # check if the requested semester already exists within the database
-    for semester in current_semesters:
-        if (semester.year == new_year and
-            semester.semester_time == new_semester_time):
-            semester_exists = True
-
-    # handle result
-    if semester_exists:
-        # do not add the semester, inform the user it exists
-        messages.warning(request, 'This semester already exists!')
-        return redirect('lo_semester')
-    else:
-        # add the semester
-        Semester.objects.create(year=new_year, semester_time=new_semester_time)
-        messages.success(request, 'Semester successfully added!')
-
-    return render(request, 'laborganizer/dashboard.html')
+        # check if a user attached a CSV file to their addition
+        if len(request.FILES) != 0:
+            semester_csv = request.FILES['semester_csv']
+            # check if the file is a CSV file
+            if not semester_csv.name.endswith('.csv'):
+                messages.error(request, 'Please upload a CSV file!')
+                return redirect('lo_semester_management')
+            result, error_code = handle_semester_csv(semester_csv, time, year)
+            if result:
+                messages.success(request, f'Added a new semester and labs for {time}{year}!')
+            else:
+                messages.error(request, f'CSV Error: {error_code}')
+        # there is no CSV file, create empty semester object
+        else:
+            Semester.objects.create(semester_time=time, year=year)
+            messages.success(request, f'Added a new semester for {time}{year}!')
+    return redirect('lo_semester_management')
 
 
 def lo_display_semester(request):

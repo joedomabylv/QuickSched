@@ -3,6 +3,7 @@ from .models import Semester, Lab
 from datetime import datetime
 from teachingassistant.models import TA
 from optimization.models import TemplateSchedule
+import csv
 
 
 def get_current_semester():
@@ -91,6 +92,7 @@ def get_template_schedule(time, year, version):
     return TemplateSchedule.objects.get(semester=semester,
                                         version_number=version)
 
+
 def get_max_score(tas, lab, template_schedule):
     """Get the max score for a single lab against a set of TA's."""
     max_score = 0
@@ -134,6 +136,7 @@ def get_top_scoring_labs(tas, template_schedule):
                 lab_list.append(assignment)
     return lab_list
 
+
 def get_deviation_score(potential_ta, selected_ta, selected_lab, current_score, template_schedule):
     # NOTE This algorithm assumes that the initially generated schedule is the best possible schedule, and
     # anything deviating from such is a downgrade. This function calculates how much the respective
@@ -167,6 +170,7 @@ def get_deviation_score(potential_ta, selected_ta, selected_lab, current_score, 
 
         return gap_1 + gap_2
 
+
 def grade_deviation_score(score):
     print(score)
     if score < 20:
@@ -177,3 +181,109 @@ def grade_deviation_score(score):
         return "score4"
     else:
         return "score1"
+
+
+def semester_exists(year, time):
+    """Check if a semester already exists for a given time and year."""
+    try:
+        Semester.objects.get(semester_time=time, year=year)
+        return True
+    except Semester.DoesNotExist:
+        return False
+
+
+def lab_exists(course_id):
+    """Check if a lab exists for given class name and course ID."""
+    try:
+        Lab.objects.get(course_id=course_id)
+        return True
+    except Lab.DoesNotExist:
+        return False
+
+
+def validate_days(days):
+    """Ensure a given set of days is properly formatted for the database."""
+    valid_days = ['M', 'T', 'W', 'Th', 'F']
+    split_days = days.split(' ')
+    for day in split_days:
+        if day not in valid_days:
+            return False
+    return True
+
+
+def validate_time(time):
+    """Ensure a given time is properly formatted for the database."""
+    try:
+        datetime.strptime(time, '%I:%M')
+        return True
+    except ValueError:
+        return False
+
+
+def add_labs(labs_list, semester):
+    """Add labs to the database for prevalidated data to a given semester."""
+    # try:
+    for lab in labs_list:
+        Lab.objects.create(
+            class_name=lab['class_name'],
+            subject=lab['subject'],
+            catalog_id=lab['catalog_id'],
+            course_id=lab['course_id'],
+            section=lab['section'],
+            days=lab['days'],
+            facility_id=lab['facility_id'],
+            facility_building=lab['facility_building'],
+            instructor=lab['instructor'],
+            start_time=lab['start_time'],
+            end_time=lab['end_time'],
+            semester=semester
+        )
+    # except:
+    #     return (False, 'Something went wrong when adding labs!')
+    return (True, 'success')
+
+
+def handle_semester_csv(semester_csv, time, year):
+    """
+    Handle a given semester CSV file and create a new semester object.
+
+    Return True on success, False on failure.
+    """
+    rows = semester_csv.read().decode('UTF-8').split('\n')
+    data_list = []
+    for index, row in enumerate(rows):
+        fields = row.split(',')
+        field_dict = {}
+        # check if there are a valid number of fields
+        if len(fields) != 11:
+            return (False, f'Row {index + 1} has an incorrect number of fields!')
+
+        field_dict['class_name'] = fields[0]
+        field_dict['subject'] = fields[1]
+        field_dict['catalog_id'] = fields[2]
+        field_dict['course_id'] = fields[3]
+        field_dict['section'] = fields[4]
+        field_dict['days'] = fields[5]
+        field_dict['facility_id'] = fields[6]
+        field_dict['facility_building'] = fields[7]
+        field_dict['instructor'] = fields[8]
+        field_dict['start_time'] = fields[9]
+        field_dict['end_time'] = fields[10]
+
+        if not validate_days(field_dict['days']):
+            return (False, f'Malformed days in row {index + 1}!')
+
+        if not validate_time(field_dict['start_time']):
+            return (False, f'Malformed starting time in row {index + 1}!')
+
+        if not validate_time(field_dict['end_time']):
+            return (False, f'Malformed ending time in row {index + 1}!')
+
+        if lab_exists(field_dict['course_id']):
+            return (False, f'The lab in row {index + 1} already exists!')
+
+        data_list.append(field_dict)
+
+    # data is prevalidated, create a new semester and add all the labs to it
+    semester = Semester.objects.create(semester_time=time, year=year)
+    return add_labs(data_list, semester)

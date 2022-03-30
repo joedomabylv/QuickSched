@@ -1,0 +1,53 @@
+<!-- Add New Semester Off Canvas -->
+<div
+    class="offcanvas offcanvas-start"
+    data-bs-scroll="true"
+    data-bs-backdrop="false"
+    tabindex="-1"
+    id="offcanvasAddNewSemester"
+    aria-labelledby="offcanvasAddNewSemester"
+>
+
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasAddNewSemester">Add New Semester</h5>
+        <button
+            type="button"
+            class="btn-close text-reset"
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
+        ></button>
+    </div>
+    
+    <!--Body of this Canvas -->
+    <div class="offcanvas-body">
+
+	<h4>New Semester</h4>
+	<form method="post" enctype="multipart/form-data" action="{% url 'lo_new_semester' %}">
+	    {% csrf_token %}
+
+	    <label for="selected_year">Year</label>
+	    <input class="form-control w-50 mx-auto" type="number" min="2021" max="2099" step="1" name="selected_year" id="selected_year" required>
+
+	    <label class="mt-3" for="selected_time">Time</label>
+	    <select class="form-select w-50 mx-auto" type="text" name="selected_time" id="selected_time">
+		<option value="SPR">Spring</option>
+		<option value="SUM">Summer</option>
+		<option value="FAL">Fall</option>
+		<option value="WNT">Winter</option>		
+	    </select>
+
+	    <label class="mt-3" for="semester_csv">CSV File</label>
+	    <input class="form-control w-75 mx-auto" type="file" name="semester_csv" id="semester_csv" accept=".csv">
+	    <p class="mt-2">Optionally, add a CSV file containing lab information to populate the semester. For more information on how to format your file, <a class="link-primary" href="#">click here</a>.</p>
+	    
+	    <input class="btn btn-primary mt-2" type="submit" value="Submit" title="Create a new semester!">
+	</form>
+
+	<hr>
+
+    </div>
+    <!-- End of Canvas Body -->
+    
+</div>
+<!-- End of Greater Canvas Selector -->
+

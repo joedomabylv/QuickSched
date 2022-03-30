@@ -21,9 +21,30 @@
     </a>
     
     <hr />
+    {% with url_name=request.resolver_match.url_name %}
+    <!-- Side Bar Tools -->
+    <ul class="flex-column mb-auto">
+	{% if url_name == 'lo_semester_management' %}
+        <li class="d-grid">
+            <button
+		class="btn btn-toggle"
+		type="button"
+		data-bs-toggle="offcanvas"
+		data-bs-target="#offcanvasAddNewSemester"
+		aria-controls="offcanvasAddNewSemester"
+            >
+		<svg class="bi me-2" width="16" height="16">
+                    <use xlink:href="#table"></use>
+		</svg>
+		Add New Semester
+            </button>
+        </li>
+	{% endif %}
+    </ul>
+
+    <hr />
     
     <!--Side Bar Nav-->
-    {% with url_name=request.resolver_match.url_name %}    
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">	    
             <a href="{% url 'lo_home' %}" class="nav-link {% if url_name == 'lo_home' %}active{% else %}link-dark{% endif %}" aria-current="page">
