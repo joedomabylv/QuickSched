@@ -152,9 +152,9 @@ def lo_generate_switches(course_id, current_semester, template_schedule):
     # calculate the deviation score for each relevant TA
     deviation_scores = []
     for ta in tas:
-        score = get_deviation_score(ta, selected_ta, selected_lab,
+        st_score, pt_score, score = get_deviation_score(ta, selected_ta, selected_lab,
                                                 current_score, template_schedule)
-        deviation_scores.append((score, ta.student_id))
+        deviation_scores.append((score, ta.student_id, st_score, pt_score))
 
     # sort the list of TA's based on their deviation score instead of their fitness score
     deviation_scores.sort(key=lambda x: x[0])
@@ -187,11 +187,13 @@ def lo_generate_switches(course_id, current_semester, template_schedule):
             switches.append({
                 "to_lab": to_lab.subject + to_lab.catalog_id + ':' + to_lab.course_id,
                 "from_lab": selected_lab.subject + selected_lab.catalog_id + ':' + selected_lab.course_id,
-                "to_ta": to_ta.first_name + ':' + to_ta.student_id,
-                "from_ta": selected_ta.first_name + ':' + selected_ta.student_id,
+                "to_ta": to_ta.first_name,
+                "from_ta": selected_ta.first_name,
                 "deviation_score": ta[0],
                 "score_color": grade,
-                "switch_id": index + 1
+                "switch_id": index + 1,
+                "st_score": ta[2],
+                "pt_score": ta[3]
             })
 
             switch_names.append("switch_" + str(index + 1))

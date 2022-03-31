@@ -152,9 +152,9 @@ def get_deviation_score(potential_ta, selected_ta, selected_lab, current_score, 
 
         # NOTE temporary bug fix
         if pt_potential_score is None or st_current_score is None:
-            return 0
+            return 0, 0, 0
 
-        return abs(pt_potential_score - st_current_score)
+        return abs(pt_potential_score - st_current_score), 0, 0
     else:
         pt_lab = pt_labs[0]
         pt_current_score = potential_ta.get_score(selected_lab, template_schedule.id)
@@ -163,16 +163,15 @@ def get_deviation_score(potential_ta, selected_ta, selected_lab, current_score, 
         # NOTE temporary bug fix
         if pt_potential_score is None or st_current_score is None \
            or pt_current_score is None or st_potential_score is None:
-            return 0
+            return 0, 0, 0
 
         gap_1 = abs(st_current_score - st_potential_score)
         gap_2 = abs(pt_current_score - pt_potential_score)
 
-        return gap_1 + gap_2
+        return gap_1, gap_2, gap_1 + gap_2
 
 
 def grade_deviation_score(score):
-    print(score)
     if score < 20:
         return "score5"
     elif score < 40:

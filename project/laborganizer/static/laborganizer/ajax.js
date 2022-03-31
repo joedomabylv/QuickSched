@@ -16,7 +16,7 @@ $(document).ready(function(){
                 </div> \
               <div class="col"> \
                 <div class="d-flex justify-content-center p-2"> \
-                  ' + response[key].to_ta + ' (' + response[key].to_lab + ') \
+                  ' + response[key].to_ta + ' (' + response[key].to_lab + ') Unfit score: ' + response[key].st_score + ' \
                 </div> \
                 <div class="d-flex justify-content-center"> \
                   <svg class="bi" width="16" height="16"> \
@@ -24,7 +24,7 @@ $(document).ready(function(){
                   </svg> \
                 </div> \
                 <div class="d-flex justify-content-center p-2"> \
-                  ' + response[key].from_ta + ' (' + response[key].from_lab + ') <br /> Deviation Score: ' + response[key].deviation_score + '\
+                  ' + response[key].from_ta + ' (' + response[key].from_lab + ') Unfit score: ' + response[key].pt_score + ' <br /> Deviation Score: ' + response[key].deviation_score + '\
                 </div> \
               </div> \
             </div> \

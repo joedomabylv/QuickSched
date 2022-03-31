@@ -69,10 +69,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-DJANGO_SUPERUSER_EMAIL=config('DJANGO_SUPERUSER_EMAIL')
-DJANGO_SUPERUSER_PASSWORD=config('DJANGO_SUPERUSER_PASSWORD')
-DJANGO_SUPERUSER_USERNAME=config('DJANGO_SUPERUSER_USERNAME')
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
