@@ -31,6 +31,7 @@
 		data-bs-toggle="offcanvas"
 		data-bs-target="#offcanvasTASelector"
 		aria-controls="offcanvasTASelector"
+        title="Select available TAs"
             >
 		<svg class="bi me-2" width="16" height="16">
                     <use xlink:href="#TA Selector"></use>
@@ -45,6 +46,7 @@
 		data-bs-toggle="offcanvas"
 		data-bs-target="#offcanvasHistory"
 		aria-controls="offcanvasHistory"
+        title="View history of changes"
             >
 		<svg class="bi me-2" width="16" height="16">
                     <use xlink:href="#history"></use>
@@ -59,6 +61,7 @@
 		data-bs-toggle="offcanvas"
 		data-bs-target="#offcanvasSemester"
 		aria-controls="offcanvasSemester"
+        title="Select a different semester"
             >
 		<svg class="bi me-2" width="16" height="16">
                     <use xlink:href="#semester"></use>
@@ -72,7 +75,7 @@
     <!--Side Bar Nav-->
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
-            <a href="{% url 'lo_home' %}" class="nav-link active" aria-current="page">
+            <a href="{% url 'lo_home' %}" class="nav-link active" aria-current="page" title="To schedule page">
 		<svg class="bi me-2" width="16" height="16">
                     <use xlink:href="#scheduling"></use>
 		</svg>
@@ -80,7 +83,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="{% url 'lo_ta_management' %}" class="nav-link link-dark" aria-current="page">
+            <a href="{% url 'lo_ta_management' %}" class="nav-link link-dark" aria-current="page" title="To TA management page">
 		<svg class="bi me-2" width="16" height="16">
                     <use xlink:href="#TA-list"></use>
 		</svg>
@@ -88,7 +91,7 @@
             </a>
         </li>
 	<li class="nav-item">
-            <a href="{% url 'lo_semester_management' %}" class="nav-link link-dark" aria-current="page">
+            <a href="{% url 'lo_semester_management' %}" class="nav-link link-dark" aria-current="page" title="To semester management page">
 		<svg class="bi me-2" width="16" height="16">
                     <use xlink:href="#semester"></use>
 		</svg>
@@ -96,7 +99,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="/admin" class="nav-link link-dark" aria-current="page">
+            <a href="/admin" class="nav-link link-dark" aria-current="page" title="To admin page">
 		<svg class="bi me-2" width="16" height="16">
                     <use xlink:href="#admin"></use>
 		</svg>
