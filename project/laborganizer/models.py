@@ -45,7 +45,8 @@ class Semester(models.Model):
     YEARS = get_10_years()
 
     year = models.IntegerField('Calendar year', choices=YEARS)
-    semester_time = models.CharField('Time held', max_length=3, choices=TIMES)
+    semester_time = models.CharField('Time held', max_length=3,
+                                     choices=TIMES)
 
 
 class Lab(models.Model):

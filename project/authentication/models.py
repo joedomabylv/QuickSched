@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from teachingassistant.models import TA, Holds, Availability
 from emailupload.models import EmailInformation
-from laborganizer.models import AllowTAEdit
+from laborganizer.models import AllowTAEdit, Semester
 
 
 class CustomUserManager(BaseUserManager):

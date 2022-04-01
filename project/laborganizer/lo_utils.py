@@ -59,8 +59,8 @@ def get_most_recent_sched(time, year):
     for schedule in template_schedules:
         if schedule.version_number > largest_version:
             largest_version = schedule.version_number
-    return TemplateSchedule.objects.get(semester=semester,
-                                        version_number=largest_version)
+        return TemplateSchedule.objects.get(semester=semester,
+                                            version_number=largest_version)
 
 
 def get_all_schedule_version_numbers(time, year):
@@ -81,7 +81,7 @@ def get_all_schedule_version_numbers(time, year):
     for schedule in template_schedules:
         version_list.append(schedule.version_number)
 
-    return version_list
+        return version_list
 
 
 def get_template_schedule(time, year, version):
@@ -213,7 +213,8 @@ def validate_days(days):
 def validate_time(time):
     """Ensure a given time is properly formatted for the database."""
     try:
-        datetime.strptime(time, '%I:%M')
+        tmp = datetime.strptime(time, '%H:%M')
+        print(tmp)
         return True
     except ValueError:
         return False
@@ -273,6 +274,7 @@ def handle_semester_csv(semester_csv, time, year):
             return (False, f'Malformed days in row {index + 1}!')
 
         if not validate_time(field_dict['start_time']):
+            print('what', field_dict['start_time'])
             return (False, f'Malformed starting time in row {index + 1}!')
 
         if not validate_time(field_dict['end_time']):
@@ -285,4 +287,7 @@ def handle_semester_csv(semester_csv, time, year):
 
     # data is prevalidated, create a new semester and add all the labs to it
     semester = Semester.objects.create(semester_time=time, year=year)
+    # create empty template schedule
+    template_schedule = TemplateSchedule.objects.create(version_number=0, semester=semester)
+    template_schedule.save()
     return add_labs(data_list, semester)

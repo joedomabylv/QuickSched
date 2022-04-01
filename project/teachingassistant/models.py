@@ -174,6 +174,39 @@ class TA(models.Model):
         # save changes
         self.save()
 
+    def get_semesters(self):
+        """Get a list of all semesters this TA is assigned to."""
+        semesters = []
+        for semester in self.assigned_semesters.all():
+            semesters.append(semester)
+        return semesters
+
+    def is_assigned_to_semester(self, semester_to_check):
+        """Check if this TA is assigned to the given semester."""
+        for semester in self.assigned_semesters.all():
+            if semester == semester_to_check:
+                return True
+        return False
+
+    def update_semesters(self, semester_list):
+        """Given a list of semesters, update the assignemnts to this TA."""
+        # loop through all given semesters
+        for semester in semester_list:
+            year = semester[3:]
+            time = semester[:3]
+            semester = Semester.objects.get(year=year, semester_time=time)
+
+            # check if the TA is already assigned to that semester
+            if not self.is_assigned_to_semester(semester):
+                self.assigned_semesters.add(semester)
+
+        # loop through semesters TA is already assigned to
+        for semester in self.assigned_semesters.all():
+            # check if they're assigned to a semester NOT in the given list
+            if str(semester) not in semester_list:
+                # they are, unassign them
+                self.assigned_semesters.remove(semester)
+
     # define choice variable
     YEAR = (
         ('FR', 'Freshman'),

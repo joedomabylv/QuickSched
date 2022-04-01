@@ -37,93 +37,93 @@ def lo_home(request, selected_semester=None, template_schedule=None):
 
     Displays data relevant to the active semester based on the time of year.
     """
-    if selected_semester is None:
-        # establish current semester time/year, based on time
-        current_semester = get_current_semester()
+    context = {}
+    if Semester.objects.all().exists():
+        if selected_semester is None:
+            # establish current semester time/year, based on time
+            current_semester = get_current_semester()
 
-    else:
-        # get the current semester argument
-        current_semester = selected_semester
+        else:
+            # get the current semester argument
+            current_semester = selected_semester
 
-    # check if a template schedule was given
-    if template_schedule is None:
-        # if not, get the most recent version of the current semester
-        template_schedule = get_most_recent_sched(current_semester['time'],
-                                                  current_semester['year'])
-    else:
-        # use the provided template schedule
-        template_schedule = template_schedule
+        # check if a template schedule was given
+        if template_schedule is None:
+            # if not, get the most recent version of the current semester
+            template_schedule = get_most_recent_sched(current_semester['time'],
+                                                      current_semester['year'])
+        else:
+            # use the provided template schedule
+            template_schedule = template_schedule
 
-    # Handles get request required for generating switches
-    if request.GET.get('lab_name') is not None:
-        catalog_id = request.GET.get('lab_name')
-        response = lo_generate_switches(catalog_id,
-                                        current_semester,
-                                        template_schedule)
-        return JsonResponse(response, status=200)
+        # Handles get request required for generating switches
+        if request.GET.get('lab_name') is not None:
+            catalog_id = request.GET.get('lab_name')
+            response = lo_generate_switches(catalog_id,
+                                            current_semester,
+                                            template_schedule)
+            return JsonResponse(response, status=200)
 
+        # Handles get request required for undoing changes
+        if request.GET.get('undo') is not None:
+            node = template_schedule.his_nodes.last()
 
-    # Handles get request required for undoing changes
-    if request.GET.get('undo') is not None:
-        node = template_schedule.his_nodes.last()
+            if node is not None:
+                to_assignment, from_assignment = None, None
+                for assignment in template_schedule.assignments.all():
+                    if assignment.ta == node.ta_1.first():
+                        from_assignment = assignment
+                    elif assignment.ta == node.ta_2.first():
+                        to_assignment = assignment
 
-        if node is not None:
-            to_assignment, from_assignment = None, None
-            for assignment in template_schedule.assignments.all():
-                if assignment.ta == node.ta_1.first():
-                    from_assignment = assignment
-                elif assignment.ta == node.ta_2.first():
-                    to_assignment = assignment
+                        node.undo_bilateral_switch(template_schedule, from_assignment, to_assignment)
+                        node.delete()
 
-            node.undo_bilateral_switch(template_schedule, from_assignment, to_assignment)
-            node.delete()
+        # Handles get request required for confirming switches
+        if request.GET.get('swap') is not None:
+            switch_data = request.GET.get('swap').split()
+            switch_data.pop(0)
+            print(switch_data)
+            lo_confirm_switch(switch_data, template_schedule)
+            messages.success(request, "Switch confirmed!")
 
-    # Handles get request required for confirming switches
-    if request.GET.get('swap') is not None:
-        switch_data = request.GET.get('swap').split()
-        switch_data.pop(0)
-        print(switch_data)
-        lo_confirm_switch(switch_data, template_schedule)
-        messages.success(request, "Switch confirmed!")
+        # get all labs for the current semester
+        labs = Lab.objects.filter(
+            semester__semester_time=current_semester['time'],
+            semester__year=current_semester['year']
+        )
 
-    # get all labs for the current semester
-    labs = Lab.objects.filter(
-        semester__semester_time=current_semester['time'],
-        semester__year=current_semester['year']
-    )
+        # get all TA's assigned to that semester
+        tas = get_tas_by_semester(current_semester['time'],
+                                  current_semester['year'])
 
-    # get all TA's assigned to that semester
-    tas = get_tas_by_semester(current_semester['time'],
-                              current_semester['year'])
+        # get the names of all the semesters for selection purposes
+        semester_options = Semester.objects.all()
 
-    # get the names of all the semesters for selection purposes
-    semester_options = Semester.objects.all()
+        # get all template schedule version numbers for selection
+        template_schedule_versions = get_all_schedule_version_numbers(
+            current_semester['time'],
+            current_semester['year'])
 
-    # get all template schedule version numbers for selection
-    template_schedule_versions = get_all_schedule_version_numbers(
-        current_semester['time'],
-        current_semester['year'])
+        # get all history nodes that are active
+        history = template_schedule.his_nodes.all()
 
-    # get all history nodes that are active
-    history = template_schedule.his_nodes.all()
+        # instantiate context variable
+        context = {
+            'labs': labs,
+            'tas': tas,
+            'semester_options': semester_options,
+            'current_semester': current_semester,
+            'template_schedule': template_schedule,
+            'schedule_versions': template_schedule_versions,
+            'history': history
+        }
 
-    # instantiate context variable
-    context = {
-        'labs': labs,
-        'tas': tas,
-        'semester_options': semester_options,
-        'current_semester': current_semester,
-        'template_schedule': template_schedule,
-        'schedule_versions': template_schedule_versions,
-        'history': history
-    }
-
-    # check if there are no labs in the selected semester
-    if len(labs) == 0:
-        messages.warning(request, 'No labs in the current semester!')
+        # check if there are no labs in the selected semester
+        if len(labs) == 0:
+            messages.warning(request, 'No labs in the current semester!')
 
     return render(request, 'laborganizer/dashboard.html', context)
-
 
 def lo_generate_switches(course_id, current_semester, template_schedule):
     """Generate all available switches for a lab at LO command."""
@@ -371,35 +371,55 @@ def lo_generate_schedule(request):
 def lo_ta_management(request):
     """TA Management route."""
     context = {}
-    # check for post request
-    if request.method == 'POST':
-        # get value from chosen semester form
-        post_semester = request.POST.get('chosen_semester')
+    # # check for post request
+    # if request.method == 'POST':
+    #     # get value from chosen semester form
+    #     post_semester = request.POST.get('chosen_semester')
 
-        # check if the user selected a semester before submitting it
-        if post_semester is None:
-            messages.warning(request, 'Please select a semester first!')
-            return redirect('lo_ta_management')
+    #     # check if the user selected a semester before submitting it
+    #     if post_semester is None:
+    #         messages.warning(request, 'Please select a semester first!')
+    #         return redirect('lo_ta_management')
 
-        # split results
-        semester = {'year': post_semester[3:], 'time': post_semester[:3]}
+    #     # split results
+    #     semester = {'year': post_semester[3:], 'time': post_semester[:3]}
 
-        # get all TA's assigned to that semester
-        tas = get_tas_by_semester(semester['time'], semester['year'])
+    #     # get all TA's assigned to that semester
+    #     tas = get_tas_by_semester(semester['time'], semester['year'])
 
-        # get all Hold objects by the current ta's
-        holds = []
-        for ta in tas:
-            hold = Holds.objects.filter(ta=ta)
-            if hold is not None:
-                holds.append(hold)
+    #     # get all Hold objects by the current ta's
+    #     holds = []
+    #     for ta in tas:
+    #         hold = Holds.objects.filter(ta=ta)
+    #         if hold is not None:
+    #             holds.append(hold)
 
-        # populate context
-        context = {
-            'tas': tas,
-            'holds': holds,
-            'semester': semester,
-        }
+    #     # populate context
+    #     context = {
+    #         'tas': tas,
+    #         'holds': holds,
+    #         'semester': semester,
+    #     }
+
+    # get all TA objects
+    tas = TA.objects.all()
+
+    # get all holds objects applied to those TA's
+    holds = []
+    for ta in tas:
+        hold = Holds.objects.filter(ta=ta)
+        if hold is not None:
+            holds.append(hold)
+
+    # get all semester objects
+    all_semesters = Semester.objects.all()
+
+    # generate context variable
+    context = {
+        'tas': tas,
+        'holds': holds,
+        'all_semesters': all_semesters,
+    }
 
     # always populate semester selection options
     semester_options = Semester.objects.all()
@@ -407,6 +427,16 @@ def lo_ta_management(request):
 
     return render(request, 'laborganizer/ta_management/ta_management.html',
                   context)
+
+
+def lo_update_ta_semesters(request):
+    """Update TA assigned semesters."""
+    if request.method == 'POST':
+        selected_semesters = request.POST.getlist('selected_semesters[]')
+        ta = TA.objects.get(student_id=request.POST.get('submit'))
+        ta.update_semesters(selected_semesters)
+        messages.success(request, 'Updated semester assignments!')
+    return redirect('lo_ta_management')
 
 
 def lo_semester_management(request, selected_semester=None):
@@ -457,7 +487,7 @@ def lo_propogate_schedule(request):
         # get the template schedule object
         schedule = get_template_schedule(time, year, version)
 
-        # import optimization utils and use that propogate_schedule function
+        # propogate the schedule to the live version
         propogate_schedule(schedule, all_tas)
 
         messages.success(request, f'Successfully uploaded version {version}!')
