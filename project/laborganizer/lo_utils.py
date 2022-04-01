@@ -59,8 +59,8 @@ def get_most_recent_sched(time, year):
     for schedule in template_schedules:
         if schedule.version_number > largest_version:
             largest_version = schedule.version_number
-        return TemplateSchedule.objects.get(semester=semester,
-                                            version_number=largest_version)
+    return TemplateSchedule.objects.get(semester=semester,
+                                        version_number=largest_version)
 
 
 def get_all_schedule_version_numbers(time, year):
@@ -81,7 +81,7 @@ def get_all_schedule_version_numbers(time, year):
     for schedule in template_schedules:
         version_list.append(schedule.version_number)
 
-        return version_list
+    return version_list
 
 
 def get_template_schedule(time, year, version):
