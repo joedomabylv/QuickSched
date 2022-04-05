@@ -2,7 +2,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from teachingassistant.models import TA, Holds, Availability
-from emailupload.models import EmailInformation
 from laborganizer.models import AllowTAEdit, Semester
 
 
@@ -11,6 +10,8 @@ class CustomUserManager(BaseUserManager):
 
     def create_user(self, email, password=None, is_ta=True):
         """Create normal user accounts. Overriding from BaseUserManager."""
+        print(email)
+        print()
         if not email:
             raise ValueError("Users must have an email address.")
 
@@ -63,10 +64,6 @@ class CustomUserManager(BaseUserManager):
         # create object that checks for TA information edit allowance
         new_allow_ta_edit = AllowTAEdit.objects.create()
         new_allow_ta_edit.save()
-
-        # create empty EmailInformation object
-        new_email_info = EmailInformation.objects.create()
-        new_email_info.save()
 
         # save to application database
         user.save(using=self._db)
