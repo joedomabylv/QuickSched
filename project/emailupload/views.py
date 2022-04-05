@@ -9,7 +9,7 @@ from quicksched import settings
 from django.contrib import messages
 from django.forms import ValidationError
 from django.utils.datastructures import MultiValueDictKeyError
-from .models import EmailInformation
+from .models import NewAccountEmails, ReturningAccountEmails
 from authentication.models import CustomUserModel
 import csv
 import os
@@ -72,11 +72,12 @@ def eu_upload(request):
         for account in new_accounts:
             # try to validate
             try:
-                validate_email(account)
-            except ValidationError:
+                validate_email(account.strip())
+            except ValidationError as error:
                 # TODO: get and display ALL invalid emails, not just one
                 messages.error(request, account + ' is not a valid email for this roster!')
-                return redirect('laborganizer/ta_add')
+                print(error)
+                return redirect('../ta_add')
 
         # set email information block
         set_email_info(new_accounts, returning_accounts)
@@ -95,61 +96,32 @@ def eu_upload(request):
 
 def set_email_info(new_accounts, returning_accounts):
     """Set/initialize the Email Information object."""
-    # grab the email information object
-    email_info = EmailInformation.objects.all()[0]
+    NewAccountEmails.objects.all().delete()
+    ReturningAccountEmails.objects.all().delete()
 
-    # wipe the email information object
-    email_info.clear_all_fields()
+    for account in new_accounts:
+        acct = NewAccountEmails(new_account=account.strip())
+        acct.save()
 
-    # set email information object status
-    if len(new_accounts) > 0:
-        email_info.set_new_accounts(new_accounts)
-        print(email_info.get_new_accounts())
-
-    if len(returning_accounts) > 0:
-        email_info.set_returning_accounts(returning_accounts)
-        print(email_info.get_returning_accounts())
-
-    # save email information object to database
-    email_info.save()
-
+    for account in returning_accounts:
+        acct = ReturningAccountEmails(returning_account=account.strip())
+        acct.save()
 
 def cancel_roster(request):
-    """Cancel the file upload of new emails."""
-    # default_storage.delete(os.path.join('', filename))
-    email_info = EmailInformation.objects.all()[0]
-
-    # i dont know why but new_accounts always has an empty string
-    # as the first entry. in response, i splice
-    new_accounts = email_info.get_new_accounts()[1:]
-    returning_accounts = email_info.get_returning_accounts()
-    print(new_accounts)
-    print(returning_accounts)
-
-    return render(request, 'emailupload/ta_add.html')
+    return redirect('../ta_add')
 
 
 def confirm_emails(request):
     """Confirm the emails in all accounts, new or returning."""
     # get email information
-    email_info = EmailInformation.objects.all()[0]
-    new_accounts = email_info.get_new_accounts()
-    print(f'New Accounts: {new_accounts}')
-    returning_accounts = email_info.get_returning_accounts()
+    new_accounts = NewAccountEmails.objects.all().values_list('new_account', flat=True)
+    returning_accounts = ReturningAccountEmails.objects.all().values_list('returning_account', flat=True)
 
     # generate passwords for new emails
     passwords = []
     for account in new_accounts:
         passwords.append(get_random_string(12))
 
-    # loop through the list of emails and passwords
-    index = 0
-    while index < len(new_accounts) and len(new_accounts) > 0:
-        email = new_accounts[index]
-        temp_pass = passwords[index]
-        print(f'{new_accounts[index]}:{passwords[index]}')
-        get_user_model().objects.create_user(email, temp_pass)
-        index += 1
 
     email_messages = []
 
@@ -166,7 +138,7 @@ def confirm_emails(request):
             from_email = settings.EMAIL_HOST_USER
             email_messages.append((welcome_subject, welcome_message, from_email, [to_email]))
             index += 1
-        send_mass_mail(tuple(email_messages), fail_silently=True)
+        send_mass_mail(tuple(email_messages), fail_silently=False)
 
     # returning email
     if len(returning_accounts) > 0:
@@ -175,7 +147,13 @@ def confirm_emails(request):
         Please sign in and update your schedule and other information about your availability and qualifications."""
         from_email = settings.EMAIL_HOST_USER
         send_mail(welcome_subject, welcome_message, from_email,
-                  returning_accounts, fail_silently=True)
+                  returning_accounts, fail_silently=False)
+
+    # loop through the list of emails and passwords and create accounts for TA's
+    index = 0
+    for account in new_accounts:
+        get_user_model().objects.create_user(account, passwords[index])
+        index += 1
 
     messages.success(request, 'Success!')
     return redirect('lo_home')
