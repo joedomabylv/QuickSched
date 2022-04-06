@@ -413,12 +413,14 @@ def lo_ta_management(request):
 
     # get all semester objects
     all_semesters = Semester.objects.all()
+    allow_edit = AllowTAEdit.objects.all()[0].allowed
 
     # generate context variable
     context = {
         'tas': tas,
         'holds': holds,
         'all_semesters': all_semesters,
+        'allowed_edit': allow_edit
     }
 
     # always populate semester selection options

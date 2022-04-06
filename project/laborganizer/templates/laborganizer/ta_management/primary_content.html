@@ -70,7 +70,7 @@
 				{% for hold in hold_object %}
 				{% if hold.ta == ta %}
 				
-				{% if hold.incomplete_profile %}
+				{% if hold.incomplete_profile and not allowed_edit %}
 				<span class="badge bg-danger">incomplete profile</span>
 				{% endif %}
 				{% if hold.update_availability %}
