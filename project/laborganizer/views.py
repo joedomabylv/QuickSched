@@ -24,7 +24,8 @@ from laborganizer.lo_utils import (get_current_semester,
                                    get_deviation_score,
                                    grade_deviation_score,
                                    semester_exists,
-                                   handle_semester_csv)
+                                   handle_semester_csv,
+                                   get_semester_cluster)
 
 from optimization.optimization_utils import (generate_by_selection,
                                              propogate_schedule)
@@ -412,7 +413,8 @@ def lo_ta_management(request):
             holds.append(hold)
 
     # get all semester objects
-    all_semesters = Semester.objects.all()
+    current_semester = get_current_semester()
+    all_semesters = get_semester_cluster(current_semester)
     allow_edit = AllowTAEdit.objects.all()[0].allowed
 
     # generate context variable

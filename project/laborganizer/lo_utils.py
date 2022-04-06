@@ -291,3 +291,53 @@ def handle_semester_csv(semester_csv, time, year):
     template_schedule = TemplateSchedule.objects.create(version_number=0, semester=semester)
     template_schedule.save()
     return add_labs(data_list, semester)
+
+# returns current semester, two semesters forward, and two back
+def get_semester_cluster(current_semester):
+    curr_sem_string = current_semester['time'] + str(current_semester['year'])
+    sorted_semesters = sort_semesters()
+
+    index = 0
+    bottom_ind = 0
+    top_ind = 0
+    for sem in sorted_semesters:
+        if sem == curr_sem_string:
+            if index > 2:
+                bottom_ind = index - 2
+            top_ind = index + 2
+        index += 1
+    return sorted_semesters[bottom_ind:top_ind+1]
+
+    
+
+
+# returns a string of the semester names in order (not objects)
+def sort_semesters():
+
+    time_encode_keys = {
+        'SPR': 1,
+        'SUM': 2,
+        'FAL': 3,
+        'WNT': 4
+    }
+
+    time_decode_keys = {
+        1: 'SPR',
+        2: 'SUM',
+        3: 'FAL',
+        4: 'WNT'
+    }
+    semesters = Semester.objects.all()
+    semesters_tups = []
+    sorted_semesters = []
+    for semester in semesters:
+        time = (time_encode_keys[semester.semester_time])
+        year = (str(semester.year))
+        semesters_tups.append(tuple((year, time)))
+
+    semesters_tups.sort()
+    for tup in semesters_tups:
+        sem = time_decode_keys[tup[1]] + tup[0]
+        sorted_semesters.append(sem)
+
+    return sorted_semesters
