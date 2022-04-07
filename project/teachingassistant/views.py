@@ -23,7 +23,6 @@ def ta_home(request):
         semester = get_current_semester()
         labs = ta.get_assigned_labs(semester)
 
-
         context = {
             'ta': ta,
             'holds': holds,
