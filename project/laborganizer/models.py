@@ -98,7 +98,7 @@ class Lab(models.Model):
     catalog_id = models.CharField("Catalog ID", max_length=10)
     course_id = models.CharField("Course ID", max_length=10, blank=True, unique=True)
     section = models.CharField("Section", max_length=10, blank=True)
-    days = models.CharField("Days", max_length=10)
+    days = models.CharField("Days", max_length=10, help_text="Characters separated by spaces")
     facility_id = models.CharField("Facility ID", max_length=20, blank=True)
     facility_building = models.CharField("Facility Building", max_length=50,
                                          blank=True)
@@ -107,7 +107,6 @@ class Lab(models.Model):
                                   auto_now_add=False, blank=True, null=True)
     end_time = models.TimeField("End Time", auto_now=False,
                                 auto_now_add=False, blank=True, null=True)
-    staffed = models.BooleanField(default=False)
 
     semester = models.ForeignKey(
         'Semester',

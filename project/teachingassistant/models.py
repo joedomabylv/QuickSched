@@ -35,14 +35,7 @@ class TA(models.Model):
 
     def __str__(self):
         """Human readable class name, for admin site."""
-        human_readable_name = ""
-        if self.year == 'GR':
-            # flag the TA as a 'G'TA
-            # NOTE: we can change the admin site to display an arrow or
-            #       something if the TA is a GTA (or if they're contracted)
-            human_readable_name += 'G'
-        human_readable_name += 'TA ' + self.first_name + ' ' + self.last_name
-        return human_readable_name
+        return self.first_name + ' ' + self.last_name
 
     def get_all_assigned_semesters(self):
         """
