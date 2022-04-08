@@ -248,6 +248,7 @@ class TemplateSchedule(models.Model):
                                  blank=True, null=True)
     assignments = models.ManyToManyField(TemplateAssignment, blank=True)
 
+
 class History(models.Model):
     """History stack for swapped TA's."""
 

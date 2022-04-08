@@ -11,9 +11,11 @@ Variables used throughout LO dashboard:
 'current_semester': used to display which semester is currently chosen/active
 """
 from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
+from django.core.cache import cache
 from teachingassistant.models import TA, Holds
 from .models import Semester, Lab, AllowTAEdit
-from optimization.models import History
+from optimization.models import History, TemplateSchedule
 from django.contrib import messages
 from laborganizer.lo_utils import (get_current_semester,
                                    get_tas_by_semester,
@@ -45,11 +47,14 @@ def lo_home(request, selected_semester=None, template_schedule=None):
         if Semester.objects.all().exists():
             if selected_semester is None:
                 # establish current semester time/year, based on time
-                current_semester = get_current_semester()
+                current_semester = cache.get('most_recent_semester')
+                if current_semester is None:
+                    current_semester = get_current_semester()
 
             else:
                 # get the current semester argument
                 current_semester = selected_semester
+                cache.set('most_recent_semester', current_semester, 800)
 
             # check if a template schedule was given
             if template_schedule is None:
@@ -101,6 +106,14 @@ def lo_home(request, selected_semester=None, template_schedule=None):
             tas = get_tas_by_semester(current_semester['time'],
                                       current_semester['year'])
 
+            ta_incomplete = False
+            for ta in tas:
+                hold = Holds.objects.get(ta=ta)
+                if hold.incomplete_profile:
+                    ta_incomplete = True
+            if ta_incomplete:
+                messages.warning(request, 'There are TAs with incomplete profiles!')
+
             # get the names of all the semesters for selection purposes
             semester_options = Semester.objects.all()
 
@@ -122,10 +135,6 @@ def lo_home(request, selected_semester=None, template_schedule=None):
                 'schedule_versions': template_schedule_versions,
                 'history': history
             }
-
-            # check if there are no labs in the selected semester
-            if len(labs) == 0:
-                messages.warning(request, 'No labs in the current semester!')
 
         return render(request, 'laborganizer/dashboard.html', context)
 
@@ -340,12 +349,12 @@ def lo_select_semester(request):
             # pass the selected semester to the primary view
             return lo_home(request, selected_semester, None)
 
-        return redirect('lo_home')
+        return lo_home(request, selected_semester, None)
 
     # the user is not a superuser, take them back to the login page
     return redirect('sign_in')
 
-
+# NOTE TO JOE: YOU WERE IN THE MIDDLE OF FIXING THE BELOW METHOD. WHEN THERE AREN'T ANY LABS IN A SEMESTER AND A LO TRIES TO GENERATE A SCHEDULE, INFINITE LOOP. UH OH!
 @login_required
 def lo_generate_schedule(request):
     """
@@ -380,18 +389,26 @@ def lo_generate_schedule(request):
 
             # gather a list of all selected TA's
             tas = []
+            ta_incomplete = False
             for ta_id in ta_ids:
-                tas.append(TA.objects.get(student_id=ta_id))
+                ta = TA.objects.get(student_id=ta_id)
+                tas.append(ta)
 
             # gather all labs for the selected semester
             labs = get_labs_by_semester(selected_semester['time'],
                                         selected_semester['year'])
 
-            # using those TA's, populate a TemplateSchedule object from
-            # optimization.models
-            template_schedule = generate_by_selection(tas, labs, selected_semester, priority_bonus)
+            # check if there are any labs in the chosen semester
+            if len(labs) != 0:
+                # using those TA's, populate a TemplateSchedule object from
+                # optimization.models
+                template_schedule = generate_by_selection(tas, labs, selected_semester, priority_bonus)
 
-            lo_home(request, selected_semester, template_schedule)
+                return lo_home(request, selected_semester, template_schedule)
+
+            # there are no labs in the semester, warn the user
+            messages.warning(request, "Please create labs before creating a schedule!")
+            return lo_home(request, selected_semester)
 
         # not a POST request, direct to default view
         return redirect('lo_home')
@@ -537,18 +554,29 @@ def lo_propogate_schedule(request):
             time = request.POST.get('time')
             version = request.POST.get('version')
 
-            # get all TA's assigned to this semester
-            all_tas = get_tas_by_semester(time, year)
+            labs = get_labs_by_semester(time, year)
 
-            # get the template schedule object
-            schedule = get_template_schedule(time, year, version)
+            # check if there are any labs assigned to this semester
+            if len(labs) != 0:
+                # get all TA's assigned to this semester
+                all_tas = get_tas_by_semester(time, year)
 
-            # propogate the schedule to the live version
-            propogate_schedule(schedule, all_tas)
+                # get the template schedule object
+                schedule = get_template_schedule(time, year, version)
 
-            messages.success(request, f'Successfully uploaded version {version}!')
-            return redirect('lo_home')
-        messages.warning(request, f'Failed to upload version {version}')
+                # propogate the schedule to the live version
+                propogate_schedule(schedule, all_tas)
+
+                selected_semester = {
+                    'time': time,
+                    'year': year
+                }
+
+                messages.success(request, f'Successfully uploaded version {version}!')
+                return lo_home(request, selected_semester, schedule)
+
+        # there are no labs, warn the user
+        messages.warning(request, 'There are no labs to propogate a schedule for!')
         return redirect('lo_home')
 
     # user is not a superuser, take them back to the login page
@@ -647,9 +675,10 @@ def lo_new_semester(request):
                     messages.success(request, f'Added a new semester and labs for {time}{year}!')
                 else:
                     messages.error(request, f'CSV Error: {error_code}')
-            # there is no CSV file, create empty semester object
+            # there is no CSV file, create empty semester object and template schedule
             else:
-                Semester.objects.create(semester_time=time, year=year)
+                semester = Semester.objects.create(semester_time=time, year=year)
+                TemplateSchedule.objects.create(version_number=0, semester=semester)
                 messages.success(request, f'Added a new semester for {time}{year}!')
         return redirect('lo_semester_management')
 
