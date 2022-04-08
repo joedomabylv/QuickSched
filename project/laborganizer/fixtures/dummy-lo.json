@@ -82,7 +82,6 @@
 	"instructor": "McAddis, C.",
 	"start_time": "11:10",
 	"end_time": "12:20",
-	"staffed": false,
 	"semester": 10
     }
 },
@@ -102,7 +101,6 @@
 	"instructor": "Leverington, M.",
 	"start_time": "16:00",
 	"end_time": "17:30",
-	"staffed": false,
 	"semester": 10
     }
 },
@@ -122,7 +120,6 @@
 	"instructor": "McAddis, C.",
 	"start_time": "14:20",
 	"end_time": "15:30",
-	"staffed": false,
 	"semester": 10
     }
 },
@@ -142,7 +139,6 @@
 	"instructor": "Amresh, A.",
 	"start_time": "12:45",
 	"end_time": "14:00",
-	"staffed": false,
 	"semester": 11
     }
 },
@@ -162,7 +158,6 @@
 	"instructor": "Leverington, M.",
 	"start_time": "13:45",
 	"end_time": "15:00",
-	"staffed": false,
 	"semester": 11
     }
 },
@@ -182,7 +177,6 @@
 	"instructor": "Otte, W.",
 	"start_time": "12:45",
 	"end_time": "14:00",
-	"staffed": false,
 	"semester": 11
     }
 },
@@ -202,7 +196,6 @@
 	"instructor": "Leverington, M.",
 	"start_time": "16:00",
 	"end_time": "17:15",
-	"staffed": false,
 	"semester": 12
     }
 },
@@ -222,7 +215,6 @@
 	"instructor": "Beverly, D.",
 	"start_time": "12:45",
 	"end_time": "15:15",
-	"staffed": false,
 	"semester": 12
     }
 },
@@ -242,7 +234,6 @@
 	"instructor": "Otte, W.",
 	"start_time": "08:00",
 	"end_time": "09:15",
-	"staffed": false,
 	"semester": 12
     }
 },
@@ -262,7 +253,6 @@
 	"instructor": "Domabyl V, J.",
 	"start_time": "10:45",
 	"end_time": "11:50",
-	"staffed": false,
 	"semester": 13
     }
 },
@@ -282,7 +272,6 @@
 	"instructor": "Liddell, A.",
 	"start_time": "10:45",
 	"end_time": "11:50",
-	"staffed": false,
 	"semester": 13
     }
 },
@@ -302,7 +291,6 @@
 	"instructor": "Doerry, E.",
 	"start_time": "14:45",
 	"end_time": "17:50",
-	"staffed": false,
 	"semester": 13
     }
 }

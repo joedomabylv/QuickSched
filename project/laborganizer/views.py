@@ -32,7 +32,6 @@ from optimization.optimization_utils import (generate_by_selection,
 from django.http import JsonResponse
 
 
-@login_required
 def lo_home(request, selected_semester=None, template_schedule=None):
     """
     Home route for the Lab Organizer dashboard.
@@ -80,8 +79,8 @@ def lo_home(request, selected_semester=None, template_schedule=None):
                         elif assignment.ta == node.ta_2.first():
                             to_assignment = assignment
 
-                            node.undo_bilateral_switch(template_schedule, from_assignment, to_assignment)
-                            node.delete()
+                    node.undo_bilateral_switch(template_schedule, from_assignment, to_assignment)
+                    node.delete()
 
             # Handles get request required for confirming switches
             if request.GET.get('swap') is not None:
@@ -133,7 +132,6 @@ def lo_home(request, selected_semester=None, template_schedule=None):
     return redirect('sign_in')
 
 
-@login_required
 def lo_generate_switches(course_id, current_semester, template_schedule):
     """Generate all available switches for a lab at LO command."""
     contender_number = 3  # TODO make this a global variable
@@ -194,8 +192,8 @@ def lo_generate_switches(course_id, current_semester, template_schedule):
             switches.append({
                 "to_lab": to_lab.subject + to_lab.catalog_id + ':' + to_lab.course_id,
                 "from_lab": selected_lab.subject + selected_lab.catalog_id + ':' + selected_lab.course_id,
-                "to_ta": to_ta.first_name,
-                "from_ta": selected_ta.first_name,
+                "to_ta": to_ta.first_name + ":" + to_ta.student_id,
+                "from_ta": selected_ta.first_name + ":" + selected_ta.student_id,
                 "deviation_score": ta[0],
                 "score_color": grade,
                 "switch_id": index + 1,
@@ -211,15 +209,14 @@ def lo_generate_switches(course_id, current_semester, template_schedule):
     return response
 
 
-@login_required
 def lo_confirm_switch(switch_data, template_schedule):
     """Confirm a switch within the database according to the template."""
     # Prepare data for the switch to occur
     switch_dict = {
         "first_ta": switch_data[0],  # format <first_name>:<student_id>
         "first_course": switch_data[1],  # format: <subject><catalog_id>:<course_id>
-        "second_ta": switch_data[2],  # format <first_name>:<student_id>
-        "second_course": switch_data[3]  # format: <subject><catalog_id>:<course_id>
+        "second_ta": switch_data[5],  # format <first_name>:<student_id>
+        "second_course": switch_data[6]  # format: <subject><catalog_id>:<course_id>
     }
 
     # extract the student ID from the desired TA's
@@ -261,10 +258,9 @@ def lo_confirm_switch(switch_data, template_schedule):
     # Confirm the switch on the database side
     template_schedule.swap_assignments(from_assignment, to_assignment)
 
-    return redirect('lo_home')
+    return redirect('/laborganizer/')
 
 
-@login_required
 def lo_select_schedule_version(request):
     """Select a new version of a template schedule to display."""
     # ensure the user is a superuser
@@ -289,7 +285,6 @@ def lo_select_schedule_version(request):
     return redirect('sign_in')
 
 
-@login_required
 def lo_assign_to_template(request):
     """Assign the given TA to the given Lab in the template schedule."""
     # ensure the user is a superuser
@@ -317,7 +312,6 @@ def lo_assign_to_template(request):
     return redirect('sign_in')
 
 
-@login_required
 def lo_select_semester(request):
     """
     View to generate semester information regarding a chosen semester.
@@ -346,7 +340,6 @@ def lo_select_semester(request):
     return redirect('sign_in')
 
 
-@login_required
 def lo_generate_schedule(request):
     """
     View for generating TA schedule via LO command, from the TA Selector.
@@ -400,7 +393,6 @@ def lo_generate_schedule(request):
     return redirect('sign_in')
 
 
-@login_required
 def lo_ta_management(request):
     """TA Management route."""
     # ensure the user is a superuser
@@ -470,7 +462,6 @@ def lo_ta_management(request):
     return redirect('sign_in')
 
 
-@login_required
 def lo_update_ta_semesters(request):
     """Update TA assigned semesters."""
     # ensure the user is a superuser
@@ -486,7 +477,6 @@ def lo_update_ta_semesters(request):
     return redirect('sign_in')
 
 
-@login_required
 def lo_semester_management(request, selected_semester=None):
     """View for semester information."""
     # ensure the user is a superuser
@@ -527,7 +517,6 @@ def lo_semester_management(request, selected_semester=None):
     return redirect('sign_in')
 
 
-@login_required
 def lo_propogate_schedule(request):
     """Propogate the desired template schedule to the live version."""
     # ensure the user is a superuser
@@ -555,7 +544,6 @@ def lo_propogate_schedule(request):
     return redirect('sign_in')
 
 
-@login_required
 def lo_edit_lab(request):
     """Update lab information for a single lab."""
     # ensure the user is a superuser
@@ -599,7 +587,6 @@ def lo_edit_lab(request):
     return redirect('sign_in')
 
 
-@login_required
 def lo_allow_ta_edit(request):
     """Allow TA's to edit their information form for the requested time."""
     if request.user.is_superuser:
@@ -622,7 +609,6 @@ def lo_allow_ta_edit(request):
     return redirect('sign_in')
 
 
-@login_required
 def lo_new_semester(request):
     """Handle the new semester form submitted by a user."""
     # ensure the user is a superuser
@@ -657,7 +643,6 @@ def lo_new_semester(request):
     return redirect('sign_in')
 
 
-@login_required
 def lo_display_semester(request):
     """Display information regarding a single semester."""
     # ensure the user is a superuser
@@ -690,7 +675,6 @@ def lo_display_semester(request):
     return redirect('sign_in')
 
 
-@login_required
 def lo_upload(request):
     """View to upload CSV file. Probably going to be deleted, see Andrew."""
     return render(request, 'laborganizer/dashboard.html')
