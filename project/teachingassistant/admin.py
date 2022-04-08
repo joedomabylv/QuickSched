@@ -1,6 +1,6 @@
 """Admin information for teachingassistant app."""
 from django.contrib import admin
-from .models import TA
+from .models import TA, Holds
 
 
 class TAAdmin(admin.ModelAdmin):
@@ -16,3 +16,4 @@ class TAAdmin(admin.ModelAdmin):
 
 
 admin.site.register(TA, TAAdmin)
+admin.site.register(Holds)
