@@ -98,7 +98,7 @@ class Lab(models.Model):
     catalog_id = models.CharField("Catalog ID", max_length=10)
     course_id = models.CharField("Course ID", max_length=10, blank=True, unique=True)
     section = models.CharField("Section", max_length=10, blank=True)
-    days = models.CharField("Days", max_length=10)
+    days = models.CharField("Days", max_length=10, help_text="Characters separated by spaces")
     facility_id = models.CharField("Facility ID", max_length=20, blank=True)
     facility_building = models.CharField("Facility Building", max_length=50,
                                          blank=True)
@@ -107,7 +107,6 @@ class Lab(models.Model):
                                   auto_now_add=False, blank=True, null=True)
     end_time = models.TimeField("End Time", auto_now=False,
                                 auto_now_add=False, blank=True, null=True)
-    staffed = models.BooleanField(default=False)
 
     semester = models.ForeignKey(
         'Semester',
@@ -149,19 +148,18 @@ class AllowTAEdit(models.Model):
         saved_day = self.date.strftime('%m/%d/%Y')
         saved_time = self.time.strftime('%H:%M')
 
-        # if the current time is before the saved time, allow
-        # TA's to edit their information
-        if day <= saved_day and time < saved_time:
+        # check if the current day is before the saved day or
+        # the saved day is the current day and it's before the saved time
+        if (day < saved_day) or (day == saved_day and time <= saved_time):
+            # the current day is before the saved day, the TA is
+            # allowed to edit their information
             self.allowed = True
             return True
         else:
-            # if the saved time is after the current time, do not
-            # allow TA's to edit their information
+            # otherwise, the TA is not allowed to edit their information
             self.allowed = False
             return False
 
     allowed = models.BooleanField('Allow TA\'s to edit', default=False)
     date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True)
-
-

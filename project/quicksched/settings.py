@@ -163,6 +163,6 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
+LOGIN_URL = 'sign_in'
 LOGIN_REDIRECT_URL = 'sign_in'
 LOGOUT_REDIRECT_URL = 'sign_in'
