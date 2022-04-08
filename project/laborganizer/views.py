@@ -16,6 +16,8 @@ from teachingassistant.models import TA, Holds
 from .models import Semester, Lab, AllowTAEdit
 from optimization.models import History
 from django.contrib import messages
+from django.core.cache import cache
+
 from laborganizer.lo_utils import (get_current_semester,
                                    get_tas_by_semester,
                                    get_labs_by_semester,
@@ -45,11 +47,15 @@ def lo_home(request, selected_semester=None, template_schedule=None):
     if Semester.objects.all().exists():
         if selected_semester is None:
             # establish current semester time/year, based on time
-            current_semester = get_current_semester()
+            try:
+                current_semester = cache.get('most_recent_semester')
+            except:
+                current_semester = get_current_semester()
 
         else:
             # get the current semester argument
             current_semester = selected_semester
+            cache.set('most_recent_semester', current_semester, 800)
 
         # check if a template schedule was given
         if template_schedule is None:
