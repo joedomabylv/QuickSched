@@ -11,6 +11,7 @@ Variables used throughout LO dashboard:
 'current_semester': used to display which semester is currently chosen/active
 """
 from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
 from teachingassistant.models import TA, Holds
 from .models import Semester, Lab, AllowTAEdit
 from optimization.models import History
@@ -30,6 +31,8 @@ from laborganizer.lo_utils import (get_current_semester,
 from optimization.optimization_utils import (generate_by_selection,
                                              propogate_schedule)
 from django.http import JsonResponse
+
+
 
 
 def lo_home(request, selected_semester=None, template_schedule=None):
@@ -98,6 +101,13 @@ def lo_home(request, selected_semester=None, template_schedule=None):
         tas = get_tas_by_semester(current_semester['time'],
                                   current_semester['year'])
 
+        ta_incomplete = False
+        for ta in tas:
+            hold = Holds.objects.filter(ta=ta)
+            if hold is not None:
+                ta_incomplete = True
+        if ta_incomplete:
+            messages.warning(request, 'There are TAs with incomplete profiles')
         # get the names of all the semesters for selection purposes
         semester_options = Semester.objects.all()
 
@@ -318,7 +328,7 @@ def lo_select_semester(request):
         # pass the selected semester to the primary view
         return lo_home(request, selected_semester, None)
 
-    return redirect('lo_home')
+    return lo_home(request, selected_semester, None)
 
 
 def lo_generate_schedule(request):
@@ -352,8 +362,11 @@ def lo_generate_schedule(request):
 
         # gather a list of all selected TA's
         tas = []
+        ta_incomplete = False
         for ta_id in ta_ids:
-            tas.append(TA.objects.get(student_id=ta_id))
+            ta = TA.objects.get(student_id=ta_id)
+            tas.append(ta)
+
 
         # gather all labs for the selected semester
         labs = get_labs_by_semester(selected_semester['time'],
@@ -363,7 +376,7 @@ def lo_generate_schedule(request):
         # optimization.models
         template_schedule = generate_by_selection(tas, labs, selected_semester, priority_bonus)
 
-        lo_home(request, selected_semester, template_schedule)
+        return lo_home(request, selected_semester, template_schedule)
 
     # not a POST request, direct to default view
     return redirect('lo_home')
@@ -494,8 +507,13 @@ def lo_propogate_schedule(request):
         # propogate the schedule to the live version
         propogate_schedule(schedule, all_tas)
 
+        selected_semester = {
+            'time': time,
+            'year': year
+        }
+
         messages.success(request, f'Successfully uploaded version {version}!')
-        return redirect('lo_home')
+        return lo_home(request, selected_semester, schedule)
     messages.warning(request, f'Failed to upload version {version}')
     return redirect('lo_home')
 
