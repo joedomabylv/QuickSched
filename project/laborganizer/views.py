@@ -106,13 +106,12 @@ def lo_home(request, selected_semester=None, template_schedule=None):
             tas = get_tas_by_semester(current_semester['time'],
                                       current_semester['year'])
 
+            # check if there are any TA's with incomplete profiles
             ta_incomplete = False
             for ta in tas:
                 hold = Holds.objects.get(ta=ta)
                 if hold.incomplete_profile:
                     ta_incomplete = True
-            if ta_incomplete:
-                messages.warning(request, 'There are TAs with incomplete profiles!')
 
             # get the names of all the semesters for selection purposes
             semester_options = Semester.objects.all()
@@ -133,7 +132,8 @@ def lo_home(request, selected_semester=None, template_schedule=None):
                 'current_semester': current_semester,
                 'template_schedule': template_schedule,
                 'schedule_versions': template_schedule_versions,
-                'history': history
+                'history': history,
+                'ta_incomplete': ta_incomplete,
             }
 
         return render(request, 'laborganizer/dashboard.html', context)
@@ -389,7 +389,6 @@ def lo_generate_schedule(request):
 
             # gather a list of all selected TA's
             tas = []
-            ta_incomplete = False
             for ta_id in ta_ids:
                 ta = TA.objects.get(student_id=ta_id)
                 tas.append(ta)
