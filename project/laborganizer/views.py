@@ -54,7 +54,7 @@ def lo_home(request, selected_semester=None, template_schedule=None):
             else:
                 # get the current semester argument
                 current_semester = selected_semester
-                cache.set('most_recent_semester', current_semester, 800)
+                cache.set('most_recent_semester', current_semester, None)
 
             # check if a template schedule was given
             if template_schedule is None:
