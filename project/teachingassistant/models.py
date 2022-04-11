@@ -171,6 +171,13 @@ class TA(models.Model):
         """Get a list of all semesters this TA is assigned to."""
         semesters = []
         for semester in self.assigned_semesters.all():
+            semesters.append(semester.__str__())
+        return ', '.join(semesters)
+
+    def get_semester_objects(self):
+        """Get all semester objects this TA is assigned to."""
+        semesters = []
+        for semester in self.assigned_semesters.all():
             semesters.append(semester)
         return semesters
 
@@ -180,6 +187,10 @@ class TA(models.Model):
             if semester == semester_to_check:
                 return True
         return False
+
+    def has_assigned_semesters(self):
+        """Check if this TA has any assigned semesters."""
+        return len(self.assigned_semesters.all()) > 0
 
     def update_semesters(self, semester_list):
         """Given a list of semesters, update the assignemnts to this TA."""

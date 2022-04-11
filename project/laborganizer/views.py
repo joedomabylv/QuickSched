@@ -422,36 +422,6 @@ def lo_ta_management(request):
     # ensure the user is a superuser
     if request.user.is_superuser:
         context = {}
-        # # check for post request
-        # if request.method == 'POST':
-        #     # get value from chosen semester form
-        #     post_semester = request.POST.get('chosen_semester')
-
-        #     # check if the user selected a semester before submitting it
-        #     if post_semester is None:
-        #         messages.warning(request, 'Please select a semester first!')
-        #         return redirect('lo_ta_management')
-
-        #     # split results
-        #     semester = {'year': post_semester[3:], 'time': post_semester[:3]}
-
-        #     # get all TA's assigned to that semester
-        #     tas = get_tas_by_semester(semester['time'], semester['year'])
-
-        #     # get all Hold objects by the current ta's
-        #     holds = []
-        #     for ta in tas:
-        #         hold = Holds.objects.filter(ta=ta)
-        #         if hold is not None:
-        #             holds.append(hold)
-
-        #     # populate context
-        #     context = {
-        #         'tas': tas,
-        #         'holds': holds,
-        #         'semester': semester,
-        #     }
-
         # get all TA objects
         tas = TA.objects.all()
 
