@@ -354,7 +354,7 @@ def lo_select_semester(request):
     # the user is not a superuser, take them back to the login page
     return redirect('sign_in')
 
-# NOTE TO JOE: YOU WERE IN THE MIDDLE OF FIXING THE BELOW METHOD. WHEN THERE AREN'T ANY LABS IN A SEMESTER AND A LO TRIES TO GENERATE A SCHEDULE, INFINITE LOOP. UH OH!
+
 @login_required
 def lo_generate_schedule(request):
     """

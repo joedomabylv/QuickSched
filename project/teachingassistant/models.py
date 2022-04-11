@@ -171,7 +171,6 @@ class TA(models.Model):
         """Get a list of all semesters this TA is assigned to."""
         semesters = []
         for semester in self.assigned_semesters.all():
-            print(semester)
             semesters.append(semester)
         return semesters
 
