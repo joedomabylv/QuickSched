@@ -64,7 +64,9 @@
 			    aria-expanded="false"
 			    aria-controls="collapse-{{ forloop.counter }}"
 			>
-			    {{ ta.first_name }} {{ ta.last_name }}
+				<div class="TAname">
+					{{ ta.first_name }} {{ ta.last_name }}
+				</div>
 			    <div class="mx-5 col text-end">
 				{% for hold_object in holds %}
 				{% for hold in hold_object %}

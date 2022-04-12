@@ -10,5 +10,24 @@
     <div class="d-flex flex-row">
 	<span class="fs-5 px-3">TA Management</span>
     </div>
+    <!--TAFilter-->
+    <div calss="d-flex flex-row">
+        <form class="container-fluid">
+            <div class="input-group">
+                <span class="input-group-text bg-white">
+                <svg class="bi" width="16" height="16">
+                    <use xlink:href="#filter"></use>
+                </svg>
+                </span>
+                <input
+                type="text"
+                class="form-control me-2"
+                placeholder="Type to filter..."
+                onkeyup="filterTA()"
+                id="tafilter"
+                />
+            </div>
+        </form>
+    </div>
 
 </div>
