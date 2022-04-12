@@ -292,11 +292,11 @@ def handle_semester_csv(semester_csv, time, year):
     template_schedule.save()
     return add_labs(data_list, semester)
 
-# returns current semester, two semesters forward, and two back
+
 def get_semester_cluster(current_semester):
+    """Find two previous semesters and two future semesters."""
     curr_sem_string = current_semester['time'] + str(current_semester['year'])
     sorted_semesters = sort_semesters()
-
     index = 0
     bottom_ind = 0
     top_ind = 0
@@ -308,12 +308,14 @@ def get_semester_cluster(current_semester):
         index += 1
     return sorted_semesters[bottom_ind:top_ind+1]
 
-    
-
 
 # returns a string of the semester names in order (not objects)
 def sort_semesters():
+    """
+    Return semester names in order.
 
+    Note: Does not return objects, returns a list of strings.
+    """
     time_encode_keys = {
         'SPR': 1,
         'SUM': 2,

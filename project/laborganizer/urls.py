@@ -28,6 +28,8 @@ urlpatterns = [
          name='lo_new_semester'),
     path('update_ta_semesters', views.lo_update_ta_semesters,
          name='lo_update_ta_semesters'),
+    path('ta_management/flip_contract_status', views.lo_flip_contract_status,
+         name='lo_flip_contract_status'),
     path('upload/', views.lo_upload, name='lo_upload'),
 ]
 

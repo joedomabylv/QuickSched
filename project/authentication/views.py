@@ -131,6 +131,7 @@ def sign_in(request):
                 # else, take them to their dashboard
                 return redirect('teachingassistant/')
         else:
+            messages.error(request, 'Invalid username or password')
             return redirect('sign_in')
 
     return render(request, "authentication/sign_in.html")

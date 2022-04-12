@@ -42,6 +42,7 @@ class Semester(models.Model):
             years.append((year, year))
         return years
 
+
     YEARS = get_10_years()
 
     year = models.IntegerField('Calendar year', choices=YEARS)

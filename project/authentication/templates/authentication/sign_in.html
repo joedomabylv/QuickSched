@@ -7,6 +7,9 @@
 <link rel="stylesheet" href="{% static 'authentication/sign_in.css' %}" />
 
 <main class="form-signin">
+
+    {% include 'authentication/message.html' %}
+    
     <form method="post" action="/sign_in">
 
 	{% csrf_token %}
