@@ -2,157 +2,155 @@
 
     {% include 'laborganizer/semester_management/horizontal_tool_bar.html' %}
     {% include 'laborganizer/message.html' %}    
-	
-	<!-- Main content wrap -->
-	<div style="overflow-y: scroll;">
-		<div class="m-5 text-start">
-			<h3>Select Semester</h3>
-			<form method="post" action="{% url 'lo_semester_management' %}">
-				{% csrf_token %}
-				<select class="form-select" aria-label="Default select example" name="chosen_semester">
-				{% if semester_options %}
-				<option disabled selected>Select a semester</option>
-				{% for semester in semester_options %}
-				<option value="{{ semester }}">{{ semester }}</option>
-				{% endfor %}
-				{% endif %}
-				</select>
-				<input class="mt-2 btn btn-primary" type="submit" value="Choose Semester">
-			</form>
-		</div>
 
-		{% if labs %}
-
-		<div class="mx-5">
-
-		<div class="container">
-			<div class="row">
-			<h3 class="col text-start">{{ semester.time }}{{ semester.year }}</h3>
-			<h3 class="col text-end">Total Labs: {{ labs|length }}</h3>
-			</div>
-		</div>
-
-		<div class="accordion" id="accordionTA">
-
-			{% for lab in labs %}
-
-			<div class="accordion-item">
-
-			<h2 class="accordion-header" id="heading:{{ forloop.counter }}">
-				<button
-				class="accordion-button collapsed"
-						type="button"
-						data-bs-toggle="collapse"
-						data-bs-target="#collapse-{{ forloop.counter }}"
-						aria-expanded="false"
-						aria-controls="collapse-{{ forloop.counter }}"
-				>
-				{{ lab }}
-				</button>
-			</h2>
-
-			<div
-				id="collapse-{{ forloop.counter }}"
-				class="accordion-collapse collapse"
-				aria-labelledby="heading:{{ forloop.counter }}"
-				data-bs-parent="#accordionTA"
-			>
-
-				<form method="post" action="{% url 'lo_edit_lab' %}">
-				{% csrf_token %}
-				<div class="accordion-body">
-					<div class="container">
-					<div class="row">
-						<div class="col-4">
-						<label class="form-label" for="course_id"><strong>Course ID:</strong></label>
-						<input class="form-control" type="text" id="course_id" name="course_id" value="{{ lab.course_id }}">
-						</div>
-						<div class="col-4">
-						<label class="form-label" for="section"><strong>Section:</strong></label>
-						<input class="form-control" type="text" id="section" name="section" value="{{ lab.section }}">
-						</div>
-
-						<!-- Begin Day Checklist Block -->
-						<div class="col-4">
-						<label class="form-label" for="days[]"><strong>Days:</strong></label><br>
-						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="checkbox" id="days-M" name="days[]" value="M" {% if "M" in lab.get_days %}checked{% endif %}>
-							<label class="form-check-label" for="days"><strong>M</strong></label>	    
-						</div>
-						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="checkbox" id="days-T" name="days[]" value="T" {% if "T" in lab.get_days %}checked{% endif %}>
-							<label class="form-check-label" for="days"><strong>T</strong></label>	    
-						</div>
-						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="checkbox" id="days-W" name="days[]" value="W" {% if "W" in lab.get_days %}checked{% endif %}>
-							<label class="form-check-label" for="days"><strong>W</strong></label>	    
-						</div>
-						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="checkbox" id="days-Th" name="days[]" value="Th" {% if "Th" in lab.get_days %}checked{% endif %}>
-							<label class="form-check-label" for="days"><strong>Th</strong></label>
-						</div>
-						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="checkbox" id="days-F" name="days[]" value="F" {% if "F" in lab.get_days %}checked{% endif %}>
-							<label class="form-check-label" for="days"><strong>F</strong></label>	    
-						</div>
-
-						</div>
-						<!-- End Day Checklist Block -->
-
-					</div>
-					<hr>
-					<div class="row">
-						<div class="col-4">
-						<label class="form-label" for="facility_building"><strong>Facility Building:</strong></label>
-						<input class="form-control" type="text" id="facility_building" name="facility_building" value="{{ lab.facility_building }}">
-						</div>
-						<div class="col-4">
-						<label class="form-label" for="facility_id"><strong>Facility ID:</strong></label>
-						<input class="form-control" type="text" id="facility_id" name="facility_id" value="{{ lab.facility_id }}">
-						</div>				
-						<div class="col-4">
-						<label class="form-label" for="instructor"><strong>Instructor:</strong></label>
-						<input class="form-control" type="text" id="instructor" name="instructor" value="{{ lab.instructor }}">
-						</div>		
-					</div>
-					<hr>
-					<div class="row">
-						<div class="col-6">
-						<label class="form-label" for="start_time"><strong>Start Time:</strong></label>
-						<input class="form-control" type="time" id="start_time" name="start_time" value="{{ lab.get_start_time }}">
-						</div>
-						<div class="col-6">
-						<label class="form-label" for="end_time"><strong>End Time:</strong></label>
-						<input class="form-control" type="time" id="end_time" name="end_time" value="{{ lab.get_end_time }}">
-						</div>
-					</div>			    
-					<hr>
-					<div class="row">
-						<div class="col">
-						<input type="hidden" name="old_course_id" value="{{ lab.course_id }}">
-						<button class="btn btn-primary" type="submit" name="submit" value="{{ semester.time }}{{ semester.year }}">Save Changes</button>
-						</div>
-					</div>
-					</div>
-				</div>
-				</form>
-
-			</div>
-
-			</div>
-			
-				{% endfor %}
-
-		</div>
-		
-		</div>
-
-		{% else %}
-
-		<div class="">
-		No labs to display!
-		</div>
-
+    <div class="m-5 text-start">
+	<h3>Select Semester</h3>
+	<form method="post" action="{% url 'lo_semester_management' %}">
+	    {% csrf_token %}
+	    <select class="form-select" aria-label="Default select example" name="chosen_semester">
+		{% if semester_options %}
+		<option disabled selected>Select a semester</option>
+		{% for semester in semester_options %}
+		<option value="{{ semester }}">{{ semester }}</option>
+		{% endfor %}
 		{% endif %}
-   </div>
+	    </select>
+	    <input class="mt-2 btn btn-primary" type="submit" value="Choose Semester">
+	</form>
+    </div>
+
+    {% if labs %}
+
+    <div class="mx-5">
+
+	<div class="container">
+	    <div class="row">
+		<h3 class="col text-start">{{ semester.time }}{{ semester.year }}</h3>
+		<h3 class="col text-end">Total Labs: {{ labs|length }}</h3>
+	    </div>
+	</div>
+
+	<div class="accordion" id="accordionTA">
+
+	    {% for lab in labs %}
+
+	    <div class="accordion-item">
+
+		<h2 class="accordion-header" id="heading:{{ forloop.counter }}">
+		    <button
+			class="accordion-button collapsed"
+			       type="button"
+			       data-bs-toggle="collapse"
+			       data-bs-target="#collapse-{{ forloop.counter }}"
+			       aria-expanded="false"
+			       aria-controls="collapse-{{ forloop.counter }}"
+		    >
+			{{ lab }}
+		    </button>
+		</h2>
+
+		<div
+		    id="collapse-{{ forloop.counter }}"
+		    class="accordion-collapse collapse"
+		    aria-labelledby="heading:{{ forloop.counter }}"
+		    data-bs-parent="#accordionTA"
+		>
+
+		    <form method="post" action="{% url 'lo_edit_lab' %}">
+			{% csrf_token %}
+			<div class="accordion-body">
+			    <div class="container">
+				<div class="row">
+				    <div class="col-4">
+					<label class="form-label" for="course_id"><strong>Course ID:</strong></label>
+					<input class="form-control" type="text" id="course_id" name="course_id" value="{{ lab.course_id }}">
+				    </div>
+				    <div class="col-4">
+					<label class="form-label" for="section"><strong>Section:</strong></label>
+					<input class="form-control" type="text" id="section" name="section" value="{{ lab.section }}">
+				    </div>
+
+				    <!-- Begin Day Checklist Block -->
+				    <div class="col-4">
+					<label class="form-label" for="days[]"><strong>Days:</strong></label><br>
+					<div class="form-check form-check-inline">
+					    <input class="form-check-input" type="checkbox" id="days-M" name="days[]" value="M" {% if "M" in lab.get_days %}checked{% endif %}>
+					    <label class="form-check-label" for="days"><strong>M</strong></label>	    
+					</div>
+					<div class="form-check form-check-inline">
+					    <input class="form-check-input" type="checkbox" id="days-T" name="days[]" value="T" {% if "T" in lab.get_days %}checked{% endif %}>
+					    <label class="form-check-label" for="days"><strong>T</strong></label>	    
+					</div>
+					<div class="form-check form-check-inline">
+					    <input class="form-check-input" type="checkbox" id="days-W" name="days[]" value="W" {% if "W" in lab.get_days %}checked{% endif %}>
+					    <label class="form-check-label" for="days"><strong>W</strong></label>	    
+					</div>
+					<div class="form-check form-check-inline">
+					    <input class="form-check-input" type="checkbox" id="days-Th" name="days[]" value="Th" {% if "Th" in lab.get_days %}checked{% endif %}>
+					    <label class="form-check-label" for="days"><strong>Th</strong></label>
+					</div>
+					<div class="form-check form-check-inline">
+					    <input class="form-check-input" type="checkbox" id="days-F" name="days[]" value="F" {% if "F" in lab.get_days %}checked{% endif %}>
+					    <label class="form-check-label" for="days"><strong>F</strong></label>	    
+					</div>
+
+				    </div>
+				    <!-- End Day Checklist Block -->
+
+				</div>
+				<hr>
+				<div class="row">
+				    <div class="col-4">
+					<label class="form-label" for="facility_building"><strong>Facility Building:</strong></label>
+					<input class="form-control" type="text" id="facility_building" name="facility_building" value="{{ lab.facility_building }}">
+				    </div>
+				    <div class="col-4">
+					<label class="form-label" for="facility_id"><strong>Facility ID:</strong></label>
+					<input class="form-control" type="text" id="facility_id" name="facility_id" value="{{ lab.facility_id }}">
+				    </div>				
+				    <div class="col-4">
+					<label class="form-label" for="instructor"><strong>Instructor:</strong></label>
+					<input class="form-control" type="text" id="instructor" name="instructor" value="{{ lab.instructor }}">
+				    </div>		
+				</div>
+				<hr>
+				<div class="row">
+				    <div class="col-6">
+					<label class="form-label" for="start_time"><strong>Start Time:</strong></label>
+					<input class="form-control" type="time" id="start_time" name="start_time" value="{{ lab.get_start_time }}">
+				    </div>
+				    <div class="col-6">
+					<label class="form-label" for="end_time"><strong>End Time:</strong></label>
+					<input class="form-control" type="time" id="end_time" name="end_time" value="{{ lab.get_end_time }}">
+				    </div>
+				</div>			    
+				<hr>
+				<div class="row">
+				    <div class="col">
+					<input type="hidden" name="old_course_id" value="{{ lab.course_id }}">
+					<button class="btn btn-primary" type="submit" name="submit" value="{{ semester.time }}{{ semester.year }}">Save Changes</button>
+				    </div>
+				</div>
+			    </div>
+			</div>
+		    </form>
+
+		</div>
+
+	    </div>
+	    
+		    {% endfor %}
+
+	</div>
+	
+    </div>
+
+    {% else %}
+
+    <div class="">
+	No labs to display!
+    </div>
+
+    {% endif %}
+        
 </div>
