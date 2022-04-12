@@ -37,6 +37,14 @@ class TA(models.Model):
         """Human readable class name, for admin site."""
         return self.first_name + ' ' + self.last_name
 
+    def flip_contract_status(self):
+        """Flip the contracted status of this TA."""
+        if self.contracted:
+            self.contracted = False
+        else:
+            self.contracted = True
+        self.save()
+
     def get_all_assigned_semesters(self):
         """
         Get a list of all semesters this TA is assigned to.

@@ -142,6 +142,14 @@ def lo_home(request, selected_semester=None, template_schedule=None):
     return redirect('sign_in')
 
 
+def lo_flip_contract_status(request):
+    """Flip the contracted status of a TA."""
+    if request.method == 'POST':
+        ta = TA.objects.get(student_id=request.POST.get('ta_id'))
+        ta.flip_contract_status()
+        return JsonResponse({'result': True}, status=200)
+
+
 @login_required
 def lo_generate_switches(course_id, current_semester, template_schedule):
     """Generate all available switches for a lab at LO command."""
@@ -601,20 +609,12 @@ def lo_allow_ta_edit(request):
     """Allow TA's to edit their information form for the requested time."""
     if request.user.is_superuser:
         if request.method == 'POST':
-            date = request.POST.get('date')
-            time = request.POST.get('time')
-
-            if date != '' or time != '':
-                allow_edits = AllowTAEdit.objects.all()[0]
-                allow_edits.date = date
-                allow_edits.time = time
-                allow_edits.allowed = True
-                allow_edits.save()
-                messages.success(request, 'TA\'s are allowed to edit their information!')
-            else:
-                messages.warning(request, 'Please select a date and a time!')
-        return redirect('lo_ta_management')
-
+            ta = TA.objects.get(student_id=request.POST.get('ta'))
+            holds = Holds.objects.get(pk=ta.holds_key)
+            holds.incomplete_profile = True
+            holds.save()
+            messages.success(request, f'{ta} is now allowed to edit their information!')
+            return redirect('lo_ta_management')
     # the user is not a superuser, take them back to the login page
     return redirect('sign_in')
 

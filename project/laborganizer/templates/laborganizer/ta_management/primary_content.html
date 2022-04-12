@@ -6,17 +6,7 @@
     <!-- Main content wrap -->
     <div style="overflow-y: scroll;">
 	<div class="m-5 text-start" >
-	    <h3>Allow TA Edit</h3>
-	    <p>TA's will be allowed to edit their own information until this date and time!</p>
-	    <form method="post" action="{% url 'lo_allow_ta_edit' %}">
-		{% csrf_token %}
-		<div class="input-group">
-		    <span class="input-group-text">Date & Time</span>
-		    <input type="date" name="date" class="form-control">
-		    <input type="time" name="time" class="form-control">
-		</div>
-		<input class="mt-2 btn btn-primary" type="submit">
-	    </form>	
+	    <h3>All TA's</h3>
 	</div>
 		
 	{% if tas %}
@@ -91,11 +81,10 @@
 				    </div>				
 				    <div class="col-4">
 					<strong>Contracted: </strong>
+					<input type="checkbox" onclick="flip_contract_status({{ ta.student_id }})"
 					{% if ta.contracted %}
-					Yes
-					{% else %}
-					No
-					{% endif %}
+					checked
+					{% endif %}>
 				    </div>		
 				</div>
 				<hr>
@@ -103,7 +92,7 @@
 				    <div class="col-6">
 					<strong>
 					    Semesters
-					    <span title="These are the semesters the TA is assigned to">
+					    <span title="These are the semesters this TA is assigned to">
 						<svg class="bi me-2" width="16" height="16">
 						    <use xlink:href="#question-mark"></use>
 						</svg>
@@ -165,12 +154,22 @@
 				    </div>
 				</div>
 			    </div>
+			    <form method="post" action="{% url 'lo_allow_ta_edit' %}">
+				{% csrf_token %}
+				<button class="btn btn-primary" type="submit" name="ta" value="{{ ta.student_id }}">
+				    Allow Editing
+				    <span title="Allow this TA to edit their own information. This will set an 'incomplete profile' hold on their account">
+					<svg class="bi me-2" width="16" height="16">
+					    <use xlink:href="#question-mark"></use>
+					</svg>
+				    </span>				    
+				</button>
+			    </form>
 			</div>
 			
 		    </div>
 		    
 		</div>
-
 		{% endif %}
 		
 		{% endfor %}
