@@ -31,7 +31,7 @@ from optimization.optimization_utils import (generate_by_selection,
                                              propogate_schedule)
 from django.http import JsonResponse
 
-
+@login_required
 def lo_home(request, selected_semester=None, template_schedule=None):
     """
     Home route for the Lab Organizer dashboard.
@@ -261,6 +261,7 @@ def lo_confirm_switch(switch_data, template_schedule):
     return redirect('/laborganizer/')
 
 
+@login_required
 def lo_select_schedule_version(request):
     """Select a new version of a template schedule to display."""
     # ensure the user is a superuser
@@ -285,6 +286,7 @@ def lo_select_schedule_version(request):
     return redirect('sign_in')
 
 
+@login_required
 def lo_assign_to_template(request):
     """Assign the given TA to the given Lab in the template schedule."""
     # ensure the user is a superuser
@@ -312,6 +314,7 @@ def lo_assign_to_template(request):
     return redirect('sign_in')
 
 
+@login_required
 def lo_select_semester(request):
     """
     View to generate semester information regarding a chosen semester.
@@ -340,6 +343,7 @@ def lo_select_semester(request):
     return redirect('sign_in')
 
 
+@login_required
 def lo_generate_schedule(request):
     """
     View for generating TA schedule via LO command, from the TA Selector.
@@ -393,6 +397,7 @@ def lo_generate_schedule(request):
     return redirect('sign_in')
 
 
+@login_required
 def lo_ta_management(request):
     """TA Management route."""
     # ensure the user is a superuser
@@ -462,6 +467,7 @@ def lo_ta_management(request):
     return redirect('sign_in')
 
 
+@login_required
 def lo_update_ta_semesters(request):
     """Update TA assigned semesters."""
     # ensure the user is a superuser
@@ -517,6 +523,7 @@ def lo_semester_management(request, selected_semester=None):
     return redirect('sign_in')
 
 
+@login_required
 def lo_propogate_schedule(request):
     """Propogate the desired template schedule to the live version."""
     # ensure the user is a superuser
@@ -544,6 +551,7 @@ def lo_propogate_schedule(request):
     return redirect('sign_in')
 
 
+@login_required
 def lo_edit_lab(request):
     """Update lab information for a single lab."""
     # ensure the user is a superuser
