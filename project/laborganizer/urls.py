@@ -30,6 +30,11 @@ urlpatterns = [
          name='lo_update_ta_semesters'),
     path('ta_management/flip_contract_status', views.lo_flip_contract_status,
          name='lo_flip_contract_status'),
+    path('csv_lab_upload', views.lo_csv_lab_upload, name='lo_csv_lab_upload'),
+    path('csv_upload_help', views.lo_csv_upload_help,
+         name='lo_csv_upload_help'),
+    path('csv_lab_upload_confirm', views.lo_csv_lab_upload_confirm,
+         name='lo_csv_lab_upload_confirm'),
     path('upload/', views.lo_upload, name='lo_upload'),
 ]
 

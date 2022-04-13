@@ -1,0 +1,46 @@
+<div class="col d-flex flex-column flex-shrink-0 bg-light" >
+
+    {% include 'laborganizer/csv_upload/horizontal_tool_bar.html' %}
+    {% include 'laborganizer/message.html' %}    
+    
+    <div class="m-5 text-start">
+	<h3>Formatting</h3>
+	<p>Each row in your CSV file must contain <strong>11</strong> rows that follow this format:</p>
+	<ul class="list-group mx-auto">
+	    <li class="list-group-item">1. Class Name
+		<p>The name of the class, i.e. "Computer Science 1"</p></li>
+	    <li class="list-group-item">2. Subject
+		<p>The subject of the class, i.e. "CS"</p></li>
+	    <li class="list-group-item">3. Catalog ID
+		<p>The catalog ID of the class, i.e. "126"</p></li>
+	    <li class="list-group-item">4. Course ID
+		<p>The <strong>unique</strong> course ID of the class, i.e. "1234"</p></li>
+	    <li class="list-group-item">5. Section
+		<p>The section of the class, i.e. "001"</p></li>
+	    <li class="list-group-item">6. Days
+		<p>The days the class is held, characters separated by spaces, i.e. "M W F"</p></li>
+	    <li class="list-group-item">7. Facility ID
+		<p>The ID of the facility building, i.e. "69"</p></li>
+	    <li class="list-group-item">8. Facility Building
+		<p>The name of the facility building, i.e. "Engineering"</p></li>
+	    <li class="list-group-item">9. Instructor
+		<p>The name of the primary instructor, i.e. "Smith"</p></li>
+	    <li class="list-group-item">10. Start Time
+		<p>The time this class starts, in 24 hour format, i.e. "13:30"</p></li>
+	    <li class="list-group-item">11. End Time
+		<p>The time this class ends, in 24 hour format, i.e. "14:45"</p></li>
+	</ul>
+    </div>
+
+    <div class="m-5 text-start">
+	<h3>Example</h3>
+	<p>An example row in your CSV file might look like:</p>
+	<strong>Computer Science 1, CS, 126, 1234, 001, M W F, 69, Engineering, Smith, 13:30, 14:45</strong>
+	<p>This row would represent a class called Computer Science 1, CS126 held in the Engineering building, taught by Smith starting at 1:30pm and ending at 2:45pm</p>
+    </div>
+
+    <div class="m-5 text-start">
+	<a href="https://en.wikipedia.org/wiki/Comma-separated_values">What is a CSV file?</a>
+    </div>
+
+</div>

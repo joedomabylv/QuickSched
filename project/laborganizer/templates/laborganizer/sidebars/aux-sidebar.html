@@ -63,7 +63,7 @@
             </a>
         </li>
 	<li class="nav-item">
-            <a href="{% url 'lo_semester_management' %}" class="nav-link {% if url_name == 'lo_semester_management' %}active{% else %}link-dark{% endif %}" aria-current="page">
+            <a href="{% url 'lo_semester_management' %}" class="nav-link {% if url_name == 'lo_semester_management' or url_name == 'lo_csv_lab_upload' or url_name == 'lo_csv_upload_help'%}active{% else %}link-dark{% endif %}" aria-current="page">
 		<svg class="bi me-2" width="16" height="16">
                     <use xlink:href="#semester"></use>
 		</svg>

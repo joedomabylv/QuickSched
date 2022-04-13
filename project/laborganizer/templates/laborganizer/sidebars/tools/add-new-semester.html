@@ -38,7 +38,7 @@
 
 	    <label class="mt-3" for="semester_csv">CSV File</label>
 	    <input class="form-control w-75 mx-auto" type="file" name="semester_csv" id="semester_csv" accept=".csv">
-	    <p class="mt-2">Optionally, add a CSV file containing lab information to populate the semester. For more information on how to format your file, <a class="link-primary" href="#">click here</a>.</p>
+	    <p class="mt-2">Optionally, add a CSV file containing lab information to populate the semester. For more information on how to format your file, <a class="link-primary" href="{% url 'lo_csv_upload_help' %}">click here</a>.</p>
 	    
 	    <input class="btn btn-primary mt-2" type="submit" value="Submit" title="Create a new semester!">
 	</form>

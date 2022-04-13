@@ -173,8 +173,6 @@ class TemplateSchedule(models.Model):
         self.assign_all_tas_from_list(tas, labs)
 
 
-
-
     def get_highest_scoring_tas(self, tas, lab):
         """
         Get the highest scoring TA/TA's for a given lab for this schedule.

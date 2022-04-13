@@ -3,6 +3,7 @@ from .models import Semester, Lab
 from datetime import datetime
 from teachingassistant.models import TA
 from optimization.models import TemplateSchedule
+from io import StringIO
 import csv
 
 
@@ -200,97 +201,135 @@ def lab_exists(course_id):
         return False
 
 
+def parse_semester_lab_dict(lab_dict, total_class_number):
+    """
+    Given POST data of a new semester, parse through it and define a list.
+
+    This function operates under the assumption that there are exists
+    properly formatted data within the dictionary.
+
+    A single row of the POST data is as follows by index:
+    0:  class name
+    1:  subject
+    2:  catalog ID
+    3:  course ID
+    4:  section
+    5:  days
+    6:  facility ID
+    7:  facility building
+    8:  instructor
+    9:  start time
+    10: end time
+    """
+    # create empty lab list
+    lab_list = []
+    lab_index = 0
+
+    # loop through each given lab in the dictionary
+    while lab_index < int(total_class_number):
+        new_lab = []
+        # pull relevant data
+        new_lab.append(lab_dict['class_names'][lab_index])
+        new_lab.append(lab_dict['subjects'][lab_index])
+        new_lab.append(lab_dict['catalog_ids'][lab_index])
+        new_lab.append(lab_dict['course_ids'][lab_index])
+        new_lab.append(lab_dict['sections'][lab_index])
+        new_lab.append(lab_dict['days'][lab_index])
+        new_lab.append(lab_dict['facility_ids'][lab_index])
+        new_lab.append(lab_dict['facility_buildings'][lab_index])
+        new_lab.append(lab_dict['instructors'][lab_index])
+        new_lab.append(lab_dict['start_times'][lab_index])
+        new_lab.append(lab_dict['end_times'][lab_index])
+        lab_list.append(new_lab)
+        lab_index += 1
+    return lab_list
+
+
+def validate_course_id(course_id):
+    """Ensure a given course ID does not already exist within the database."""
+    try:
+        Lab.objects.get(course_id=course_id)
+        # course already exists in the database, cannot add it
+        return (None, False)
+    except Lab.DoesNotExist:
+        # course does not exist, we can add it
+        return (course_id, True)
+
+
 def validate_days(days):
     """Ensure a given set of days is properly formatted for the database."""
     valid_days = ['M', 'T', 'W', 'Th', 'F']
     split_days = days.split(' ')
     for day in split_days:
         if day not in valid_days:
-            return False
-    return True
+            return (None, False)
+    return (days, True)
 
 
 def validate_time(time):
     """Ensure a given time is properly formatted for the database."""
     try:
-        tmp = datetime.strptime(time, '%H:%M')
-        print(tmp)
-        return True
+        time = datetime.strptime(time, '%H:%M').time()
+        return (str(time), True)
     except ValueError:
-        return False
+        return (None, False)
 
 
 def add_labs(labs_list, semester):
     """Add labs to the database for prevalidated data to a given semester."""
-    # try:
-    for lab in labs_list:
-        Lab.objects.create(
-            class_name=lab['class_name'],
-            subject=lab['subject'],
-            catalog_id=lab['catalog_id'],
-            course_id=lab['course_id'],
-            section=lab['section'],
-            days=lab['days'],
-            facility_id=lab['facility_id'],
-            facility_building=lab['facility_building'],
-            instructor=lab['instructor'],
-            start_time=lab['start_time'],
-            end_time=lab['end_time'],
-            semester=semester
-        )
-    # except:
-    #     return (False, 'Something went wrong when adding labs!')
-    return (True, 'success')
+    try:
+        for lab in labs_list:
+            Lab.objects.create(
+                class_name=lab[0],
+                subject=lab[1],
+                catalog_id=lab[2],
+                course_id=lab[3],
+                section=lab[4],
+                days=lab[5],
+                facility_id=lab[6],
+                facility_building=lab[7],
+                instructor=lab[8],
+                start_time=lab[9],
+                end_time=lab[10],
+                semester=semester
+            )
+        # added all labs, return success
+        return True
+    except error as error:
+        return False
 
 
-def handle_semester_csv(semester_csv, time, year):
+def generate_semester_dictionary(semester_csv, time, year):
     """
     Handle a given semester CSV file and create a new semester object.
 
     Return True on success, False on failure.
     """
-    rows = semester_csv.read().decode('UTF-8').split('\n')
-    data_list = []
-    for index, row in enumerate(rows):
-        fields = row.split(',')
-        field_dict = {}
-        # check if there are a valid number of fields
-        if len(fields) != 11:
-            return (False, f'Row {index + 1} has an incorrect number of fields!')
-
-        field_dict['class_name'] = fields[0]
-        field_dict['subject'] = fields[1]
-        field_dict['catalog_id'] = fields[2]
-        field_dict['course_id'] = fields[3]
-        field_dict['section'] = fields[4]
-        field_dict['days'] = fields[5]
-        field_dict['facility_id'] = fields[6]
-        field_dict['facility_building'] = fields[7]
-        field_dict['instructor'] = fields[8]
-        field_dict['start_time'] = fields[9]
-        field_dict['end_time'] = fields[10]
-
-        if not validate_days(field_dict['days']):
-            return (False, f'Malformed days in row {index + 1}!')
-
-        if not validate_time(field_dict['start_time']):
-            print('what', field_dict['start_time'])
-            return (False, f'Malformed starting time in row {index + 1}!')
-
-        if not validate_time(field_dict['end_time']):
-            return (False, f'Malformed ending time in row {index + 1}!')
-
-        if lab_exists(field_dict['course_id']):
-            return (False, f'The lab in row {index + 1} already exists!')
-
-        data_list.append(field_dict)
-
-    # data is prevalidated, create a new semester and add all the labs to it
-    semester = Semester.objects.create(semester_time=time, year=year)
-    # create empty template schedule
-    template_schedule = TemplateSchedule.objects.create(version_number=0, semester=semester)
-    template_schedule.save()
-    return add_labs(data_list, semester)
+    try:
+        semester_data = []
+        csv_file = semester_csv.read().decode('UTF-8')
+        csv_reader = csv.reader(StringIO(csv_file),
+                                delimiter=',',
+                                skipinitialspace=True)
+        for row in csv_reader:
+            lab_data = {}
+            print(row)
+            if len(row) == 11:
+                lab_data['class_name'] = row[0].strip()
+                lab_data['subject'] = row[1].strip()
+                lab_data['catalog_id'] = row[2].strip()
+                lab_data['course_id'] = validate_course_id(row[3].strip())
+                lab_data['section'] = row[4].strip()
+                lab_data['days'] = validate_days(row[5].strip())
+                lab_data['facility_id'] = row[6].strip()
+                lab_data['facility_building'] = row[7].strip()
+                lab_data['instructor'] = row[8].strip()
+                lab_data['start_time'] = validate_time(row[9].strip())
+                lab_data['end_time'] = validate_time(row[10].strip())
+                semester_data.append(lab_data)
+        return semester_data
+    except csv.Error as error:
+        print(f'Error in line {csv_reader.line_num}: {error}')
 
 
 def get_semester_cluster(current_semester):

@@ -11,7 +11,6 @@ Variables used throughout LO dashboard:
 'current_semester': used to display which semester is currently chosen/active
 """
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
 from django.core.cache import cache
 from teachingassistant.models import TA, Holds
 from .models import Semester, Lab, AllowTAEdit
@@ -26,8 +25,10 @@ from laborganizer.lo_utils import (get_current_semester,
                                    get_deviation_score,
                                    grade_deviation_score,
                                    semester_exists,
-                                   handle_semester_csv,
-                                   get_semester_cluster)
+                                   generate_semester_dictionary,
+                                   get_semester_cluster,
+                                   parse_semester_lab_dict,
+                                   add_labs)
 from django.contrib.auth.decorators import login_required
 from optimization.optimization_utils import (generate_by_selection,
                                              propogate_schedule)
@@ -91,7 +92,6 @@ def lo_home(request, selected_semester=None, template_schedule=None):
             if request.GET.get('swap') is not None:
                 switch_data = request.GET.get('swap').split()
                 switch_data.pop(0)
-                print(switch_data)
                 lo_confirm_switch(switch_data, template_schedule)
                 messages.success(request, "Switch confirmed!")
 
@@ -148,6 +148,9 @@ def lo_flip_contract_status(request):
         ta = TA.objects.get(student_id=request.POST.get('ta_id'))
         ta.flip_contract_status()
         return JsonResponse({'result': True}, status=200)
+    else:
+        messages.error(request, 'Could not update contract status')
+        return JsonResponse({'result': False}, status=200)
 
 
 def lo_generate_switches(course_id, current_semester, template_schedule):
@@ -478,7 +481,7 @@ def lo_update_ta_semesters(request):
     return redirect('sign_in')
 
 
-@login_required 
+@login_required
 def lo_semester_management(request, selected_semester=None):
     """View for semester information."""
     # ensure the user is a superuser
@@ -629,6 +632,7 @@ def lo_new_semester(request):
             # check if the requested semester already exists
             if semester_exists(year, time):
                 messages.warning(request, f'A semester for {time}{year} already exists!')
+                return redirect('lo_semester_management')
 
             # check if a user attached a CSV file to their addition
             if len(request.FILES) != 0:
@@ -637,17 +641,102 @@ def lo_new_semester(request):
                 if not semester_csv.name.endswith('.csv'):
                     messages.error(request, 'Please upload a CSV file!')
                     return redirect('lo_semester_management')
-                result, error_code = handle_semester_csv(semester_csv, time, year)
-                if result:
-                    messages.success(request, f'Added a new semester and labs for {time}{year}!')
-                else:
-                    messages.error(request, f'CSV Error: {error_code}')
+                return lo_csv_lab_upload(request, semester_csv, time, year)
             # there is no CSV file, create empty semester object and template schedule
             else:
+                # create semester object
                 semester = Semester.objects.create(semester_time=time, year=year)
+
+                # create template schedule for that semester
                 TemplateSchedule.objects.create(version_number=0, semester=semester)
+
+                # inform the user of success
                 messages.success(request, f'Added a new semester for {time}{year}!')
         return redirect('lo_semester_management')
+
+    # user is not a superuser, take them back to the login page
+    return redirect('sign_in')
+
+
+@login_required
+def lo_csv_lab_upload(request, semester_csv=None, time=None, year=None):
+    """Display information to Lab Organizer regarding new Semester CSV."""
+    # ensure the user is a superuser
+    if request.user.is_superuser:
+        semester_data = generate_semester_dictionary(semester_csv, time, year)
+        context = {
+            'time': time,
+            'year': year,
+            'semester_data': semester_data,
+        }
+        return render(request, 'laborganizer/csv_upload/csv_upload.html', context)
+
+    # user is not a superuser, take them back to the login page
+    return redirect('sign_in')
+
+
+@login_required
+def lo_csv_lab_upload_confirm(request):
+    """After a Lab Organizer has confirmed lab information, update database."""
+    # check if the user is a superuser
+    if request.user.is_superuser:
+        if request.method == 'POST':
+            class_names = request.POST.getlist('class_names')
+            subjects = request.POST.getlist('subjects')
+            catalog_ids = request.POST.getlist('catalog_ids')
+            course_ids = request.POST.getlist('course_ids')
+            sections = request.POST.getlist('sections')
+            days = request.POST.getlist('days')
+            facility_ids = request.POST.getlist('facility_ids')
+            facility_buildings = request.POST.getlist('facility_buildings')
+            instructors = request.POST.getlist('instructors')
+            start_times = request.POST.getlist('start_times')
+            end_times = request.POST.getlist('end_times')
+
+            total_class_number = request.POST.get('number_of_labs')
+            time = request.POST.get('semester_time')
+            year = request.POST.get('semester_year')
+
+            lab_dict = {
+                'class_names': class_names,
+                'subjects': subjects,
+                'catalog_ids': catalog_ids,
+                'course_ids': course_ids,
+                'sections': sections,
+                'days': days,
+                'facility_ids': facility_ids,
+                'facility_buildings': facility_buildings,
+                'instructors': instructors,
+                'start_times': start_times,
+                'end_times': end_times,
+            }
+
+            lab_list = parse_semester_lab_dict(lab_dict, total_class_number)
+
+            # create a new semester object
+            new_semester = Semester.objects.create(semester_time=time, year=year)
+
+            # create new template schedule
+            TemplateSchedule.objects.create(version_number=0, semester=new_semester)
+
+            result = add_labs(lab_list, new_semester)
+
+            if result:
+                messages.success(request, f'Successfully created {new_semester}!')
+            else:
+                messages.error(request, 'Could not create a new semester')
+        return redirect('lo_semester_management')
+
+    # user is not a superuser, take them back to the login page
+    return redirect('sign_in')
+
+
+@login_required
+def lo_csv_upload_help(request):
+    """Display HTML to Lab Organizer informing them how to format a CSV."""
+    # ensure the user is a superuser
+    if request.user.is_superuser:
+        return render(request, 'laborganizer/csv_upload/csv_help.html')
 
     # user is not a superuser, take them back to the login page
     return redirect('sign_in')
@@ -686,6 +775,7 @@ def lo_display_semester(request):
     return redirect('sign_in')
 
 
+@login_required
 def lo_upload(request):
     """View to upload CSV file. Probably going to be deleted, see Andrew."""
     return render(request, 'laborganizer/dashboard.html')

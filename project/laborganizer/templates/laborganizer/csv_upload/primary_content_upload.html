@@ -1,0 +1,134 @@
+<div class="col d-flex flex-column flex-shrink-0 bg-light">
+
+    {% include 'laborganizer/csv_upload/horizontal_tool_bar.html' %}
+    {% include 'laborganizer/message.html' %}
+
+    <div class="m-5 text-start">
+	<h3>New {{ time }}{{ year }} Semester</h3>
+	<p>Please ensure the data below is correct before submitting</p>
+	<p>To add or remove labs, please edit your CSV file</p>
+    </div>
+
+    {% if semester_data %}
+
+    <form method="post" action="{% url 'lo_csv_lab_upload_confirm' %}" class="needs-validation" name="lab_form">
+	{% csrf_token %}
+
+	<div class="table-responsive">
+	    
+	    <table class="table table-striped">
+
+		<thead class="table-light">
+		    <tr>
+			<th scope="col">#</th>
+			<th scope="col">Class Name</th>
+			<th scope="col">Subject</th>
+			<th scope="col">Catalog ID</th>
+			<th scope="col">Course ID</th>
+			<th scope="col">Section</th>
+			<th scope="col">
+			    Days			    
+			    <span title="Days must be formatted as a single character separated by a space, e.g. 'M W F' ">
+				<svg class="bi me-2" width="16" height="16">
+				    <use xlink:href="#question-mark"></use>
+				</svg>
+			    </span>
+			</th>
+			<th scope="col">Facility ID</th>
+			<th scope="col">Facility Building</th>
+			<th scope="col">Instructor</th>
+			<th scope="col">Start Time</th>
+			<th scope="col">End Time</th>
+		    </tr>
+		</thead>
+
+		<tbody>
+		    {% for row in semester_data %}
+		    <div class="lab">
+		    <tr>
+			<th scope="row">{{ forloop.counter }}</th>
+
+			<td>
+			    <input type="text" class="form-control" name="class_names" value="{{ row.class_name }}" required>
+			    <div class="invalid-feedback">Please provide a class name</div>
+			</td>
+
+			<td>
+			    <input type="text" class="form-control" name="subjects" value="{{ row.subject }}" required>
+			    <div class="invalid-feedback">Please provide a subject</div>
+			</td>
+
+			<td>
+			    <input type="text" class="form-control" name="catalog_ids" value="{{ row.catalog_id }}" required>
+			    <div class="invalid-feedback">Please provide a catalog ID</div>
+			</td>
+
+			<td>
+			    <input type="text" class="form-control {%if not row.course_id.1%}is-invalid{%endif%}" name="course_ids" value="{%if row.course_id.1%}{{ row.course_id.0 }}{%endif%}" required>
+			    <div class="invalid-feedback">
+				Improper course ID
+				<span title="This may be because a lab already exists with this course ID">
+				    <svg class="bi me-2" width="16" height="16">
+					<use xlink:href="#question-mark"></use>
+				    </svg>
+				</span>				
+			    </div>
+			</td>
+
+			<td>
+			    <input type="text" class="form-control" name="sections" value="{{ row.section }}" required>
+			    <div class="invalid-feedback">Please provide a section</div>
+			</td>
+
+			<td>
+			    <input type="text" class="form-control {%if not row.days.1%}is-invalid{%endif%}" name="days" value="{%if row.days.1%}{{ row.days.0 }}{%endif%}" required>
+			    <div class="invalid-feedback">Improper days</div>
+			</td>
+
+			<td>
+			    <input type="text" class="form-control" name="facility_ids" value="{{ row.facility_id }}" required>
+			    <div class="invalid-feedback">Please provide the facility ID</div>
+			</td>
+
+			<td>
+			    <input type="text" class="form-control" name="facility_buildings" value="{{ row.facility_building }}" required>
+			    <div class="invalid-feedback">Please provide the facility building name</div>
+			</td>
+
+			<td>
+			    <input type="text" class="form-control" name="instructors" value="{{ row.instructor }}" required>
+			    <div class="invalid-feedback">Please provide the name of the primary instructor</div>
+			</td>
+
+			<td>
+			    <input type="time" class="form-control {%if not row.start_time.1%}is-invalid{%endif%}" name="start_times" value="{% if row.start_time.1 %}{{ row.start_time.0 }}{%endif%}" required>
+			    <div class="invalid-feedback">Improper start time</div>
+			</td>
+
+			<td>
+			    <input type="time" class="form-control {%if not row.end_time.1%}is-invalid{%endif%}" name="end_times" value="{%if row.end_time.1%}{{ row.end_time.0 }}{%endif%}" required>
+			    <div class="invalid-feedback">Improper end time</div>
+			</td>
+			
+		    </tr>
+		    </div>
+		    {% endfor %}
+		</tbody>
+		
+	    </table>
+
+	</div>
+
+	<input type="hidden" name="number_of_labs" id="number_of_labs">
+	<input type="hidden" name="semester_time" value="{{ time }}">
+	<input type="hidden" name="semester_year" value="{{ year }}">
+
+	<button class="btn btn-primary" type="submit">Create Semester</button>
+
+    </form>
+
+    {% else %}
+    No data to display
+    {% endif %}
+    
+</div>
