@@ -3,6 +3,8 @@
     {% include 'laborganizer/semester_management/horizontal_tool_bar.html' %}
     {% include 'laborganizer/message.html' %}
 
+	 <!-- Main content wrap -->
+	 <div style="overflow-y: scroll;">
     <div class="m-5 text-start">
 	<h3>Select Semester</h3>
 	<form method="post" action="{% url 'lo_semester_management' %}">
@@ -152,5 +154,5 @@
     </div>
 
     {% endif %}
-        
+	</div>
 </div>
