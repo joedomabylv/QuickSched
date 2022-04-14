@@ -1,4 +1,5 @@
 """Utility functions for the teachingassistant app."""
+from .models import TA
 
 
 def availability_list_to_tuples(availability_list):
@@ -41,3 +42,25 @@ def parse_availability(request, total_classes):
         avail_list.append(avail)
         index += 1
     return avail_list
+
+
+def validate_student_id(student_id, this_ta):
+    """
+    Validate a given student ID.
+
+    Ensure another TA object doesn't already exist with that ID.
+    """
+    try:
+        # try and find an existing object with the same ID
+        found_ta = TA.objects.get(student_id=student_id)
+
+        # we found a TA, make sure it isn't the TA trying to
+        # update their own student ID
+        print(found_ta, this_ta)
+        if found_ta is this_ta:
+            return True
+        # found one, return false
+        return False
+    except TA.DoesNotExist:
+        # did not find an existing TA, return True
+        return True

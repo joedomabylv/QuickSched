@@ -18,14 +18,15 @@
         ></button>
     </div>
 
+    {% if semester_options %}
+
     <form method="post" action="{% url 'lo_select_semester' %}">
 	{% csrf_token %}
 	<div class="offcanvas-body">
             <div class="d-flex flex-column align-items-center text-center p-3">
 
 		<label for="selected_semester"><span class="fs-5 m-2">Semester</span></label>
-		<select class="form-select" name="selected_semester" id="selected_semester" aria-label="Year select">
-		    <option disabled selected>Select a semester</option>
+		<select class="form-select" name="selected_semester" id="selected_semester" aria-label="Year select" required>
 		    {% for semester in semester_options %}
 		    <option value="{{ semester }}">{{ semester }}</option>
 		    {% endfor %}
@@ -40,4 +41,10 @@
 
 	</div>
     </form>
+
+    {% else %}
+
+    <p class="m-3">There are no semesters to choose from! You can create one from the <i>Semester Management</i> tab!</p>
+
+    {% endif %}
 </div>

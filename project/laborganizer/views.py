@@ -407,7 +407,7 @@ def lo_generate_schedule(request):
                                         selected_semester['year'])
 
             # check if there are any labs in the chosen semester
-            if len(labs) != 0:
+            if labs is not None:
                 # using those TA's, populate a TemplateSchedule object from
                 # optimization.models
                 template_schedule = generate_by_selection(tas, labs, selected_semester, priority_bonus)
@@ -441,6 +441,13 @@ def lo_ta_management(request):
             if hold is not None:
                 holds.append(hold)
 
+        # check if there are any TA's in the system that have not provided
+        # initial data
+        uninitialized_tas = False
+        for ta in tas:
+            if ta.student_id is None:
+                uninitialized_tas = True
+
         # get all semester objects
         current_semester = get_current_semester()
         all_semesters = get_semester_cluster(current_semester)
@@ -451,7 +458,9 @@ def lo_ta_management(request):
             'tas': tas,
             'holds': holds,
             'all_semesters': all_semesters,
-            'allowed_edit': allow_edit
+            'allowed_edit': allow_edit,
+            'current_semester': current_semester,
+            'uninitialized_tas': uninitialized_tas,
         }
 
         # always populate semester selection options
@@ -532,10 +541,14 @@ def lo_propogate_schedule(request):
             time = request.POST.get('time')
             version = request.POST.get('version')
 
+            if not version:
+                messages.warning(request, 'There is no template schedule to propogate!')
+                return redirect('lo_home')
+
             labs = get_labs_by_semester(time, year)
 
             # check if there are any labs assigned to this semester
-            if len(labs) != 0:
+            if labs is not None:
                 # get all TA's assigned to this semester
                 all_tas = get_tas_by_semester(time, year)
 

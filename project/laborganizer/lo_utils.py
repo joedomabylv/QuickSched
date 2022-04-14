@@ -42,9 +42,14 @@ def get_tas_by_semester(time, year):
 
 def get_labs_by_semester(time, year):
     """Get a list of all Labs assigned to a specific semester."""
-    labs = Lab.objects.filter(semester__semester_time=time,
-                              semester__year=year)
-    return labs
+    if time and year:
+        try:
+            labs = Lab.objects.get(semester__semester_time=time,
+                                   semester__year=year)
+            return labs
+        except Lab.DoesNotExist:
+            return None
+    return None
 
 
 def get_most_recent_sched(time, year):

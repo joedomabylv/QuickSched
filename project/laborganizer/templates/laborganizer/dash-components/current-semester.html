@@ -30,7 +30,7 @@
 			    {% csrf_token %}
 			    <div class="input-group mb-3">
 				<span class="input-group-text">version</span>
-				<select name="version_number" class="form-select">
+				<select name="version_number" class="form-select" required>
 				    <option selected>
 					{{ template_schedule.version_number }}
 				    </option>

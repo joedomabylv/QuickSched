@@ -70,8 +70,11 @@ class TA(models.Model):
 
     def get_assigned_labs(self, semester):
         """Get all assigned labs for the given semester."""
-        semester = Semester.objects.get(semester_time=semester['time'],
-                                        year=semester['year'])
+        try:
+            semester = Semester.objects.get(semester_time=semester['time'],
+                                            year=semester['year'])
+        except Semester.DoesNotExist:
+            return None
 
         lab_list = []
         for lab in self.assigned_labs.all():
@@ -234,7 +237,7 @@ class TA(models.Model):
     last_name = models.CharField('TA\'s last name',
                                  max_length=50, default='missing')
     student_id = models.CharField('TA\'s student ID', max_length=50,
-                                  unique=True, blank=True)
+                                  unique=True, blank=True, null=True)
 
     contracted = models.BooleanField('Contracted', blank=True, null=True)
 

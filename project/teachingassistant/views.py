@@ -4,7 +4,8 @@ from django.contrib import messages
 from .models import Availability, Holds
 from laborganizer.models import AllowTAEdit
 from django.contrib.auth.decorators import login_required
-from teachingassistant.ta_utils import (parse_availability)
+from teachingassistant.ta_utils import (parse_availability,
+                                        validate_student_id)
 from laborganizer.lo_utils import (get_current_semester)
 
 
@@ -83,6 +84,10 @@ def ta_info(request):
             experience = request.POST['experience']
             year = request.POST['year']
             number_of_classes = int(request.POST.get('submit_button'))
+
+            if not validate_student_id(student_id, request.user.ta_object):
+                messages.error(request, 'It looks like an account already exists with your student ID... Please contact your lab organizer')
+                return redirect('ta_home')
 
             # parse the input availability
             availability_list = parse_availability(request, number_of_classes)

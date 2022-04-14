@@ -131,7 +131,7 @@ def confirm_emails(request):
         while index < len(new_accounts):
             to_email = new_accounts[index]
             temp_pass = passwords[index]
-            welcome_subject = "Welcome to QuickSched! - Django Login"
+            welcome_subject = "Welcome to QuickSched!"
             welcome_message = """Hello! \n Welcome to Quicksched!\nYour Account has successfully been created.
             \n\n To finish your registration, please use your email and temporary password down below to login.
             You will be prompted to change it upon your login.\n\n Temporary Password: """ + temp_pass
