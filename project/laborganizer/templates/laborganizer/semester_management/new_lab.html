@@ -1,0 +1,22 @@
+{% extends 'laborganizer/base.html' %}
+{% block title %}QuickSched: Dashboard{% endblock %}
+{% load static %}
+
+{% block content %}
+
+<!-- Bootstrap and  CSS -->
+<link rel="stylesheet" href="{% static 'laborganizer/dashboard.css' %}" />
+
+<main>
+
+    {% include 'laborganizer/sidebars/aux-sidebar.html' %}
+    {% include 'laborganizer/semester_management/primary_content_new_lab.html' %}
+
+</main>
+
+<!-- Pop up window codes -->
+{% include 'laborganizer/sidebars/tools/add-new-semester.html' %}
+
+<script src="{% static 'laborganizer/dashboard.js' %}"></script>
+
+{% endblock %}

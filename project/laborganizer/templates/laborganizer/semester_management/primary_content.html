@@ -4,8 +4,8 @@
     {% include 'laborganizer/message.html' %}
 
 	 <!-- Main content wrap -->
-	 <div style="overflow-y: scroll;">
-    <div class="m-5 text-start">
+    <div style="overflow-y: scroll;">
+	<div class="m-5 text-start">
 	<h3>Select Semester</h3>
 	<form method="post" action="{% url 'lo_semester_management' %}">
 	    {% csrf_token %}
@@ -154,5 +154,6 @@
     </div>
 
     {% endif %}
+    <a class="btn btn-primary m-3" href="{% url 'lo_new_lab' %}">Add new lab</a>
 	</div>
 </div>

@@ -241,6 +241,13 @@ class TemplateSchedule(models.Model):
             if assignment.lab.course_id == course_id:
                 return assignment
 
+    def has_one_assignment(self):
+        """Check if this template has at least one TA assigned to a lab."""
+        for assignment in self.assignments.all():
+            if assignment.ta is not None:
+                return True
+        return False
+
     version_number = models.IntegerField('Schedule Version', default=0)
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE,
                                  blank=True, null=True)

@@ -24,7 +24,7 @@
     {% with url_name=request.resolver_match.url_name %}
     <!-- Side Bar Tools -->
     <ul class="flex-column mb-auto">
-	{% if url_name == 'lo_semester_management' %}
+	{% if url_name == 'lo_semester_management' or url_name == 'lo_new_lab' %}
         <li class="d-grid">
             <button
 		class="btn btn-toggle"

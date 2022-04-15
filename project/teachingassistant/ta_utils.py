@@ -56,8 +56,7 @@ def validate_student_id(student_id, this_ta):
 
         # we found a TA, make sure it isn't the TA trying to
         # update their own student ID
-        print(found_ta, this_ta)
-        if found_ta is this_ta:
+        if found_ta == this_ta:
             return True
         # found one, return false
         return False

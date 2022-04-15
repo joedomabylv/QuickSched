@@ -44,7 +44,7 @@ def get_labs_by_semester(time, year):
     """Get a list of all Labs assigned to a specific semester."""
     if time and year:
         try:
-            labs = Lab.objects.get(semester__semester_time=time,
+            labs = Lab.objects.filter(semester__semester_time=time,
                                    semester__year=year)
             return labs
         except Lab.DoesNotExist:

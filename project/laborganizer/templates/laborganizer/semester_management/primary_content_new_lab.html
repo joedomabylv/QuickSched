@@ -1,0 +1,165 @@
+<div class="col d-flex flex-column flex-shrink-0 bg-light">
+
+    {% include 'laborganizer/semester_management/horizontal_tool_bar.html' %}
+    {% include 'laborganizer/message.html' %}
+
+    <!-- Main content wrap -->
+    <div style="overflow-y: scroll;">
+
+	<div class="m-5 text-start">
+
+	    <h3>Add a new lab</h3>
+
+	    <form method="post" action="{% url 'lo_new_lab_confirm' %}" class="container">
+		{% csrf_token %}
+
+		<div class="row">
+		    <div class="col-12">
+			<div class="input-group mb-3">
+			    <span class="input-group-text">Semester</span>
+			    <select class="form-select" name="semester">
+				{% for semester in semester_options %}
+				<option value="{{ semester.semester_time }}{{ semester.year }}">{{ semester.semester_time }}{{ semester.year }}</option>
+				{% endfor %}
+			    </select>
+			</div>
+		    </div>
+		</div>
+
+		<div class="row">
+
+		    <div class="col-4">
+			<div class="input-group mb-3">
+			    <span class="input-group-text">Class Name</span>
+			    <input class="form-control" type="text" name="class_name" placeholder="the name of the class" required>
+			</div>
+		    </div>
+
+		    <div class="col-4">
+			<div class="input-group mb-3">
+			    <span class="input-group-text">Section</span>
+			    <input class="form-control" type="text" name="section" placeholder="section number of the course">
+			</div>
+		    </div>		    
+
+		    <div class="col-4">
+			<div class="input-group mb-3">
+			    <span class="input-group-text">Subject</span>
+			    <input class="form-control" type="text" name="subject" placeholder="ex. 'CS', or 'MAT', or 'CYB'">
+			</div>
+		    </div>
+
+		</div>
+
+		<div class="row">
+
+		    <div class="col-6">
+			<div class="input-group mb-3">
+			    <span class="input-group-text">Catalog ID</span>
+			    <input class="form-control" type="text" name="catalog_id" placeholder="ex. '126', or '480'">
+			</div>
+		    </div>
+
+		    <div class="col-6">
+			<div class="input-group mb-3">
+			    <span class="input-group-text">Course ID</span>
+			    <input class="form-control" type="text" name="course_id" placeholder="the unique course ID of the class" required>
+			</div>
+		    </div>
+
+		</div>
+
+		<div class="row">
+
+		    <div class="col-6">
+			<div class="input-group mb-3">
+			    <span class="input-group-text">Instructor</span>
+			    <input class="form-control" type="text" name="instructor" placeholder="the name of the primary instructor">
+			</div>
+		    </div>
+		
+		    <div class="col-6">
+			<div class="input-group mb-3">
+			    <span class="input-group-text">Days</span>
+			    <div class="form-control">
+				<div class="form-check form-check-inline my-auto mx-3">
+
+				    <input class="form-check-input" type="checkbox" name="days[]" id="days-M" value="M">
+				    <label class="form-check-label" for="day-M">M</label>
+				</div>
+
+				<div class="form-check form-check-inline my-auto mx-3">
+
+				    <input class="form-check-input" type="checkbox" name="days[]" id="days-T" value="T">
+				    <label class="form-check-label" for="day-T">T</label>
+				</div>
+
+				<div class="form-check form-check-inline my-auto mx-3">
+
+				    <input class="form-check-input" type="checkbox" name="days[]" id="days-W" value="W">
+				    <label class="form-check-label" for="day-W">W</label>
+				</div>
+
+				<div class="form-check form-check-inline my-auto mx-3">
+
+				    <input class="form-check-input" type="checkbox" name="days[]" id="days-Th" value="Th">
+				    <label class="form-check-label" for="day-Th">Th</label>
+				</div>
+
+				<div class="form-check form-check-inline my-auto mx-3">
+
+				    <input class="form-check-input" type="checkbox" name="days[]" id="days-F" value="F">
+				    <label class="form-check-label" for="day-F">F</label>
+				</div>
+			    </div>
+			    
+			</div>
+		    </div>
+
+		</div>
+
+		<div class="row">
+
+		    <div class="col-6">
+		    <div class="input-group mb-3">
+			<span class="input-group-text">Facility ID</span>
+			<input class="form-control" type="text" name="facility_id" placeholder="the ID of the facility building, if it exists">
+		    </div>
+		    </div>
+
+		    <div class="col-6">
+			<div class="input-group mb-3">
+			    <span class="input-group-text">Facility Building</span>
+			    <input class="form-control" type="text" name="facility_building" placeholder="the name of the facility building, if it exists">
+			</div>
+		    </div>
+
+		</div>
+
+		<div class="row">
+
+		    <div class="col-6">
+			<div class="input-group mb-3">
+			    <span class="input-group-text">Start Time</span>
+			    <input class="form-control" type="time" name="start_time" required>
+			</div>
+		    </div>
+
+		    <div class="col-6">
+			<div class="input-group mb-3">
+			    <span class="input-group-text">End Time</span>
+			    <input class="form-control" type="time" name="end_time" required>
+			</div>
+		    </div>
+
+		</div>
+
+		<button class="btn btn-primary mx-auto" type="submit">Create lab</button>
+		
+	    </form>
+
+	</div>
+	
+    </div>
+
+</div>

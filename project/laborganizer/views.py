@@ -28,6 +28,7 @@ from laborganizer.lo_utils import (get_current_semester,
                                    generate_semester_dictionary,
                                    get_semester_cluster,
                                    parse_semester_lab_dict,
+                                   validate_course_id,
                                    add_labs)
 from django.contrib.auth.decorators import login_required
 from optimization.optimization_utils import (generate_by_selection,
@@ -396,11 +397,16 @@ def lo_generate_schedule(request):
                 'year': year
             }
 
-            # gather a list of all selected TA's
-            tas = []
-            for ta_id in ta_ids:
-                ta = TA.objects.get(student_id=ta_id)
-                tas.append(ta)
+            # gather a list of all selected TA's, if any
+            if len(ta_ids) != 0:
+                tas = []
+                for ta_id in ta_ids:
+                    ta = TA.objects.get(student_id=ta_id)
+                    tas.append(ta)
+            else:
+                # there are no selected TA's, we cannot create a schedule
+                messages.warning(request, 'There are no TA\'s selected to generate a schedule for!')
+                return redirect('lo_home')
 
             # gather all labs for the selected semester
             labs = get_labs_by_semester(selected_semester['time'],
@@ -555,6 +561,12 @@ def lo_propogate_schedule(request):
                 # get the template schedule object
                 schedule = get_template_schedule(time, year, version)
 
+                # check if there is at least one TA assigned to a lab in this
+                # template schedule
+                if not schedule.has_one_assignment():
+                    messages.warning(request, 'There needs to be at least one TA assigned to a lab in order to propogate!')
+                    return redirect('lo_home')
+
                 # propogate the schedule to the live version
                 propogate_schedule(schedule, all_tas)
 
@@ -581,7 +593,7 @@ def lo_edit_lab(request):
     if request.user.is_superuser:
         if request.method == 'POST':
             # get all data from the post request
-            new_course_id = request.POST.get('course_id')
+            new_course_id = validate_course_id(request.POST.get('course_id'))
             new_section = request.POST.get('section')
             new_facility_building = request.POST.get('facility_building')
             new_facility_id = request.POST.get('facility_id')
@@ -589,6 +601,10 @@ def lo_edit_lab(request):
             new_days = request.POST.getlist('days[]')
             new_start_time = request.POST.get('start_time')
             new_end_time = request.POST.get('end_time')
+
+            if not new_course_id[1]:
+                messages.warning(request, 'The new course ID you\'ve provided is in use by another course!')
+                return redirect('lo_semester_management')
 
             # get the name of the lab from the submit button
             submit_value = request.POST.get('submit')
@@ -741,6 +757,83 @@ def lo_csv_lab_upload_confirm(request):
         return redirect('lo_semester_management')
 
     # user is not a superuser, take them back to the login page
+    return redirect('sign_in')
+
+
+def lo_new_lab(request):
+    """Create a single new lab for a given semester."""
+    # ensure the user is a superuser
+    if request.user.is_superuser:
+
+        semester_options = Semester.objects.all()
+
+        if semester_options:
+            context = {
+                'semester_options': semester_options,
+            }
+            return render(request, 'laborganizer/semester_management/new_lab.html',
+                          context)
+        messages.warning(request, 'There are no semesters to add a lab to!')
+        return redirect('lo_semester_management')
+
+    # user is not a superuser, take them back to the login page
+    return redirect('sign_in')
+
+
+def lo_new_lab_confirm(request):
+    """Confirm the addition of a new lab and add it to the database."""
+    # ensure the user is a superuser
+    if request.user.is_superuser:
+        if request.method == 'POST':
+            semester = request.POST.get('semester')
+            class_name = request.POST.get('class_name')
+            section = request.POST.get('section')
+            subject = request.POST.get('subject')
+            catalog_id = request.POST.get('catalog_id')
+            course_id = validate_course_id(request.POST.get('course_id'))
+            instructor = request.POST.get('instructor')
+            days = request.POST.getlist('days[]')
+            facility_id = request.POST.get('facility_id')
+            facility_building = request.POST.get('facility_building')
+            start_time = request.POST.get('start_time')
+            end_time = request.POST.get('end_time')
+
+            # check if course ID is valid
+            if not course_id[1]:
+                messages.warning(request, 'The lab you\'re attempting to create has a course ID in use by another lab!')
+                return redirect('lo_semester_management')
+
+            # get the chosen semester object
+            semester_time = semester[:3]
+            semester_year = semester[3:]
+            try:
+                semester_object = Semester.objects.get(semester_time=semester_time,
+                                                   year=semester_year)
+            except Semester.DoesNotExist:
+                messages.error(request, 'Something went wrong... the semester you\'ve chosen does not exist!')
+                return redirect('lo_semester_management')
+
+            new_lab = Lab.objects.create(
+                class_name=class_name,
+                section=section,
+                subject=subject,
+                catalog_id=catalog_id,
+                course_id=course_id[0],
+                instructor=instructor,
+                facility_id=facility_id,
+                facility_building=facility_building,
+                start_time=start_time,
+                end_time=end_time,
+                semester=semester_object
+            )
+
+            # ensure days follow the proper format of a character
+            # separated by a space
+            new_lab.set_days(days)
+            new_lab.save()
+
+            messages.success(request, f'Successfully created {new_lab}!')
+            return redirect('lo_semester_management')
     return redirect('sign_in')
 
 
