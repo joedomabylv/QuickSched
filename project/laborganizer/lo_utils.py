@@ -3,6 +3,7 @@ from .models import Semester, Lab
 from datetime import datetime
 from teachingassistant.models import TA
 from optimization.models import TemplateSchedule
+from django.core.exceptions import ObjectDoesNotExist
 from io import StringIO
 import csv
 
@@ -30,6 +31,12 @@ def get_current_semester():
         'year': current_year,
     }
 
+    # check if the semester doesn't exist in the database
+    # if not, default to the first semester in the database
+    if not check_if_sem_exists(current_semester_dict):
+        current_semester_dict['time'] = Semester.objects.all().first().semester_time
+        current_semester_dict['year'] = Semester.objects.all().first().year
+
     return current_semester_dict
 
 
@@ -39,6 +46,14 @@ def get_tas_by_semester(time, year):
                             assigned_semesters__year=year)
     return tas
 
+def check_if_sem_exists(semester_dict):
+    time = semester_dict['time']
+    year = semester_dict['year']
+    try:
+        semester = Semester.objects.get(semester_time=time, year=year)
+    except ObjectDoesNotExist:
+        return False
+    return True
 
 def get_labs_by_semester(time, year):
     """Get a list of all Labs assigned to a specific semester."""

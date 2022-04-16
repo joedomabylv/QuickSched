@@ -20,6 +20,10 @@ class Semester(models.Model):
         """Human readable class name, for admin site."""
         return self.semester_time + str(self.year)
 
+    def get_string(self):
+        """Human readable class name, for view use."""
+        return self.semester_time + str(self.year)
+
     TIMES = (
         ('SPR', 'Spring'),
         ('SUM', 'Summer'),
