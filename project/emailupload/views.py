@@ -152,6 +152,7 @@ def confirm_emails(request):
     # loop through the list of emails and passwords and create accounts for TA's
     index = 0
     for account in new_accounts:
+        print(account, passwords[index])
         get_user_model().objects.create_user(account, passwords[index])
         index += 1
 

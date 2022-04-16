@@ -487,6 +487,9 @@ def lo_update_ta_semesters(request):
     if request.user.is_superuser:
         if request.method == 'POST':
             selected_semesters = request.POST.getlist('selected_semesters[]')
+            if not selected_semesters:
+                messages.warning(request, 'Please choose semesters to update! If there are none, add some from the Semester Management tab!')
+                return redirect('lo_ta_management')
             ta = TA.objects.get(student_id=request.POST.get('submit'))
             ta.update_semesters(selected_semesters)
             messages.success(request, 'Updated semester assignments!')

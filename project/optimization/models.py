@@ -94,7 +94,8 @@ class TemplateSchedule(models.Model):
                 else:
                     uncontracted_tas.append(ta)
 
-            while not self.all_tas_assigned_to_lab(contracted_tas):
+            while (not self.all_tas_assigned_to_lab(contracted_tas)
+                   and not self.all_labs_have_assignment(lab_list)):
                 for lab in lab_list:
                     if not self.all_tas_assigned_to_lab(contracted_tas):
                         if not self.lab_has_an_assignment(lab):
@@ -116,13 +117,15 @@ class TemplateSchedule(models.Model):
                                                 self.assign(ta, lab)
 
             if not self.all_labs_have_assignment(lab_list):
-                while not self.all_tas_assigned_to_lab(uncontracted_tas):
+                while (not self.all_tas_assigned_to_lab(uncontracted_tas)
+                       and not self.all_labs_have_assignment(lab_list)):
                     for lab in lab_list:
                         if not self.all_tas_assigned_to_lab(uncontracted_tas):
                             if not self.lab_has_an_assignment(lab):
                                 while not self.lab_has_an_assignment(lab):
                                     # get list of highest scoring tas for lab
                                     highest_scoring_tas = self.get_highest_scoring_tas(uncontracted_tas, lab)
+
                                     # if all of the highest scoring tas are already assigned
                                     while self.all_tas_assigned_to_lab(highest_scoring_tas):
                                         # create new highest scoring ta list with old highest scoreres removed
@@ -145,7 +148,7 @@ class TemplateSchedule(models.Model):
                     if num_assignments < 2:
                         if not self.lab_has_an_assignment(lab):
                             self.assign(ta, lab)
-                            
+
             for lab in lab_list:
                 highest_scoring_tas = self.get_highest_scoring_tas(uncontracted_tas, lab)
                 num_assignments = 1
