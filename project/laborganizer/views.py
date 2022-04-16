@@ -29,6 +29,7 @@ from laborganizer.lo_utils import (get_current_semester,
                                    get_semester_cluster,
                                    parse_semester_lab_dict,
                                    validate_course_id,
+                                   filter_out_unscored,
                                    add_labs)
 from django.contrib.auth.decorators import login_required
 from optimization.optimization_utils import (generate_by_selection,
@@ -156,7 +157,7 @@ def lo_flip_contract_status(request):
 
 def lo_generate_switches(course_id, current_semester, template_schedule):
     """Generate all available switches for a lab at LO command."""
-    contender_number = 3  # TODO make this a global variable
+    contender_number = 5  # TODO make this a global variable
 
     # initialize variables
     top_contenders = []
@@ -177,6 +178,9 @@ def lo_generate_switches(course_id, current_semester, template_schedule):
     # remove selected ta so that it is not compared against itself
     tas = list(tas)
     tas.remove(selected_ta)
+
+    # remove TA's that were not considered for scoreing
+    tas = filter_out_unscored(tas)
 
     # calculate the deviation score for each relevant TA
     deviation_scores = []
