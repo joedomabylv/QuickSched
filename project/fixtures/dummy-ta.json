@@ -4,18 +4,30 @@
     "model": "teachingassistant.ta",
     "pk": 0,
     "fields": {
-        "first_name": "wubdfpb",
-        "last_name": "vjfsdin",
-        "student_id": "5563",
+        "first_name": "hnnkays",
+        "last_name": "zlmmvtg",
+        "student_id": "4345",
         "contracted": true,
         "experience": [
-            "zymr426",
-            "kfgy760",
-            "kiwn268"
+            "rtqt925",
+            "vmvp181",
+            "dfay593"
         ],
         "year": "JR",
         "holds_key": 0,
-        "availability_key": 0
+        "availability_key": 0,
+        "assigned_semesters": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+        ]
     }
 },
 
@@ -35,12 +47,12 @@
     "pk": 0,
     "fields": {
         "ta": 0,
-        "start_time": "17:19",
-        "end_time": "4:13",
+        "start_time": "18:51",
+        "end_time": "3:28",
         "days": [
+            "Th",
             "W",
-            "F",
-            "T"
+            "F"
         ]
     }
 },
@@ -50,12 +62,12 @@
     "pk": 1,
     "fields": {
         "ta": 0,
-        "start_time": "4:54",
-        "end_time": "23:04",
+        "start_time": "4:04",
+        "end_time": "1:40",
         "days": [
-            "T",
             "M",
-            "F"
+            "F",
+            "Th"
         ]
     }
 },
@@ -65,12 +77,12 @@
     "pk": 2,
     "fields": {
         "ta": 0,
-        "start_time": "19:44",
-        "end_time": "3:44",
+        "start_time": "14:17",
+        "end_time": "6:01",
         "days": [
-            "F",
+            "Th",
             "T",
-            "Th"
+            "F"
         ]
     }
 },
@@ -92,18 +104,30 @@
     "model": "teachingassistant.ta",
     "pk": 1,
     "fields": {
-        "first_name": "icgshyw",
-        "last_name": "govpmbn",
-        "student_id": "9807",
+        "first_name": "yepemth",
+        "last_name": "drzglgg",
+        "student_id": "1252",
         "contracted": true,
         "experience": [
-            "pmzo390",
-            "feic657",
-            "qqgw203"
+            "otsu586",
+            "noqt269",
+            "mpfl169"
         ],
-        "year": "GR",
+        "year": "FR",
         "holds_key": 1,
-        "availability_key": 1
+        "availability_key": 1,
+        "assigned_semesters": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+        ]
     }
 },
 
@@ -123,12 +147,12 @@
     "pk": 3,
     "fields": {
         "ta": 1,
-        "start_time": "13:39",
-        "end_time": "16:06",
+        "start_time": "8:31",
+        "end_time": "20:12",
         "days": [
-            "F",
+            "W",
             "T",
-            "M"
+            "Th"
         ]
     }
 },
@@ -138,11 +162,11 @@
     "pk": 4,
     "fields": {
         "ta": 1,
-        "start_time": "10:05",
-        "end_time": "14:53",
+        "start_time": "10:20",
+        "end_time": "3:17",
         "days": [
-            "T",
             "Th",
+            "F",
             "M"
         ]
     }
@@ -153,12 +177,12 @@
     "pk": 5,
     "fields": {
         "ta": 1,
-        "start_time": "15:51",
-        "end_time": "20:04",
+        "start_time": "17:50",
+        "end_time": "12:55",
         "days": [
+            "Th",
             "W",
-            "F",
-            "Th"
+            "F"
         ]
     }
 },
@@ -180,18 +204,30 @@
     "model": "teachingassistant.ta",
     "pk": 2,
     "fields": {
-        "first_name": "aadtxuw",
-        "last_name": "hokktew",
-        "student_id": "1352",
+        "first_name": "ppvelcy",
+        "last_name": "aoxymjw",
+        "student_id": "2458",
         "contracted": true,
         "experience": [
-            "hlkm796",
-            "hvpl655",
-            "hqag325"
+            "khcj462",
+            "hiqm611",
+            "srbe778"
         ],
         "year": "FR",
         "holds_key": 2,
-        "availability_key": 2
+        "availability_key": 2,
+        "assigned_semesters": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+        ]
     }
 },
 
@@ -211,12 +247,12 @@
     "pk": 6,
     "fields": {
         "ta": 2,
-        "start_time": "16:20",
-        "end_time": "10:16",
+        "start_time": "18:29",
+        "end_time": "9:16",
         "days": [
             "W",
-            "M",
-            "Th"
+            "Th",
+            "F"
         ]
     }
 },
@@ -226,12 +262,12 @@
     "pk": 7,
     "fields": {
         "ta": 2,
-        "start_time": "8:07",
-        "end_time": "6:54",
+        "start_time": "23:49",
+        "end_time": "19:20",
         "days": [
-            "T",
-            "Th",
-            "M"
+            "W",
+            "M",
+            "F"
         ]
     }
 },
@@ -241,12 +277,12 @@
     "pk": 8,
     "fields": {
         "ta": 2,
-        "start_time": "18:36",
-        "end_time": "1:34",
+        "start_time": "22:26",
+        "end_time": "16:47",
         "days": [
-            "F",
-            "W",
-            "T"
+            "Th",
+            "T",
+            "M"
         ]
     }
 },
@@ -268,18 +304,30 @@
     "model": "teachingassistant.ta",
     "pk": 3,
     "fields": {
-        "first_name": "inpeoot",
-        "last_name": "jgdyvbj",
-        "student_id": "8106",
+        "first_name": "nwleniv",
+        "last_name": "pofhwhx",
+        "student_id": "7845",
         "contracted": true,
         "experience": [
-            "ccaf852",
-            "dtpw995",
-            "bgel514"
+            "eawc690",
+            "kgkm687",
+            "vwsa819"
         ],
-        "year": "SO",
+        "year": "JR",
         "holds_key": 3,
-        "availability_key": 3
+        "availability_key": 3,
+        "assigned_semesters": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+        ]
     }
 },
 
@@ -299,12 +347,12 @@
     "pk": 9,
     "fields": {
         "ta": 3,
-        "start_time": "5:43",
-        "end_time": "11:03",
+        "start_time": "19:21",
+        "end_time": "4:14",
         "days": [
             "Th",
-            "M",
-            "W"
+            "F",
+            "M"
         ]
     }
 },
@@ -314,12 +362,12 @@
     "pk": 10,
     "fields": {
         "ta": 3,
-        "start_time": "20:03",
-        "end_time": "13:03",
+        "start_time": "1:42",
+        "end_time": "10:04",
         "days": [
+            "M",
             "T",
-            "Th",
-            "W"
+            "Th"
         ]
     }
 },
@@ -329,11 +377,11 @@
     "pk": 11,
     "fields": {
         "ta": 3,
-        "start_time": "14:12",
-        "end_time": "22:39",
+        "start_time": "10:35",
+        "end_time": "13:49",
         "days": [
-            "T",
             "Th",
+            "T",
             "F"
         ]
     }
@@ -356,18 +404,30 @@
     "model": "teachingassistant.ta",
     "pk": 4,
     "fields": {
-        "first_name": "vmxhlaf",
-        "last_name": "rqkiczy",
-        "student_id": "4071",
+        "first_name": "gcrmvsy",
+        "last_name": "zkdnxiy",
+        "student_id": "4064",
         "contracted": true,
         "experience": [
-            "qbkq491",
-            "graa162",
-            "efcw248"
+            "mhlm728",
+            "ylpf469",
+            "nbqw471"
         ],
-        "year": "FR",
+        "year": "JR",
         "holds_key": 4,
-        "availability_key": 4
+        "availability_key": 4,
+        "assigned_semesters": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+        ]
     }
 },
 
@@ -387,12 +447,12 @@
     "pk": 12,
     "fields": {
         "ta": 4,
-        "start_time": "23:23",
-        "end_time": "5:16",
+        "start_time": "16:19",
+        "end_time": "7:18",
         "days": [
-            "W",
-            "Th",
-            "T"
+            "T",
+            "M",
+            "F"
         ]
     }
 },
@@ -402,12 +462,12 @@
     "pk": 13,
     "fields": {
         "ta": 4,
-        "start_time": "12:08",
-        "end_time": "8:47",
+        "start_time": "8:49",
+        "end_time": "16:05",
         "days": [
-            "F",
             "M",
-            "T"
+            "F",
+            "Th"
         ]
     }
 },
@@ -417,12 +477,12 @@
     "pk": 14,
     "fields": {
         "ta": 4,
-        "start_time": "19:48",
-        "end_time": "17:49",
+        "start_time": "10:59",
+        "end_time": "7:40",
         "days": [
-            "Th",
-            "T",
-            "W"
+            "W",
+            "F",
+            "M"
         ]
     }
 },
@@ -444,18 +504,30 @@
     "model": "teachingassistant.ta",
     "pk": 5,
     "fields": {
-        "first_name": "seojjia",
-        "last_name": "lqscgvv",
-        "student_id": "9733",
+        "first_name": "pgwygau",
+        "last_name": "mapjysl",
+        "student_id": "7582",
         "contracted": true,
         "experience": [
-            "fjoz359",
-            "afhb896",
-            "evnb303"
+            "mmrb631",
+            "shap866",
+            "chuj499"
         ],
-        "year": "GR",
+        "year": "SO",
         "holds_key": 5,
-        "availability_key": 5
+        "availability_key": 5,
+        "assigned_semesters": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+        ]
     }
 },
 
@@ -475,8 +547,23 @@
     "pk": 15,
     "fields": {
         "ta": 5,
-        "start_time": "20:26",
-        "end_time": "15:40",
+        "start_time": "10:33",
+        "end_time": "16:44",
+        "days": [
+            "Th",
+            "T",
+            "W"
+        ]
+    }
+},
+
+{
+    "model": "teachingassistant.classtime",
+    "pk": 16,
+    "fields": {
+        "ta": 5,
+        "start_time": "21:39",
+        "end_time": "12:44",
         "days": [
             "M",
             "W",
@@ -487,30 +574,15 @@
 
 {
     "model": "teachingassistant.classtime",
-    "pk": 16,
-    "fields": {
-        "ta": 5,
-        "start_time": "8:54",
-        "end_time": "12:04",
-        "days": [
-            "M",
-            "W",
-            "Th"
-        ]
-    }
-},
-
-{
-    "model": "teachingassistant.classtime",
     "pk": 17,
     "fields": {
         "ta": 5,
-        "start_time": "4:58",
-        "end_time": "9:53",
+        "start_time": "15:03",
+        "end_time": "19:37",
         "days": [
-            "T",
-            "F",
-            "W"
+            "Th",
+            "M",
+            "T"
         ]
     }
 },
@@ -532,18 +604,30 @@
     "model": "teachingassistant.ta",
     "pk": 6,
     "fields": {
-        "first_name": "xymctvr",
-        "last_name": "utodjtc",
-        "student_id": "6495",
+        "first_name": "ipvfzqh",
+        "last_name": "qsjhran",
+        "student_id": "9790",
         "contracted": true,
         "experience": [
-            "ldkc356",
-            "jpjt896",
-            "mpia588"
+            "mzen918",
+            "qvvt528",
+            "dfuy626"
         ],
-        "year": "SR",
+        "year": "GR",
         "holds_key": 6,
-        "availability_key": 6
+        "availability_key": 6,
+        "assigned_semesters": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+        ]
     }
 },
 
@@ -563,11 +647,11 @@
     "pk": 18,
     "fields": {
         "ta": 6,
-        "start_time": "16:03",
-        "end_time": "12:29",
+        "start_time": "9:22",
+        "end_time": "8:04",
         "days": [
             "F",
-            "T",
+            "M",
             "W"
         ]
     }
@@ -578,12 +662,12 @@
     "pk": 19,
     "fields": {
         "ta": 6,
-        "start_time": "14:02",
-        "end_time": "15:46",
+        "start_time": "13:45",
+        "end_time": "14:35",
         "days": [
-            "M",
             "Th",
-            "T"
+            "T",
+            "W"
         ]
     }
 },
@@ -593,12 +677,12 @@
     "pk": 20,
     "fields": {
         "ta": 6,
-        "start_time": "2:34",
-        "end_time": "5:54",
+        "start_time": "18:01",
+        "end_time": "4:09",
         "days": [
-            "F",
             "M",
-            "W"
+            "F",
+            "T"
         ]
     }
 },
@@ -620,18 +704,30 @@
     "model": "teachingassistant.ta",
     "pk": 7,
     "fields": {
-        "first_name": "tzbcyob",
-        "last_name": "vsptsxu",
-        "student_id": "6424",
+        "first_name": "gtfqepy",
+        "last_name": "coptumg",
+        "student_id": "2558",
         "contracted": true,
         "experience": [
-            "hkwu718",
-            "feic657",
-            "nsdc975"
+            "isxx854",
+            "hwhg990",
+            "mxbb289"
         ],
-        "year": "SR",
+        "year": "SO",
         "holds_key": 7,
-        "availability_key": 7
+        "availability_key": 7,
+        "assigned_semesters": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+        ]
     }
 },
 
@@ -651,12 +747,12 @@
     "pk": 21,
     "fields": {
         "ta": 7,
-        "start_time": "18:47",
-        "end_time": "15:37",
+        "start_time": "2:38",
+        "end_time": "11:15",
         "days": [
-            "M",
-            "W",
-            "T"
+            "T",
+            "F",
+            "W"
         ]
     }
 },
@@ -666,11 +762,11 @@
     "pk": 22,
     "fields": {
         "ta": 7,
-        "start_time": "4:29",
-        "end_time": "23:28",
+        "start_time": "2:55",
+        "end_time": "16:10",
         "days": [
-            "T",
-            "Th",
+            "M",
+            "F",
             "W"
         ]
     }
@@ -681,12 +777,12 @@
     "pk": 23,
     "fields": {
         "ta": 7,
-        "start_time": "16:05",
-        "end_time": "18:39",
+        "start_time": "23:41",
+        "end_time": "1:07",
         "days": [
             "M",
             "W",
-            "T"
+            "F"
         ]
     }
 },
@@ -708,18 +804,30 @@
     "model": "teachingassistant.ta",
     "pk": 8,
     "fields": {
-        "first_name": "qdemedr",
-        "last_name": "envffqc",
-        "student_id": "2054",
+        "first_name": "arnkoia",
+        "last_name": "lnlkxkj",
+        "student_id": "1616",
         "contracted": false,
         "experience": [
-            "omiq296",
-            "fveb222",
-            "leay332"
+            "ylpf469",
+            "knjj215",
+            "zqwf258"
         ],
-        "year": "SR",
+        "year": "GR",
         "holds_key": 8,
-        "availability_key": 8
+        "availability_key": 8,
+        "assigned_semesters": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+        ]
     }
 },
 
@@ -739,11 +847,11 @@
     "pk": 24,
     "fields": {
         "ta": 8,
-        "start_time": "20:56",
-        "end_time": "14:18",
+        "start_time": "1:03",
+        "end_time": "5:19",
         "days": [
+            "F",
             "W",
-            "T",
             "Th"
         ]
     }
@@ -754,12 +862,12 @@
     "pk": 25,
     "fields": {
         "ta": 8,
-        "start_time": "19:38",
-        "end_time": "14:12",
+        "start_time": "5:32",
+        "end_time": "23:14",
         "days": [
-            "F",
-            "M",
-            "T"
+            "Th",
+            "W",
+            "M"
         ]
     }
 },
@@ -769,12 +877,12 @@
     "pk": 26,
     "fields": {
         "ta": 8,
-        "start_time": "9:42",
-        "end_time": "6:47",
+        "start_time": "4:48",
+        "end_time": "19:53",
         "days": [
+            "T",
             "W",
-            "F",
-            "T"
+            "F"
         ]
     }
 },
@@ -796,18 +904,30 @@
     "model": "teachingassistant.ta",
     "pk": 9,
     "fields": {
-        "first_name": "ntltzsy",
-        "last_name": "trjgpvw",
-        "student_id": "3214",
+        "first_name": "cixejds",
+        "last_name": "lkudspn",
+        "student_id": "2180",
         "contracted": false,
         "experience": [
-            "efcw248",
-            "hkwu718",
-            "cvhs808"
+            "qxlh581",
+            "eenn398",
+            "mxua672"
         ],
         "year": "SO",
         "holds_key": 9,
-        "availability_key": 9
+        "availability_key": 9,
+        "assigned_semesters": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+        ]
     }
 },
 
@@ -827,11 +947,11 @@
     "pk": 27,
     "fields": {
         "ta": 9,
-        "start_time": "21:52",
-        "end_time": "20:54",
+        "start_time": "17:48",
+        "end_time": "14:44",
         "days": [
             "F",
-            "T",
+            "Th",
             "W"
         ]
     }
@@ -842,12 +962,12 @@
     "pk": 28,
     "fields": {
         "ta": 9,
-        "start_time": "5:49",
-        "end_time": "20:42",
+        "start_time": "16:45",
+        "end_time": "20:24",
         "days": [
-            "W",
-            "M",
-            "T"
+            "Th",
+            "T",
+            "F"
         ]
     }
 },
@@ -857,12 +977,12 @@
     "pk": 29,
     "fields": {
         "ta": 9,
-        "start_time": "1:41",
-        "end_time": "22:24",
+        "start_time": "1:07",
+        "end_time": "10:49",
         "days": [
-            "Th",
-            "M",
-            "T"
+            "T",
+            "F",
+            "W"
         ]
     }
 },

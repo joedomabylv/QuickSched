@@ -71,12 +71,19 @@ classtime_temp = {
 with open("dummy-ta.json", "w") as f, open("dummy-lo.json", "r") as j:
 
         classes = []
+        semesters = []
+        semester_num = 0
         json_data = json.load(j)
         for obj in json_data:
             if "catalog_id" in obj["fields"]:
                 subject = obj["fields"]["subject"]
                 catalog_id = obj["fields"]["catalog_id"]
                 classes.append(subject + catalog_id)
+            if obj["model"] == "laborganizer.semester":
+                semester_num += 1
+
+        semester_list = list(range(0,semester_num))
+        print(semester_list)
 
         f.write("[")
         f.write("\n\n")
@@ -101,6 +108,7 @@ with open("dummy-ta.json", "w") as f, open("dummy-lo.json", "r") as j:
                 ta_temp["fields"]["year"] = random.choice(years)
                 ta_temp["fields"]["holds_key"] = index
                 ta_temp["fields"]["availability_key"] = index
+                ta_temp["fields"]["assigned_semesters"] = semester_list
 
                 # set them according to their respective template schedule
                 holds_temp["pk"] = index
