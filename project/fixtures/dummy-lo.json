@@ -1,0 +1,2076 @@
+[
+
+{
+    "model": "laborganizer.semester",
+    "pk": 0,
+    "fields": {
+        "year": 4383,
+        "semester_time": "SPR"
+    }
+},
+
+{
+    "model": "optimization.templateschedule",
+    "pk": 0,
+    "fields": {
+        "semester": 0
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 0,
+    "fields": {
+        "class_name": "dehkwkidcpix",
+        "subject": "xmcm",
+        "catalog_id": "945",
+        "course_id": "3820",
+        "section": "124",
+        "days": "Th W T",
+        "facility_id": "660",
+        "facility_building": "zpubfrhevtjk",
+        "instructor": "lacagcvdbfrz",
+        "start_time": "17:13",
+        "end_time": "6:30",
+        "semester": 0
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 1,
+    "fields": {
+        "class_name": "xedcrdhhjeth",
+        "subject": "dfuy",
+        "catalog_id": "626",
+        "course_id": "8077",
+        "section": "376",
+        "days": "T F M",
+        "facility_id": "569",
+        "facility_building": "bdnukltlheuf",
+        "instructor": "nccqzsvfogcp",
+        "start_time": "3:33",
+        "end_time": "5:58",
+        "semester": 0
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 2,
+    "fields": {
+        "class_name": "fjwssahcelld",
+        "subject": "etti",
+        "catalog_id": "845",
+        "course_id": "5230",
+        "section": "105",
+        "days": "Th T W",
+        "facility_id": "499",
+        "facility_building": "nmqlvroziqtu",
+        "instructor": "esozhoefiaji",
+        "start_time": "23:56",
+        "end_time": "3:16",
+        "semester": 0
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 3,
+    "fields": {
+        "class_name": "rdakedghyxoj",
+        "subject": "wjyb",
+        "catalog_id": "458",
+        "course_id": "7156",
+        "section": "207",
+        "days": "T Th M",
+        "facility_id": "336",
+        "facility_building": "yygnulnjolns",
+        "instructor": "ylqubgktpzln",
+        "start_time": "11:32",
+        "end_time": "1:52",
+        "semester": 0
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 4,
+    "fields": {
+        "class_name": "gkvnvxgzbcki",
+        "subject": "ooep",
+        "catalog_id": "247",
+        "course_id": "6295",
+        "section": "412",
+        "days": "T Th W",
+        "facility_id": "603",
+        "facility_building": "roouewjcwawt",
+        "instructor": "vfqckyloqjnj",
+        "start_time": "15:25",
+        "end_time": "8:24",
+        "semester": 0
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 5,
+    "fields": {
+        "class_name": "tiymcmxbqubp",
+        "subject": "znuv",
+        "catalog_id": "165",
+        "course_id": "2865",
+        "section": "178",
+        "days": "Th W T",
+        "facility_id": "182",
+        "facility_building": "jngktzouqkld",
+        "instructor": "uaqtcadaneen",
+        "start_time": "21:04",
+        "end_time": "17:54",
+        "semester": 0
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 6,
+    "fields": {
+        "class_name": "flhhbkacsjrn",
+        "subject": "eawc",
+        "catalog_id": "690",
+        "course_id": "4261",
+        "section": "813",
+        "days": "F W M",
+        "facility_id": "743",
+        "facility_building": "awwpebidhrrr",
+        "instructor": "elosnrgepkdh",
+        "start_time": "11:16",
+        "end_time": "23:36",
+        "semester": 0
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 7,
+    "fields": {
+        "class_name": "rczgdoyxmhbv",
+        "subject": "bcgg",
+        "catalog_id": "427",
+        "course_id": "5925",
+        "section": "110",
+        "days": "M W F",
+        "facility_id": "649",
+        "facility_building": "tmtypcewayie",
+        "instructor": "hzhmzenkbvbu",
+        "start_time": "3:55",
+        "end_time": "5:45",
+        "semester": 0
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 8,
+    "fields": {
+        "class_name": "jhlegsdqdjqy",
+        "subject": "coka",
+        "catalog_id": "797",
+        "course_id": "6522",
+        "section": "415",
+        "days": "F T M",
+        "facility_id": "726",
+        "facility_building": "lpybmnukulru",
+        "instructor": "tpiwysncracn",
+        "start_time": "11:32",
+        "end_time": "21:10",
+        "semester": 0
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 9,
+    "fields": {
+        "class_name": "aduvovmcuvfm",
+        "subject": "hiqm",
+        "catalog_id": "611",
+        "course_id": "9208",
+        "section": "781",
+        "days": "T W F",
+        "facility_id": "906",
+        "facility_building": "gvkaguzzwbip",
+        "instructor": "mocbocbacjos",
+        "start_time": "14:12",
+        "end_time": "11:06",
+        "semester": 0
+    }
+},
+
+{
+    "model": "laborganizer.semester",
+    "pk": 1,
+    "fields": {
+        "year": 4830,
+        "semester_time": "WNT"
+    }
+},
+
+{
+    "model": "optimization.templateschedule",
+    "pk": 1,
+    "fields": {
+        "semester": 1
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 10,
+    "fields": {
+        "class_name": "kieormuznskh",
+        "subject": "pldo",
+        "catalog_id": "272",
+        "course_id": "6279",
+        "section": "606",
+        "days": "F M Th",
+        "facility_id": "181",
+        "facility_building": "vrsnbqwirlrk",
+        "instructor": "gbywcixxmqjv",
+        "start_time": "19:58",
+        "end_time": "1:13",
+        "semester": 1
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 11,
+    "fields": {
+        "class_name": "qzuwpmljjqjt",
+        "subject": "envb",
+        "catalog_id": "716",
+        "course_id": "5744",
+        "section": "787",
+        "days": "M F W",
+        "facility_id": "496",
+        "facility_building": "flbasefrtugt",
+        "instructor": "fkvsobiskjsg",
+        "start_time": "16:07",
+        "end_time": "20:50",
+        "semester": 1
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 12,
+    "fields": {
+        "class_name": "dccrbfuowdfa",
+        "subject": "zedd",
+        "catalog_id": "571",
+        "course_id": "3466",
+        "section": "214",
+        "days": "W F M",
+        "facility_id": "349",
+        "facility_building": "ffaqrbzonals",
+        "instructor": "knjueistvcbv",
+        "start_time": "14:26",
+        "end_time": "21:36",
+        "semester": 1
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 13,
+    "fields": {
+        "class_name": "sfgttrjvjinb",
+        "subject": "jgph",
+        "catalog_id": "709",
+        "course_id": "1277",
+        "section": "879",
+        "days": "T Th F",
+        "facility_id": "950",
+        "facility_building": "utpmkhpxtrgd",
+        "instructor": "obewsjtdfhjx",
+        "start_time": "6:59",
+        "end_time": "23:57",
+        "semester": 1
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 14,
+    "fields": {
+        "class_name": "gjgtdsdrwnxm",
+        "subject": "kyov",
+        "catalog_id": "996",
+        "course_id": "4404",
+        "section": "693",
+        "days": "W F Th",
+        "facility_id": "469",
+        "facility_building": "mlecdozzafnj",
+        "instructor": "kyryagdtwmfl",
+        "start_time": "13:25",
+        "end_time": "1:11",
+        "semester": 1
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 15,
+    "fields": {
+        "class_name": "phxfxifvfxny",
+        "subject": "jxbk",
+        "catalog_id": "316",
+        "course_id": "3069",
+        "section": "962",
+        "days": "Th W T",
+        "facility_id": "436",
+        "facility_building": "fymfueeeprcs",
+        "instructor": "yzryhuhinawn",
+        "start_time": "18:12",
+        "end_time": "15:05",
+        "semester": 1
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 16,
+    "fields": {
+        "class_name": "impwizsentfj",
+        "subject": "jqjj",
+        "catalog_id": "147",
+        "course_id": "6131",
+        "section": "692",
+        "days": "T Th M",
+        "facility_id": "688",
+        "facility_building": "eeuleuglcpmi",
+        "instructor": "wpyqxcmsvnrp",
+        "start_time": "15:52",
+        "end_time": "9:07",
+        "semester": 1
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 17,
+    "fields": {
+        "class_name": "bkopyilyajdc",
+        "subject": "lred",
+        "catalog_id": "177",
+        "course_id": "2139",
+        "section": "286",
+        "days": "F W M",
+        "facility_id": "830",
+        "facility_building": "hqwuehdssbtw",
+        "instructor": "jaucmhwuguor",
+        "start_time": "10:08",
+        "end_time": "1:15",
+        "semester": 1
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 18,
+    "fields": {
+        "class_name": "tqhfjmbytuhk",
+        "subject": "khcj",
+        "catalog_id": "462",
+        "course_id": "5533",
+        "section": "509",
+        "days": "W F M",
+        "facility_id": "966",
+        "facility_building": "txbeumybarvn",
+        "instructor": "namhzcwbjeyb",
+        "start_time": "21:31",
+        "end_time": "1:28",
+        "semester": 1
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 19,
+    "fields": {
+        "class_name": "huwbzsqdzqyf",
+        "subject": "zqwf",
+        "catalog_id": "258",
+        "course_id": "1802",
+        "section": "209",
+        "days": "T F Th",
+        "facility_id": "698",
+        "facility_building": "qrxypitcxrse",
+        "instructor": "hojpjsjfsinr",
+        "start_time": "15:29",
+        "end_time": "9:31",
+        "semester": 1
+    }
+},
+
+{
+    "model": "laborganizer.semester",
+    "pk": 2,
+    "fields": {
+        "year": 6648,
+        "semester_time": "FAL"
+    }
+},
+
+{
+    "model": "optimization.templateschedule",
+    "pk": 2,
+    "fields": {
+        "semester": 2
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 20,
+    "fields": {
+        "class_name": "ueoqebqenlti",
+        "subject": "twvj",
+        "catalog_id": "326",
+        "course_id": "4569",
+        "section": "227",
+        "days": "T Th W",
+        "facility_id": "125",
+        "facility_building": "zhfjdkxrdrtn",
+        "instructor": "qfwiurmlqxny",
+        "start_time": "18:25",
+        "end_time": "18:03",
+        "semester": 2
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 21,
+    "fields": {
+        "class_name": "cflpltammdgl",
+        "subject": "mpul",
+        "catalog_id": "384",
+        "course_id": "2980",
+        "section": "160",
+        "days": "W Th M",
+        "facility_id": "565",
+        "facility_building": "vesguwuknscu",
+        "instructor": "htfnzojuqmqj",
+        "start_time": "19:46",
+        "end_time": "17:24",
+        "semester": 2
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 22,
+    "fields": {
+        "class_name": "zfvkfburdotr",
+        "subject": "srbe",
+        "catalog_id": "778",
+        "course_id": "7784",
+        "section": "585",
+        "days": "T F M",
+        "facility_id": "213",
+        "facility_building": "kvftxksstucw",
+        "instructor": "ivhvojjwyubz",
+        "start_time": "6:18",
+        "end_time": "16:45",
+        "semester": 2
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 23,
+    "fields": {
+        "class_name": "zcbvvweyaxhr",
+        "subject": "eqgm",
+        "catalog_id": "268",
+        "course_id": "1593",
+        "section": "357",
+        "days": "T W Th",
+        "facility_id": "472",
+        "facility_building": "pvdagfgszgjj",
+        "instructor": "njytmkxkhvbb",
+        "start_time": "1:11",
+        "end_time": "19:48",
+        "semester": 2
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 24,
+    "fields": {
+        "class_name": "cgndvnibqbgd",
+        "subject": "phkb",
+        "catalog_id": "803",
+        "course_id": "6435",
+        "section": "900",
+        "days": "W T F",
+        "facility_id": "725",
+        "facility_building": "shvpuxuodnjm",
+        "instructor": "dhbnbnedlrio",
+        "start_time": "17:59",
+        "end_time": "13:36",
+        "semester": 2
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 25,
+    "fields": {
+        "class_name": "ianvcooaunct",
+        "subject": "fbxm",
+        "catalog_id": "474",
+        "course_id": "3017",
+        "section": "416",
+        "days": "F W T",
+        "facility_id": "201",
+        "facility_building": "vtsrlmfbbskt",
+        "instructor": "jabsizqulmbd",
+        "start_time": "21:23",
+        "end_time": "14:26",
+        "semester": 2
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 26,
+    "fields": {
+        "class_name": "ikqasqhsivov",
+        "subject": "luyh",
+        "catalog_id": "529",
+        "course_id": "3934",
+        "section": "252",
+        "days": "W F M",
+        "facility_id": "583",
+        "facility_building": "cjcosvbtlvdw",
+        "instructor": "xntawefyicje",
+        "start_time": "8:53",
+        "end_time": "12:29",
+        "semester": 2
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 27,
+    "fields": {
+        "class_name": "fjlavdbzncem",
+        "subject": "qxlh",
+        "catalog_id": "581",
+        "course_id": "4581",
+        "section": "839",
+        "days": "M F W",
+        "facility_id": "550",
+        "facility_building": "hlkmdkvyactc",
+        "instructor": "mzpzmmbsvpxz",
+        "start_time": "20:42",
+        "end_time": "5:44",
+        "semester": 2
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 28,
+    "fields": {
+        "class_name": "romuvkbcpyzp",
+        "subject": "shap",
+        "catalog_id": "866",
+        "course_id": "3004",
+        "section": "125",
+        "days": "Th T W",
+        "facility_id": "221",
+        "facility_building": "ejmqcjbxszvf",
+        "instructor": "hbxteseexbvc",
+        "start_time": "9:49",
+        "end_time": "11:53",
+        "semester": 2
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 29,
+    "fields": {
+        "class_name": "jegdvfwwethl",
+        "subject": "hbey",
+        "catalog_id": "791",
+        "course_id": "9987",
+        "section": "606",
+        "days": "M T Th",
+        "facility_id": "355",
+        "facility_building": "uuwnvpokxxsx",
+        "instructor": "djqjhibruvxn",
+        "start_time": "20:54",
+        "end_time": "4:56",
+        "semester": 2
+    }
+},
+
+{
+    "model": "laborganizer.semester",
+    "pk": 3,
+    "fields": {
+        "year": 7795,
+        "semester_time": "WNT"
+    }
+},
+
+{
+    "model": "optimization.templateschedule",
+    "pk": 3,
+    "fields": {
+        "semester": 3
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 30,
+    "fields": {
+        "class_name": "itjwklxfvpze",
+        "subject": "wanr",
+        "catalog_id": "587",
+        "course_id": "6308",
+        "section": "798",
+        "days": "M F T",
+        "facility_id": "762",
+        "facility_building": "mvakzupoaows",
+        "instructor": "kuikyrftrhmo",
+        "start_time": "13:49",
+        "end_time": "5:18",
+        "semester": 3
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 31,
+    "fields": {
+        "class_name": "lxlforadlgef",
+        "subject": "fxuy",
+        "catalog_id": "507",
+        "course_id": "3461",
+        "section": "533",
+        "days": "T W F",
+        "facility_id": "415",
+        "facility_building": "tmjwpuagvsyd",
+        "instructor": "aiyqozqrnejl",
+        "start_time": "1:43",
+        "end_time": "8:25",
+        "semester": 3
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 32,
+    "fields": {
+        "class_name": "mbssxqbfyjma",
+        "subject": "efqk",
+        "catalog_id": "688",
+        "course_id": "4602",
+        "section": "765",
+        "days": "Th W T",
+        "facility_id": "314",
+        "facility_building": "himushravgqb",
+        "instructor": "xqihwescrocg",
+        "start_time": "6:07",
+        "end_time": "11:14",
+        "semester": 3
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 33,
+    "fields": {
+        "class_name": "rtoaexbpzcbf",
+        "subject": "ehmv",
+        "catalog_id": "265",
+        "course_id": "6528",
+        "section": "305",
+        "days": "F T M",
+        "facility_id": "500",
+        "facility_building": "oerlrdyknnht",
+        "instructor": "wtrfehpwccfs",
+        "start_time": "7:48",
+        "end_time": "8:59",
+        "semester": 3
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 34,
+    "fields": {
+        "class_name": "tgtxdxwzcxxw",
+        "subject": "rqji",
+        "catalog_id": "294",
+        "course_id": "1512",
+        "section": "908",
+        "days": "M Th F",
+        "facility_id": "460",
+        "facility_building": "qusjqapwcziy",
+        "instructor": "blylygyaaaru",
+        "start_time": "22:25",
+        "end_time": "8:47",
+        "semester": 3
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 35,
+    "fields": {
+        "class_name": "npbnjosozaiu",
+        "subject": "pycw",
+        "catalog_id": "526",
+        "course_id": "8218",
+        "section": "854",
+        "days": "M Th F",
+        "facility_id": "764",
+        "facility_building": "fovmhpzqmfef",
+        "instructor": "rumhirfvnbpr",
+        "start_time": "11:56",
+        "end_time": "13:50",
+        "semester": 3
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 36,
+    "fields": {
+        "class_name": "ycnfppiuocps",
+        "subject": "mmrb",
+        "catalog_id": "631",
+        "course_id": "1504",
+        "section": "543",
+        "days": "T Th W",
+        "facility_id": "372",
+        "facility_building": "hwfojdchsrrn",
+        "instructor": "smvmblgjzmsy",
+        "start_time": "19:47",
+        "end_time": "16:54",
+        "semester": 3
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 37,
+    "fields": {
+        "class_name": "cscotujknfkk",
+        "subject": "aytv",
+        "catalog_id": "722",
+        "course_id": "8209",
+        "section": "443",
+        "days": "F Th M",
+        "facility_id": "670",
+        "facility_building": "evqmgtxswpas",
+        "instructor": "nlgqtuaqdecn",
+        "start_time": "23:12",
+        "end_time": "6:46",
+        "semester": 3
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 38,
+    "fields": {
+        "class_name": "ywbonliicshf",
+        "subject": "olzp",
+        "catalog_id": "989",
+        "course_id": "7957",
+        "section": "866",
+        "days": "W M T",
+        "facility_id": "518",
+        "facility_building": "uwbbbppsouiu",
+        "instructor": "vywufnlcxbdq",
+        "start_time": "3:14",
+        "end_time": "20:32",
+        "semester": 3
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 39,
+    "fields": {
+        "class_name": "uuxmlsogkwrd",
+        "subject": "mroe",
+        "catalog_id": "977",
+        "course_id": "6712",
+        "section": "223",
+        "days": "F T M",
+        "facility_id": "269",
+        "facility_building": "obyrfupxpeab",
+        "instructor": "zivqnxwcivjk",
+        "start_time": "2:26",
+        "end_time": "6:52",
+        "semester": 3
+    }
+},
+
+{
+    "model": "laborganizer.semester",
+    "pk": 4,
+    "fields": {
+        "year": 7875,
+        "semester_time": "WNT"
+    }
+},
+
+{
+    "model": "optimization.templateschedule",
+    "pk": 4,
+    "fields": {
+        "semester": 4
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 40,
+    "fields": {
+        "class_name": "ngtdpvupobyv",
+        "subject": "czvh",
+        "catalog_id": "287",
+        "course_id": "6314",
+        "section": "347",
+        "days": "T W M",
+        "facility_id": "117",
+        "facility_building": "tgltdljgmuyh",
+        "instructor": "dbtxvibgbtqt",
+        "start_time": "10:38",
+        "end_time": "13:08",
+        "semester": 4
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 41,
+    "fields": {
+        "class_name": "ugaxstahayyf",
+        "subject": "qtjw",
+        "catalog_id": "676",
+        "course_id": "9964",
+        "section": "479",
+        "days": "M Th F",
+        "facility_id": "757",
+        "facility_building": "mmzdtsmliulm",
+        "instructor": "ckgpvdmptwne",
+        "start_time": "19:14",
+        "end_time": "13:41",
+        "semester": 4
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 42,
+    "fields": {
+        "class_name": "makpvnagtefa",
+        "subject": "tfds",
+        "catalog_id": "560",
+        "course_id": "3153",
+        "section": "547",
+        "days": "Th W F",
+        "facility_id": "526",
+        "facility_building": "hovnymfoadyh",
+        "instructor": "slriiyxmeyjq",
+        "start_time": "6:41",
+        "end_time": "14:39",
+        "semester": 4
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 43,
+    "fields": {
+        "class_name": "cnqcyvuegchk",
+        "subject": "iyra",
+        "catalog_id": "769",
+        "course_id": "1823",
+        "section": "489",
+        "days": "W T M",
+        "facility_id": "714",
+        "facility_building": "uxqbyqeajpzx",
+        "instructor": "ghfehiveijcj",
+        "start_time": "11:43",
+        "end_time": "9:06",
+        "semester": 4
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 44,
+    "fields": {
+        "class_name": "jtuiuovenqlb",
+        "subject": "tusm",
+        "catalog_id": "925",
+        "course_id": "7536",
+        "section": "433",
+        "days": "W F T",
+        "facility_id": "994",
+        "facility_building": "kvydpkyhaxrd",
+        "instructor": "oypmzyvkjqqz",
+        "start_time": "19:54",
+        "end_time": "17:58",
+        "semester": 4
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 45,
+    "fields": {
+        "class_name": "pahyadpdtdfq",
+        "subject": "bzbr",
+        "catalog_id": "691",
+        "course_id": "2632",
+        "section": "895",
+        "days": "Th W M",
+        "facility_id": "987",
+        "facility_building": "gskorchehoyp",
+        "instructor": "tokzduozpykq",
+        "start_time": "12:12",
+        "end_time": "21:30",
+        "semester": 4
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 46,
+    "fields": {
+        "class_name": "dfdvmmhbwrau",
+        "subject": "njfq",
+        "catalog_id": "323",
+        "course_id": "5926",
+        "section": "660",
+        "days": "M Th W",
+        "facility_id": "173",
+        "facility_building": "zskfhlakcmda",
+        "instructor": "ipkjapjhdxfc",
+        "start_time": "12:59",
+        "end_time": "4:57",
+        "semester": 4
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 47,
+    "fields": {
+        "class_name": "cozbozxyzsyv",
+        "subject": "yvru",
+        "catalog_id": "443",
+        "course_id": "2864",
+        "section": "661",
+        "days": "Th F T",
+        "facility_id": "971",
+        "facility_building": "fogjftnccunk",
+        "instructor": "yzkojtaqkbuu",
+        "start_time": "3:24",
+        "end_time": "16:30",
+        "semester": 4
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 48,
+    "fields": {
+        "class_name": "odpffllrdjyh",
+        "subject": "knjj",
+        "catalog_id": "215",
+        "course_id": "6797",
+        "section": "911",
+        "days": "M F T",
+        "facility_id": "379",
+        "facility_building": "cszavvzmpoyb",
+        "instructor": "hvzkekinresq",
+        "start_time": "12:42",
+        "end_time": "19:32",
+        "semester": 4
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 49,
+    "fields": {
+        "class_name": "dijyrbeexnol",
+        "subject": "mxbb",
+        "catalog_id": "289",
+        "course_id": "3184",
+        "section": "935",
+        "days": "M Th F",
+        "facility_id": "328",
+        "facility_building": "btmkkmdfbqau",
+        "instructor": "dlqxsfgllayi",
+        "start_time": "17:41",
+        "end_time": "21:41",
+        "semester": 4
+    }
+},
+
+{
+    "model": "laborganizer.semester",
+    "pk": 5,
+    "fields": {
+        "year": 2699,
+        "semester_time": "SPR"
+    }
+},
+
+{
+    "model": "optimization.templateschedule",
+    "pk": 5,
+    "fields": {
+        "semester": 5
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 50,
+    "fields": {
+        "class_name": "vwrjhczzlxvl",
+        "subject": "hwhg",
+        "catalog_id": "990",
+        "course_id": "8658",
+        "section": "827",
+        "days": "F M Th",
+        "facility_id": "692",
+        "facility_building": "ywqnxddmddgz",
+        "instructor": "hcpnkevoxacn",
+        "start_time": "17:06",
+        "end_time": "23:19",
+        "semester": 5
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 51,
+    "fields": {
+        "class_name": "kfxtedlgyqok",
+        "subject": "qvvt",
+        "catalog_id": "528",
+        "course_id": "8908",
+        "section": "781",
+        "days": "W F M",
+        "facility_id": "815",
+        "facility_building": "yhannxaqchdw",
+        "instructor": "nmtvfmkshagl",
+        "start_time": "7:13",
+        "end_time": "14:13",
+        "semester": 5
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 52,
+    "fields": {
+        "class_name": "bvjqhbdlmgxg",
+        "subject": "iuiy",
+        "catalog_id": "205",
+        "course_id": "7217",
+        "section": "719",
+        "days": "F M W",
+        "facility_id": "589",
+        "facility_building": "fmjxyjerrboi",
+        "instructor": "ksjoeadpiswp",
+        "start_time": "21:33",
+        "end_time": "4:21",
+        "semester": 5
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 53,
+    "fields": {
+        "class_name": "nmpwhlkfqprd",
+        "subject": "lhdf",
+        "catalog_id": "601",
+        "course_id": "2872",
+        "section": "906",
+        "days": "Th T M",
+        "facility_id": "851",
+        "facility_building": "gvtpthvzhzms",
+        "instructor": "hnnqvmghcgoi",
+        "start_time": "2:22",
+        "end_time": "20:52",
+        "semester": 5
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 54,
+    "fields": {
+        "class_name": "qnebwlcocccl",
+        "subject": "kmgt",
+        "catalog_id": "860",
+        "course_id": "3654",
+        "section": "213",
+        "days": "Th T F",
+        "facility_id": "299",
+        "facility_building": "kixycmdzgxsm",
+        "instructor": "dxxbzwizuwla",
+        "start_time": "12:10",
+        "end_time": "14:46",
+        "semester": 5
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 55,
+    "fields": {
+        "class_name": "jklqihqcjbat",
+        "subject": "kgkm",
+        "catalog_id": "687",
+        "course_id": "7991",
+        "section": "425",
+        "days": "Th T F",
+        "facility_id": "621",
+        "facility_building": "nzfnhkgdwtfl",
+        "instructor": "yzoartililhl",
+        "start_time": "18:22",
+        "end_time": "2:12",
+        "semester": 5
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 56,
+    "fields": {
+        "class_name": "dtupfoojngkc",
+        "subject": "otsu",
+        "catalog_id": "586",
+        "course_id": "2641",
+        "section": "147",
+        "days": "M W Th",
+        "facility_id": "587",
+        "facility_building": "vlplyyzjwmpr",
+        "instructor": "lcqtbsvxsede",
+        "start_time": "18:28",
+        "end_time": "7:16",
+        "semester": 5
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 57,
+    "fields": {
+        "class_name": "uuluydffjbtr",
+        "subject": "amtw",
+        "catalog_id": "435",
+        "course_id": "7097",
+        "section": "628",
+        "days": "T M Th",
+        "facility_id": "558",
+        "facility_building": "gddeedoptxtv",
+        "instructor": "wqwkmpqfxdhm",
+        "start_time": "1:50",
+        "end_time": "2:23",
+        "semester": 5
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 58,
+    "fields": {
+        "class_name": "osjxotdxnbim",
+        "subject": "bvfp",
+        "catalog_id": "291",
+        "course_id": "1600",
+        "section": "422",
+        "days": "F M T",
+        "facility_id": "297",
+        "facility_building": "jbqgemrrsemx",
+        "instructor": "wvktqwurodas",
+        "start_time": "17:30",
+        "end_time": "22:02",
+        "semester": 5
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 59,
+    "fields": {
+        "class_name": "bxhdwpwaqqku",
+        "subject": "znir",
+        "catalog_id": "127",
+        "course_id": "9524",
+        "section": "656",
+        "days": "T F Th",
+        "facility_id": "531",
+        "facility_building": "tcvtghwphoxy",
+        "instructor": "jgcjesabuzpl",
+        "start_time": "18:10",
+        "end_time": "23:36",
+        "semester": 5
+    }
+},
+
+{
+    "model": "laborganizer.semester",
+    "pk": 6,
+    "fields": {
+        "year": 8421,
+        "semester_time": "SUM"
+    }
+},
+
+{
+    "model": "optimization.templateschedule",
+    "pk": 6,
+    "fields": {
+        "semester": 6
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 60,
+    "fields": {
+        "class_name": "yhkfeltisibd",
+        "subject": "ikcm",
+        "catalog_id": "246",
+        "course_id": "1971",
+        "section": "826",
+        "days": "Th T M",
+        "facility_id": "519",
+        "facility_building": "taiueplaarah",
+        "instructor": "mogzgluyezbc",
+        "start_time": "23:07",
+        "end_time": "16:48",
+        "semester": 6
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 61,
+    "fields": {
+        "class_name": "curjoonxalko",
+        "subject": "wdky",
+        "catalog_id": "357",
+        "course_id": "3294",
+        "section": "854",
+        "days": "T W Th",
+        "facility_id": "110",
+        "facility_building": "jlxkmfcydwcp",
+        "instructor": "wbxqobwmgfbv",
+        "start_time": "22:46",
+        "end_time": "4:03",
+        "semester": 6
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 62,
+    "fields": {
+        "class_name": "gatqbirblkiy",
+        "subject": "rtqt",
+        "catalog_id": "925",
+        "course_id": "9659",
+        "section": "418",
+        "days": "W F M",
+        "facility_id": "429",
+        "facility_building": "ulkqgpbohdzl",
+        "instructor": "nseghxbhrcui",
+        "start_time": "14:16",
+        "end_time": "17:29",
+        "semester": 6
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 63,
+    "fields": {
+        "class_name": "eumzmnfroiwm",
+        "subject": "udkd",
+        "catalog_id": "912",
+        "course_id": "7208",
+        "section": "806",
+        "days": "F Th M",
+        "facility_id": "719",
+        "facility_building": "hiwonjvglzoy",
+        "instructor": "oxypiubxrqqc",
+        "start_time": "11:53",
+        "end_time": "7:51",
+        "semester": 6
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 64,
+    "fields": {
+        "class_name": "wkdaxuogqfyr",
+        "subject": "mzen",
+        "catalog_id": "918",
+        "course_id": "4047",
+        "section": "891",
+        "days": "W Th T",
+        "facility_id": "672",
+        "facility_building": "lavcdmrfjwsn",
+        "instructor": "xcbyrcopwclz",
+        "start_time": "23:10",
+        "end_time": "9:31",
+        "semester": 6
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 65,
+    "fields": {
+        "class_name": "favutjtmqkbg",
+        "subject": "dskd",
+        "catalog_id": "500",
+        "course_id": "3964",
+        "section": "178",
+        "days": "Th W M",
+        "facility_id": "371",
+        "facility_building": "ekiiehaitgyq",
+        "instructor": "afpxobsyiiiy",
+        "start_time": "7:18",
+        "end_time": "11:24",
+        "semester": 6
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 66,
+    "fields": {
+        "class_name": "gytyljirqfyw",
+        "subject": "pfcn",
+        "catalog_id": "557",
+        "course_id": "3063",
+        "section": "159",
+        "days": "T M F",
+        "facility_id": "524",
+        "facility_building": "aetuetvpbxhs",
+        "instructor": "kxjorupsyvet",
+        "start_time": "4:23",
+        "end_time": "4:43",
+        "semester": 6
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 67,
+    "fields": {
+        "class_name": "fxkwfqnaszaf",
+        "subject": "uent",
+        "catalog_id": "933",
+        "course_id": "4619",
+        "section": "974",
+        "days": "Th M W",
+        "facility_id": "963",
+        "facility_building": "tpasaiqowycq",
+        "instructor": "xggqdzcqeayv",
+        "start_time": "4:14",
+        "end_time": "10:13",
+        "semester": 6
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 68,
+    "fields": {
+        "class_name": "plcszoszcctv",
+        "subject": "mhlm",
+        "catalog_id": "728",
+        "course_id": "4459",
+        "section": "227",
+        "days": "W F Th",
+        "facility_id": "608",
+        "facility_building": "ktevcalgalns",
+        "instructor": "jzbupoxceuun",
+        "start_time": "2:57",
+        "end_time": "4:40",
+        "semester": 6
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 69,
+    "fields": {
+        "class_name": "raldemlgowil",
+        "subject": "pjhp",
+        "catalog_id": "875",
+        "course_id": "1610",
+        "section": "330",
+        "days": "M F W",
+        "facility_id": "182",
+        "facility_building": "bdzgsryvbebs",
+        "instructor": "ikrwfjyqlwtt",
+        "start_time": "3:39",
+        "end_time": "9:54",
+        "semester": 6
+    }
+},
+
+{
+    "model": "laborganizer.semester",
+    "pk": 7,
+    "fields": {
+        "year": 9653,
+        "semester_time": "SUM"
+    }
+},
+
+{
+    "model": "optimization.templateschedule",
+    "pk": 7,
+    "fields": {
+        "semester": 7
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 70,
+    "fields": {
+        "class_name": "vystankrithu",
+        "subject": "qdwp",
+        "catalog_id": "903",
+        "course_id": "1977",
+        "section": "440",
+        "days": "M W T",
+        "facility_id": "678",
+        "facility_building": "scxnkusuulqd",
+        "instructor": "ezeabcwzsoiv",
+        "start_time": "1:45",
+        "end_time": "10:15",
+        "semester": 7
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 71,
+    "fields": {
+        "class_name": "pbrnskbymcbv",
+        "subject": "khey",
+        "catalog_id": "922",
+        "course_id": "9835",
+        "section": "297",
+        "days": "F Th M",
+        "facility_id": "637",
+        "facility_building": "qnuygtepcuum",
+        "instructor": "tziffgzpwxll",
+        "start_time": "23:06",
+        "end_time": "22:07",
+        "semester": 7
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 72,
+    "fields": {
+        "class_name": "cejmkbibnuoo",
+        "subject": "jfrb",
+        "catalog_id": "795",
+        "course_id": "6045",
+        "section": "669",
+        "days": "M F W",
+        "facility_id": "363",
+        "facility_building": "stmagoelojvv",
+        "instructor": "iwgthoixgazy",
+        "start_time": "18:31",
+        "end_time": "23:42",
+        "semester": 7
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 73,
+    "fields": {
+        "class_name": "svchiehsxaed",
+        "subject": "lxjc",
+        "catalog_id": "309",
+        "course_id": "6250",
+        "section": "922",
+        "days": "M T Th",
+        "facility_id": "695",
+        "facility_building": "iviuurtgdkri",
+        "instructor": "cpxnqwikozkv",
+        "start_time": "16:41",
+        "end_time": "4:03",
+        "semester": 7
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 74,
+    "fields": {
+        "class_name": "hidfjnrlyafz",
+        "subject": "mxua",
+        "catalog_id": "672",
+        "course_id": "5893",
+        "section": "263",
+        "days": "T F W",
+        "facility_id": "834",
+        "facility_building": "urqcuiffzrla",
+        "instructor": "upwbvpbqcqmb",
+        "start_time": "14:45",
+        "end_time": "4:48",
+        "semester": 7
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 75,
+    "fields": {
+        "class_name": "zrshshyfpmff",
+        "subject": "ylpf",
+        "catalog_id": "469",
+        "course_id": "3061",
+        "section": "549",
+        "days": "M Th W",
+        "facility_id": "568",
+        "facility_building": "eybdcodrncfp",
+        "instructor": "pszipadesmgg",
+        "start_time": "12:28",
+        "end_time": "12:05",
+        "semester": 7
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 76,
+    "fields": {
+        "class_name": "rxbdurilyeqn",
+        "subject": "bbke",
+        "catalog_id": "638",
+        "course_id": "8405",
+        "section": "141",
+        "days": "F Th T",
+        "facility_id": "534",
+        "facility_building": "hqfkybyyezba",
+        "instructor": "pzebnouejsnf",
+        "start_time": "14:40",
+        "end_time": "13:58",
+        "semester": 7
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 77,
+    "fields": {
+        "class_name": "gmixlfmvldhk",
+        "subject": "clvt",
+        "catalog_id": "227",
+        "course_id": "5043",
+        "section": "548",
+        "days": "T W Th",
+        "facility_id": "656",
+        "facility_building": "axmtmvxwdoba",
+        "instructor": "sdnjayxlvnnl",
+        "start_time": "5:17",
+        "end_time": "12:42",
+        "semester": 7
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 78,
+    "fields": {
+        "class_name": "iiocpbovvxik",
+        "subject": "nraj",
+        "catalog_id": "543",
+        "course_id": "1059",
+        "section": "375",
+        "days": "W M F",
+        "facility_id": "922",
+        "facility_building": "rvuhvcouexjr",
+        "instructor": "ooespjtcgdyl",
+        "start_time": "23:44",
+        "end_time": "8:02",
+        "semester": 7
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 79,
+    "fields": {
+        "class_name": "xhxtbdwuzxnd",
+        "subject": "auen",
+        "catalog_id": "659",
+        "course_id": "8238",
+        "section": "636",
+        "days": "T F M",
+        "facility_id": "264",
+        "facility_building": "bsvlhsqdoxrq",
+        "instructor": "zargziolofsh",
+        "start_time": "2:02",
+        "end_time": "7:27",
+        "semester": 7
+    }
+},
+
+{
+    "model": "laborganizer.semester",
+    "pk": 8,
+    "fields": {
+        "year": 8032,
+        "semester_time": "WNT"
+    }
+},
+
+{
+    "model": "optimization.templateschedule",
+    "pk": 8,
+    "fields": {
+        "semester": 8
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 80,
+    "fields": {
+        "class_name": "voswjgcjfauk",
+        "subject": "rxmr",
+        "catalog_id": "334",
+        "course_id": "7667",
+        "section": "979",
+        "days": "T W F",
+        "facility_id": "519",
+        "facility_building": "fkhhlzbioyzv",
+        "instructor": "hwzjbuilxkde",
+        "start_time": "17:21",
+        "end_time": "19:27",
+        "semester": 8
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 81,
+    "fields": {
+        "class_name": "gzpnexpqscpw",
+        "subject": "eenn",
+        "catalog_id": "398",
+        "course_id": "9849",
+        "section": "806",
+        "days": "W T F",
+        "facility_id": "751",
+        "facility_building": "kegrgxixbtvg",
+        "instructor": "izuhijeuoavu",
+        "start_time": "8:25",
+        "end_time": "2:13",
+        "semester": 8
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 82,
+    "fields": {
+        "class_name": "tncolinjtnqc",
+        "subject": "yffc",
+        "catalog_id": "739",
+        "course_id": "7060",
+        "section": "158",
+        "days": "M F Th",
+        "facility_id": "172",
+        "facility_building": "gegleylnwhsz",
+        "instructor": "wdppjsjpdroj",
+        "start_time": "10:51",
+        "end_time": "14:13",
+        "semester": 8
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 83,
+    "fields": {
+        "class_name": "izuofpwgxrhw",
+        "subject": "wodp",
+        "catalog_id": "323",
+        "course_id": "7808",
+        "section": "272",
+        "days": "M Th W",
+        "facility_id": "463",
+        "facility_building": "wuhkdkvtluxt",
+        "instructor": "ofjfralvhdvq",
+        "start_time": "21:07",
+        "end_time": "20:14",
+        "semester": 8
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 84,
+    "fields": {
+        "class_name": "orttdgtbobxp",
+        "subject": "dfay",
+        "catalog_id": "593",
+        "course_id": "5255",
+        "section": "607",
+        "days": "M F W",
+        "facility_id": "397",
+        "facility_building": "xjfypjkespaf",
+        "instructor": "yehuoqymedkn",
+        "start_time": "14:38",
+        "end_time": "11:13",
+        "semester": 8
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 85,
+    "fields": {
+        "class_name": "yjvbweqtxgcq",
+        "subject": "nbqw",
+        "catalog_id": "471",
+        "course_id": "6095",
+        "section": "991",
+        "days": "T M F",
+        "facility_id": "438",
+        "facility_building": "llkdixjwgqeh",
+        "instructor": "uormfudegpme",
+        "start_time": "3:57",
+        "end_time": "2:42",
+        "semester": 8
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 86,
+    "fields": {
+        "class_name": "ddoyjelwursh",
+        "subject": "nlbk",
+        "catalog_id": "439",
+        "course_id": "1237",
+        "section": "379",
+        "days": "F Th M",
+        "facility_id": "176",
+        "facility_building": "jlfdlnkuxgex",
+        "instructor": "ukqorrlnrduj",
+        "start_time": "16:37",
+        "end_time": "7:03",
+        "semester": 8
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 87,
+    "fields": {
+        "class_name": "vjwjjqjjvonv",
+        "subject": "yciq",
+        "catalog_id": "745",
+        "course_id": "4609",
+        "section": "326",
+        "days": "W T F",
+        "facility_id": "253",
+        "facility_building": "odniilkzdbwg",
+        "instructor": "nprfedzycxgs",
+        "start_time": "20:01",
+        "end_time": "6:12",
+        "semester": 8
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 88,
+    "fields": {
+        "class_name": "ooccdjheoumo",
+        "subject": "chuj",
+        "catalog_id": "499",
+        "course_id": "9045",
+        "section": "746",
+        "days": "Th F T",
+        "facility_id": "968",
+        "facility_building": "zizezkbfjyio",
+        "instructor": "dvxbgzwjsfsi",
+        "start_time": "17:22",
+        "end_time": "8:41",
+        "semester": 8
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 89,
+    "fields": {
+        "class_name": "zzqgnwlxynvx",
+        "subject": "isxx",
+        "catalog_id": "854",
+        "course_id": "4271",
+        "section": "548",
+        "days": "Th T M",
+        "facility_id": "464",
+        "facility_building": "mikjpgigenhh",
+        "instructor": "lkujoaowguaq",
+        "start_time": "2:38",
+        "end_time": "18:53",
+        "semester": 8
+    }
+},
+
+{
+    "model": "laborganizer.semester",
+    "pk": 9,
+    "fields": {
+        "year": 5317,
+        "semester_time": "SPR"
+    }
+},
+
+{
+    "model": "optimization.templateschedule",
+    "pk": 9,
+    "fields": {
+        "semester": 9
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 90,
+    "fields": {
+        "class_name": "akxrcbxkdwsv",
+        "subject": "mpfl",
+        "catalog_id": "169",
+        "course_id": "9101",
+        "section": "775",
+        "days": "T W Th",
+        "facility_id": "283",
+        "facility_building": "hrmtqwadzukh",
+        "instructor": "blyatqxqfotu",
+        "start_time": "4:22",
+        "end_time": "8:45",
+        "semester": 9
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 91,
+    "fields": {
+        "class_name": "dsbmlzldoitu",
+        "subject": "vmvp",
+        "catalog_id": "181",
+        "course_id": "7746",
+        "section": "325",
+        "days": "F T M",
+        "facility_id": "880",
+        "facility_building": "fijxhrzmwwzc",
+        "instructor": "pcnuwuwuurmg",
+        "start_time": "9:57",
+        "end_time": "20:34",
+        "semester": 9
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 92,
+    "fields": {
+        "class_name": "psyvftcecuzo",
+        "subject": "ndvj",
+        "catalog_id": "493",
+        "course_id": "2665",
+        "section": "531",
+        "days": "T Th M",
+        "facility_id": "859",
+        "facility_building": "cjtjpvvgpvyi",
+        "instructor": "prpwtwadnwic",
+        "start_time": "2:24",
+        "end_time": "12:21",
+        "semester": 9
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 93,
+    "fields": {
+        "class_name": "uyvvjrifxiuq",
+        "subject": "fhpd",
+        "catalog_id": "170",
+        "course_id": "5553",
+        "section": "533",
+        "days": "M Th W",
+        "facility_id": "127",
+        "facility_building": "hinqdfckcfin",
+        "instructor": "bphrazclzdhb",
+        "start_time": "19:36",
+        "end_time": "6:23",
+        "semester": 9
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 94,
+    "fields": {
+        "class_name": "zvghhlxftaql",
+        "subject": "cuze",
+        "catalog_id": "478",
+        "course_id": "1011",
+        "section": "616",
+        "days": "M Th W",
+        "facility_id": "552",
+        "facility_building": "ebwqktozyaie",
+        "instructor": "kzqevbktijrr",
+        "start_time": "7:59",
+        "end_time": "20:58",
+        "semester": 9
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 95,
+    "fields": {
+        "class_name": "pnjbmwzqomtm",
+        "subject": "vwsa",
+        "catalog_id": "819",
+        "course_id": "2251",
+        "section": "928",
+        "days": "T M F",
+        "facility_id": "895",
+        "facility_building": "vzudklyzlbaq",
+        "instructor": "qrcudkdnldlu",
+        "start_time": "5:07",
+        "end_time": "21:09",
+        "semester": 9
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 96,
+    "fields": {
+        "class_name": "lmmdgwwcjexm",
+        "subject": "noqt",
+        "catalog_id": "269",
+        "course_id": "7702",
+        "section": "876",
+        "days": "F Th W",
+        "facility_id": "465",
+        "facility_building": "shwpjptlreoc",
+        "instructor": "vftrivcucszu",
+        "start_time": "6:17",
+        "end_time": "2:35",
+        "semester": 9
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 97,
+    "fields": {
+        "class_name": "ybyscqaaviif",
+        "subject": "mhzg",
+        "catalog_id": "681",
+        "course_id": "6153",
+        "section": "777",
+        "days": "F T M",
+        "facility_id": "774",
+        "facility_building": "ruhexvxsbykb",
+        "instructor": "ulnwybtobimd",
+        "start_time": "17:55",
+        "end_time": "12:54",
+        "semester": 9
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 98,
+    "fields": {
+        "class_name": "hnkmaekwnaxj",
+        "subject": "jsde",
+        "catalog_id": "610",
+        "course_id": "6128",
+        "section": "270",
+        "days": "T W Th",
+        "facility_id": "977",
+        "facility_building": "oxrzzaiikiyl",
+        "instructor": "vohbbnttberh",
+        "start_time": "16:56",
+        "end_time": "4:54",
+        "semester": 9
+    }
+},
+
+{
+    "model": "laborganizer.lab",
+    "pk": 99,
+    "fields": {
+        "class_name": "acbebaiifvvw",
+        "subject": "kufe",
+        "catalog_id": "175",
+        "course_id": "7150",
+        "section": "132",
+        "days": "F Th W",
+        "facility_id": "284",
+        "facility_building": "uodghydpruir",
+        "instructor": "wiysvdissgyc",
+        "start_time": "21:10",
+        "end_time": "16:04",
+        "semester": 9
+    }
+}
+
+
+
+]
+

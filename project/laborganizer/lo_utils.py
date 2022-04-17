@@ -3,6 +3,7 @@ from .models import Semester, Lab
 from datetime import datetime
 from teachingassistant.models import TA
 from optimization.models import TemplateSchedule
+from django.core.exceptions import ObjectDoesNotExist
 from io import StringIO
 import csv
 
@@ -30,6 +31,12 @@ def get_current_semester():
         'year': current_year,
     }
 
+    # check if the semester doesn't exist in the database
+    # if not, default to the first semester in the database
+    if not check_if_sem_exists(current_semester_dict):
+        current_semester_dict['time'] = Semester.objects.all().first().semester_time
+        current_semester_dict['year'] = Semester.objects.all().first().year
+
     return current_semester_dict
 
 
@@ -39,6 +46,14 @@ def get_tas_by_semester(time, year):
                             assigned_semesters__year=year)
     return tas
 
+def check_if_sem_exists(semester_dict):
+    time = semester_dict['time']
+    year = semester_dict['year']
+    try:
+        semester = Semester.objects.get(semester_time=time, year=year)
+    except ObjectDoesNotExist:
+        return False
+    return True
 
 def get_labs_by_semester(time, year):
     """Get a list of all Labs assigned to a specific semester."""
@@ -155,21 +170,11 @@ def get_deviation_score(potential_ta, selected_ta, selected_lab, current_score, 
 
     # if the potential ta doesnt have an assignment, just return the difference between st and pt scores
     if len(pt_labs) == 0:
-
-        # NOTE temporary bug fix
-        if pt_potential_score is None or st_current_score is None:
-            return 0, 0, 0
-
         return abs(pt_potential_score - st_current_score), 0, 0
     else:
         pt_lab = pt_labs[0]
         pt_current_score = potential_ta.get_score(selected_lab, template_schedule.id)
         st_potential_score = selected_ta.get_score(pt_lab, template_schedule.id)
-
-        # NOTE temporary bug fix
-        if pt_potential_score is None or st_current_score is None \
-           or pt_current_score is None or st_potential_score is None:
-            return 0, 0, 0
 
         gap_1 = abs(st_current_score - st_potential_score)
         gap_2 = abs(pt_current_score - pt_potential_score)
@@ -387,3 +392,11 @@ def sort_semesters():
         sorted_semesters.append(sem)
 
     return sorted_semesters
+
+def filter_out_unscored(ta_list):
+    tas = []
+    for ta in ta_list:
+        if len(ta.scores.all()) != 0:
+            tas.append(ta)
+
+    return tas

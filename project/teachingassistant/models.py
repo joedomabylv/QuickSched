@@ -98,12 +98,14 @@ class TA(models.Model):
         If a score exists, return the ScorePair object, otherwise
         return None.
         """
+        index = 0
         for score in self.scores.all():
             if (score.score_catalog_id == lab.catalog_id and
                 score.semester == lab.semester and
                 int(score.schedule_key) == schedule_key):
                 # found a matching ScorePair
                 return score
+            index += 1
         # did not find a matching ScorePair
         return None
 
