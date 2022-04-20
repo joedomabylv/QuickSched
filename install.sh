@@ -2,7 +2,7 @@
 
 # generate .env file
 django_key=$(echo $RANDOM | md5sum | head -c 30);
-echo "SECRET_KEY=$django_key" >> env_file;
+echo "SECRET_KEY=$django_key" >> /home/bitnami/QuickSched/project/env_file;
 
 # rename and enable vhost files
 sudo cp -v /opt/bitnami/apache2/conf/vhosts/sample-vhost.conf.disabled /opt/bitnami/apache2/conf/vhosts/quicksched-vhost.conf;
