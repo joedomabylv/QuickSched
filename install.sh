@@ -2,20 +2,10 @@
 
 # generate .env file
 django_key=$(echo $RANDOM | md5sum | head -c 30);
-'SECRET_KEY=$django_key' >> env_file;
+"SECRET_KEY=$django_key" >> env_file;
 
 # rename env file
 mv /home/bitnami/QuickSched/project/env_file /home/bitnami/QuickSched/project/.env
-
-# set up django database
-python /home/bitnami/QuickSched/project/manage.py makemigrations;
-python /home/bitnami/QuickSched/project/manage.py migrate;
-
-# create new superuser
-python /home/bitnami/QuickSched/project/manage.py createsuperuser;
-
-# collect static files for apache to serve
-python /home/bitnami/QuickSched/project/manage.py collectstatic --noinput;
 
 # rename and enable vhost files
 sudo cp /opt/bitnami/apache2/conf/vhosts/sample-vhost.conf.disabled /opt/bitnami/apache2/conf/vhosts/quicksched-vhost.conf;
@@ -36,6 +26,16 @@ sudo mkdir -pv /opt/bitnami/projects/quicksched/;
 
 # deploy django files to specified directory
 sudo mv /home/bitnami/QuickSched/project/* /opt/bitnami/projects/quicksched/;
+
+# set up django database
+python /opt/bitnami/projects/quicksched/project/manage.py makemigrations;
+python /opt/bitnami/projects/quicksched/project/manage.py migrate;
+
+# create new superuser
+python /opt/bitnami/projects/quicksched/project/manage.py createsuperuser;
+
+# collect static files for apache to serve
+python /opt/bitnami/projects/quicksched/project/manage.py collectstatic --noinput;
 
 # change the owner of the django files to the apache wsgi mod daemon
 sudo chown -R daemon:daemon /opt/bitnami/projects/quicksched/
