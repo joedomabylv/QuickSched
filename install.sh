@@ -21,11 +21,11 @@ sudo cp -v .local/lib/python3.8/site-packages/decouple.py /opt/bitnami/python/li
 # make a directory for deployed django files
 sudo mkdir -pv /opt/bitnami/projects/quicksched/;
 
-# deploy django files to specified directory
-sudo mv -v /home/bitnami/QuickSched/project/* /opt/bitnami/projects/quicksched/;
-
 # rename env file
 mv /home/bitnami/QuickSched/project/env_file /home/bitnami/QuickSched/project/.env
+
+# deploy django files to specified directory
+sudo mv -v /home/bitnami/QuickSched/project/* /opt/bitnami/projects/quicksched/;
 
 # move env file to specified directory
 mv /home/bitnami/QuickSched/project/.env /opt/bitnami/projects/quicksched/
