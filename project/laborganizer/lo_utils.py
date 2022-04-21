@@ -34,8 +34,12 @@ def get_current_semester():
     # check if the semester doesn't exist in the database
     # if not, default to the first semester in the database
     if not check_if_sem_exists(current_semester_dict):
-        current_semester_dict['time'] = Semester.objects.all().first().semester_time
-        current_semester_dict['year'] = Semester.objects.all().first().year
+        try:
+            current_semester_dict['time'] = Semester.objects.all().first().semester_time
+            current_semester_dict['year'] = Semester.objects.all().first().year
+        except AttributeError:
+            current_semester_dict['time'] = ''
+            current_semester_dict['year'] = 0
 
     return current_semester_dict
 
