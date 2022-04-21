@@ -47,4 +47,4 @@ sudo chown -R daemon:daemon /opt/bitnami/projects/quicksched/
 sudo /opt/bitnami/ctlscript.sh restart apache
 
 # report success
-echo "\n\n\n\nYou have successfully installed your QuickSched instance! Enter your server's public IP address in your browser to login with your credentials."
+echo -e "\n\n\n\nYou have successfully installed your QuickSched instance! Enter your server's public IP address in your browser to login with your credentials."
