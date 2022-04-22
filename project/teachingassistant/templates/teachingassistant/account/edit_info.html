@@ -6,7 +6,11 @@
 
     <div class="my-5 container">
 
-	<p class="alert alert-info">Please make sure all the information below is correct! After you submit this form, you won't be able to edit it again without the consent of your lab organizer!</p>
+	<div class="alert alert-info">
+	    <p>Please make sure all the information below is correct! After you submit this form, you won't be able to edit it again without the consent of your lab organizer!</p>
+
+	    <p>When entering your class times, please be aware that these will represent the times you are <strong>unavailable</strong> to work!</p>
+	</div>
 
         <form method="post" action="{% url 'ta_info' %}" class="needs-validation" novalidate>
 	    {% csrf_token %}
