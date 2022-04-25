@@ -271,5 +271,7 @@ class History(models.Model):
     lab_1 = models.ManyToManyField(Lab, blank=True, related_name='lab_1')
     lab_2 = models.ManyToManyField(Lab, blank=True, related_name='lab_2')
 
+    is_assignment = models.BooleanField(default=False)
+
     temp_sched = models.ForeignKey(TemplateSchedule, on_delete=models.CASCADE, related_name='his_nodes', null=True)
     relative_node_id = models.IntegerField(null=True)
