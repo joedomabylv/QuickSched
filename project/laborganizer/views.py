@@ -14,7 +14,7 @@ from django.shortcuts import render, redirect
 from django.core.cache import cache
 from teachingassistant.models import TA, Holds
 from .models import Semester, Lab, AllowTAEdit
-from optimization.models import History, TemplateSchedule
+from optimization.models import History, TemplateSchedule, TemplateAssignment
 from django.contrib import messages
 from laborganizer.lo_utils import (get_current_semester,
                                    get_tas_by_semester,
@@ -81,14 +81,17 @@ def lo_home(request, selected_semester=None, template_schedule=None):
             if request.GET.get('undo') is not None:
                 node = template_schedule.his_nodes.last()
                 if node is not None:
-                    to_assignment, from_assignment = None, None
-                    for assignment in template_schedule.assignments.all():
-                        if assignment.ta == node.ta_1.first():
-                            from_assignment = assignment
-                        elif assignment.ta == node.ta_2.first():
-                            to_assignment = assignment
+                    if not node.is_assignment:
+                        to_assignment, from_assignment = None, None
+                        for assignment in template_schedule.assignments.all():
+                            if assignment.ta == node.ta_1.first():
+                                from_assignment = assignment
+                            elif assignment.ta == node.ta_2.first():
+                                to_assignment = assignment
 
-                    node.undo_bilateral_switch(template_schedule, from_assignment, to_assignment)
+                        node.undo_bilateral_switch(template_schedule, from_assignment, to_assignment)
+                    else:
+                        template_schedule.assign(node.ta_1.first(), node.lab_1.first())
                     node.delete()
 
             # Handles get request required for confirming switches
@@ -292,6 +295,31 @@ def lo_confirm_switch(switch_data, template_schedule):
 
     return redirect('lo_home')
 
+def generate_assignment_node(ta, lab, template_schedule):
+    """Generate an assignment history node for record"""
+
+    # find idenity of other TA to switch
+    other_ta = None
+    for assignment in TemplateAssignment.objects.all():
+        if assignment.lab == lab:
+            other_ta = assignment.ta
+
+    # set up node for switching
+    relative_node_id = len(template_schedule.his_nodes.all()) + 1
+    abs_node_id = len(History.objects.all()) + 1
+
+    # create said node
+    node = History(id=abs_node_id)
+    node.save()
+    node.relative_node_id = relative_node_id
+    node.ta_1.set([other_ta])
+    node.ta_2.set([ta])
+    node.lab_1.set([lab])
+    node.lab_2.set([None])
+    node.temp_sched = template_schedule
+    node.is_assignment = True
+    node.save()
+
 
 @login_required
 def lo_select_schedule_version(request):
@@ -310,6 +338,7 @@ def lo_select_schedule_version(request):
 
             # get that schedule version
             template_schedule = get_template_schedule(time, year, version_number)
+            
             cache.set('selected_semester', selected_semester, None)
             cache.set('template_schedule', template_schedule, None)
 
@@ -336,6 +365,9 @@ def lo_assign_to_template(request):
             ta = TA.objects.get(student_id=student_id)
             lab = Lab.objects.get(course_id=course_id)
             template_schedule = get_template_schedule(time, year, version)
+
+            # generate the history node for the assignment
+            generate_assignment_node(ta, lab, template_schedule)
 
             # assign the ta to the selected lab
             template_schedule.assign(ta, lab)
