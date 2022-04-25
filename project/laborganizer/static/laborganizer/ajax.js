@@ -6,10 +6,11 @@ $(document).ready(function(){
       data: {
           lab_name: this.id
       },
-      success: function(response) {
+	success: function(response) {
+	    console.log('hi');
         for(var key in response) {
           $("#switches-list").append(
-            '<a href="#" id="switch" class="list-group-item list-group-item-action switch '+ response[key].score_color + '"> \
+            '<a href="" id="switch" class="list-group-item list-group-item-action switch '+ response[key].score_color + '"> \
               <div class="row align-items-center "> \
                 <div class="col-1"> \
                   <h1 class="ms-2 d-flex justify-content-center">' + response[key].switch_id + '</h1> \

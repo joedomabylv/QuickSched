@@ -174,6 +174,8 @@ def get_deviation_score(potential_ta, selected_ta, selected_lab, current_score, 
 
     # if the potential ta doesnt have an assignment, just return the difference between st and pt scores
     if len(pt_labs) == 0:
+        if pt_potential_score is None:
+            return 0, 0, 0
         return abs(pt_potential_score - st_current_score), 0, 0
     else:
         pt_lab = pt_labs[0]

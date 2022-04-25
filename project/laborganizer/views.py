@@ -47,7 +47,7 @@ def lo_home(request, selected_semester=None, template_schedule=None):
     if request.user.is_superuser:
         context = {}
         if Semester.objects.all().exists():
-            if selected_semester is None:
+            if cache.get('selected_semester') is None:
                 # establish current semester time/year, based on time
                 current_semester = cache.get('most_recent_semester')
                 if current_semester is None:
@@ -55,17 +55,19 @@ def lo_home(request, selected_semester=None, template_schedule=None):
 
             else:
                 # get the current semester argument
-                current_semester = selected_semester
+                current_semester = cache.get('selected_semester')
+                # clear the cache for future decisions
+                cache.delete('selected_semester')
                 cache.set('most_recent_semester', current_semester, None)
 
             # check if a template schedule was given
-            if template_schedule is None:
+            if cache.get('template_schedule') is None:
                 # if not, get the most recent version of the current semester
                 template_schedule = get_most_recent_sched(current_semester['time'],
                                                           current_semester['year'])
             else:
                 # use the provided template schedule
-                template_schedule = template_schedule
+                template_schedule = cache.get('template_schedule')
 
             # Handles get request required for generating switches
             if request.GET.get('lab_name') is not None:
@@ -78,7 +80,6 @@ def lo_home(request, selected_semester=None, template_schedule=None):
             # Handles get request required for undoing changes
             if request.GET.get('undo') is not None:
                 node = template_schedule.his_nodes.last()
-
                 if node is not None:
                     if not node.is_assignment:
                         to_assignment, from_assignment = None, None
@@ -176,7 +177,12 @@ def lo_generate_switches(course_id, current_semester, template_schedule):
     for assignment in template_schedule.assignments.all():
         if assignment.lab.course_id == course_id:
             selected_ta = assignment.ta
-    current_score = selected_ta.get_score(selected_lab, template_schedule.id)
+
+    if selected_ta is not None:
+        current_score = selected_ta.get_score(selected_lab, template_schedule.id)
+    else:
+        print('selected ta none')
+        return None
 
     # remove selected ta so that it is not compared against itself
     tas = list(tas)
@@ -287,7 +293,7 @@ def lo_confirm_switch(switch_data, template_schedule):
     # Confirm the switch on the database side
     template_schedule.swap_assignments(from_assignment, to_assignment)
 
-    return redirect('/laborganizer/')
+    return redirect('lo_home')
 
 def generate_assignment_node(ta, lab, template_schedule):
     """Generate an assignment history node for record"""
@@ -332,8 +338,9 @@ def lo_select_schedule_version(request):
 
             # get that schedule version
             template_schedule = get_template_schedule(time, year, version_number)
-
-            return lo_home(request, selected_semester, template_schedule)
+            
+            cache.set('selected_semester', selected_semester, None)
+            cache.set('template_schedule', template_schedule, None)
 
         return redirect('lo_home')
 
@@ -392,10 +399,10 @@ def lo_select_semester(request):
                 'year': year,
             }
 
-            # pass the selected semester to the primary view
-            return lo_home(request, selected_semester, None)
+            # set the cache for selection in lo_home
+            cache.set('selected_semester', selected_semester, None)
 
-        return lo_home(request, selected_semester, None)
+        return redirect('lo_home')
 
     # the user is not a superuser, take them back to the login page
     return redirect('sign_in')
@@ -454,11 +461,17 @@ def lo_generate_schedule(request):
                 # optimization.models
                 template_schedule = generate_by_selection(tas, labs, selected_semester, priority_bonus)
 
-                return lo_home(request, selected_semester, template_schedule)
+                # set the cache
+                cache.set('selected_semester', selected_semester, None)
+                cache.set('template_schedule', template_schedule, None)
+
+                return redirect('lo_home')
 
             # there are no labs in the semester, warn the user
             messages.warning(request, "Please create labs before creating a schedule!")
-            return lo_home(request, selected_semester)
+            # cache the selected semester
+            cache.set('selected_semester', selected_semester, None)
+            return redirect('lo_home')
 
         # not a POST request, direct to default view
         return redirect('lo_home')
@@ -615,7 +628,9 @@ def lo_propogate_schedule(request):
                 }
 
                 messages.success(request, f'Successfully uploaded version {version}!')
-                return lo_home(request, selected_semester, schedule)
+                cache.set('selected_semester', selected_semester, None)
+                cache.set('template_schedule', schedule, None)
+                return redirect('lo_home')
 
         # there are no labs, warn the user
         messages.warning(request, 'There are no labs to propogate a schedule for!')
