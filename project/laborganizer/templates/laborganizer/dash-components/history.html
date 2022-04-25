@@ -25,51 +25,51 @@
                     class="btn btn-outline-secondary py-2 undo"
                     value="{{history.id}}"
                     title="Undo last switch"
-                    >
-            <svg class="bi" width="16" height="16">
-            <use xlink:href="#redo"></use>
-            </svg>
-        </button>
+            >
+		<svg class="bi" width="16" height="16">
+		    <use xlink:href="#redo"></use>
+		</svg>
+            </button>
         </div>
         <br>
-        <ul class="list-group">
+        <ul class="list-group" id="history_list">
             {% if history %}
-                {% for node in history reversed%}
-                <li class="list-group-item container">
-            <div class="row align-items-center">
-                <div class="col-1">
-                <h1 class="ms-2 d-flex justify-content-center">{{node.relative_node_id}}</h1>
-                </div>
-                <div class="col">
-                <!--Change history description-->
-                <!--Firset TA name and lab-->
-                <div class="d-flex justify-content-center p-2">
-                    {% for ta in node.ta_1.all %}
-                    {{ ta.first_name }}
-                    {% endfor %}
-                    {% for lab in node.lab_1.all %}
-                    (CS {{lab.catalog_id}}-{{lab.section}})
-                    {% endfor %}
-                </div>
-                <!--Switch icon-->
-                <div class="d-flex justify-content-center">
-                    <svg class="bi" width="16" height="16">
-                    <use xlink:href="#switch"></use>
-                    </svg>
-                </div>
-                <div class="d-flex justify-content-center p-2">
-                    {% for ta in node.ta_2.all %}
-                    {{ ta.first_name }}
-                    {% endfor %}
-                    {% for lab in node.lab_2.all %}
-                    (CS {{lab.catalog_id}}-{{lab.section}})
-                    {% endfor %}
-                </div>
-                </div>
-            </div>
-                </li>
-                {% endfor %}
-                {% endif %}
-            </ul>
-        </div>
+            {% for node in history reversed %}
+            <li class="list-group-item container">
+		<div class="row align-items-center">
+                    <div class="col-1">
+			<h1 class="ms-2 d-flex justify-content-center">{{node.relative_node_id}}</h1>
+                    </div>
+                    <div class="col">
+			<!--Change history description-->
+			<!--Firset TA name and lab-->
+			<div class="d-flex justify-content-center p-2">
+			    {% for ta in node.ta_1.all %}
+			    {{ ta.first_name }}
+			    {% endfor %}
+			    {% for lab in node.lab_1.all %}
+			    ({{ lab.subject }} {{lab.catalog_id}}-{{lab.section}})
+			    {% endfor %}
+			</div>
+			<!--Switch icon-->
+			<div class="d-flex justify-content-center">
+			    <svg class="bi" width="16" height="16">
+				<use xlink:href="#switch"></use>
+			    </svg>
+			</div>
+			<div class="d-flex justify-content-center p-2">
+			    {% for ta in node.ta_2.all %}
+			    {{ ta.first_name }}
+			    {% endfor %}
+			    {% for lab in node.lab_2.all %}
+			    (CS {{lab.catalog_id}}-{{lab.section}})
+			    {% endfor %}
+			</div>
+                    </div>
+		</div>
+            </li>
+            {% endfor %}
+            {% endif %}
+        </ul>
     </div>
+</div>
