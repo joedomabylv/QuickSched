@@ -118,7 +118,7 @@
 				    </div>
 				    <div class="col-6">
 					<strong>
-					    Class times for {{ current_semester.time }}{{ current_semester.year }}
+					    Class times
 					    <span title="These are the times this TA is unavailable">
 						<svg class="bi me-2" width="16" height="16">
 						    <use xlink:href="#question-mark"></use>
@@ -132,6 +132,15 @@
 						    <th scope="col">Days</th>
 						    <th scope="col">Start Time</th>
 						    <th scope="col">End Time</th>
+						    <th scope="col">
+							Semester
+							<span title="These values will have no effect on schedule placement">
+							    <svg class="bi me-2" width="16" height="16">
+								<use xlink:href="#question-mark"></use>
+							    </svg>
+							</span>
+
+						    </th>
 						</tr>
 					    </thead>
 					    {% for class, values in ta.get_availability.items %}
@@ -144,7 +153,11 @@
 							{{ day }}
 							{% endfor %}
 							{% else %}
+							{% if value %}
 							{{ value }}
+							{% else %}
+							No data!
+							{% endif %}
 							{% endif %}
 						    </td>
 						{% endfor %}

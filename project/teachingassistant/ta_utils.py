@@ -37,11 +37,13 @@ def parse_availability(request, total_classes):
     """
     index = 0
     avail_list = []
+    semester_list = []
     while index <= total_classes:
         avail = request.POST.getlist(f'ta_class_time_{index}')
+        semester_list.append(request.POST.get(f'ta_class_semester_{index}'))
         avail_list.append(avail)
         index += 1
-    return avail_list
+    return (avail_list, semester_list)
 
 
 def validate_student_id(student_id, this_ta):
