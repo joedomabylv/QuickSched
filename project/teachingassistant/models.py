@@ -165,7 +165,8 @@ class TA(models.Model):
             avail[str(index)] = {
                 'days': class_time.get_days(),
                 'start_time': class_time.start_time,
-                'end_time': class_time.end_time
+                'end_time': class_time.end_time,
+                'semester_name': class_time.semester_name,
             }
         return avail
 
@@ -302,6 +303,7 @@ class ClassTime(models.Model):
 
     # days for these times
     days = models.CharField('Days', max_length=10, blank=True, null=True)
+    semester_name = models.TextField('Semester', blank=True)
 
 
 class Availability(models.Model):
@@ -326,11 +328,12 @@ class Availability(models.Model):
         # delete actual ClassTime objects
         ClassTime.objects.filter(ta=self.ta).delete()
 
-    def edit_time(self, time_list):
+    def edit_time(self, time_list, semester_list):
         """Create a new ClassTime object for this TA."""
         # delete the existing class times, if any
         self.delete_times()
 
+        semester_index = 0
         # create new class times for each object
         for new_time in time_list:
             # splice the days from the current index
@@ -343,7 +346,10 @@ class Availability(models.Model):
             self.class_times.create(start_time=new_time[0],
                                     end_time=new_time[1],
                                     days=days,
+                                    semester_name=semester_list[semester_index],
                                     ta=self.ta)
+
+            semester_index += 1
 
     def get_class_times(self):
         """Return a list of the TA's class times."""

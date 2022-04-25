@@ -90,7 +90,8 @@ def ta_info(request):
                 return redirect('ta_home')
 
             # parse the input availability
-            availability_list = parse_availability(request, number_of_classes)
+            availability_list, semester_list = parse_availability(request,
+                                                                  number_of_classes)
 
             # gather keys
             availability_key = request.user.ta_object.availability_key
@@ -101,7 +102,7 @@ def ta_info(request):
             ta_holds = Holds.objects.get(id=holds_key)
 
             # update availability object
-            ta_availability.edit_time(availability_list)
+            ta_availability.edit_time(availability_list, semester_list)
 
             # update existing TA object
             request.user.ta_object.first_name = first_name
