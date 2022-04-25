@@ -30,6 +30,7 @@ from laborganizer.lo_utils import (get_current_semester,
                                    parse_semester_lab_dict,
                                    validate_course_id,
                                    filter_out_unscored,
+                                   filter_out_nolabs,
                                    add_labs)
 from django.contrib.auth.decorators import login_required
 from optimization.optimization_utils import (generate_by_selection,
@@ -191,6 +192,9 @@ def lo_generate_switches(course_id, current_semester, template_schedule):
     # remove TA's that were not considered for scoreing
     tas = filter_out_unscored(tas)
 
+    # filter out tas with no previous lab assignments
+    tas = filter_out_nolabs(tas, template_schedule)
+
     # calculate the deviation score for each relevant TA
     deviation_scores = []
     for ta in tas:
@@ -221,24 +225,23 @@ def lo_generate_switches(course_id, current_semester, template_schedule):
         to_labs = to_ta.get_assignments_from_template(template_schedule)
 
         # check for one lab we could switch into
-        if len(to_labs) > 0:
-            to_lab = to_labs[0]
+        to_lab = to_labs[0]
 
-            switches.append({
-                "to_lab": to_lab.subject + to_lab.catalog_id + ':' + to_lab.course_id,
-                "from_lab": selected_lab.subject + selected_lab.catalog_id + ':' + selected_lab.course_id,
-                "to_ta": to_ta.first_name + ":" + to_ta.student_id,
-                "from_ta": selected_ta.first_name + ":" + selected_ta.student_id,
-                "deviation_score": ta[0],
-                "score_color": grade,
-                "switch_id": index + 1,
-                "st_score": ta[2],
-                "pt_score": ta[3]
-            })
+        switches.append({
+            "to_lab": to_lab.subject + to_lab.catalog_id + ':' + to_lab.course_id,
+            "from_lab": selected_lab.subject + selected_lab.catalog_id + ':' + selected_lab.course_id,
+            "to_ta": to_ta.first_name + ":" + to_ta.student_id,
+            "from_ta": selected_ta.first_name + ":" + selected_ta.student_id,
+            "deviation_score": ta[0],
+            "score_color": grade,
+            "switch_id": index + 1,
+            "st_score": ta[2],
+            "pt_score": ta[3]
+        })
 
-            switch_names.append("switch_" + str(index + 1))
+        switch_names.append("switch_" + str(index + 1))
 
-            index += 1
+        index += 1
 
     response = dict(zip(switch_names, switches))
     return response
