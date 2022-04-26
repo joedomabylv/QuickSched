@@ -14,7 +14,7 @@ from django.shortcuts import render, redirect
 from django.core.cache import cache
 from teachingassistant.models import TA, Holds
 from .models import Semester, Lab, AllowTAEdit
-from optimization.models import History, TemplateSchedule
+from optimization.models import History, TemplateSchedule, TemplateAssignment
 from django.contrib import messages
 from laborganizer.lo_utils import (get_current_semester,
                                    get_tas_by_semester,
@@ -30,6 +30,7 @@ from laborganizer.lo_utils import (get_current_semester,
                                    parse_semester_lab_dict,
                                    validate_course_id,
                                    filter_out_unscored,
+                                   filter_out_nolabs,
                                    add_labs)
 from django.contrib.auth.decorators import login_required
 from optimization.optimization_utils import (generate_by_selection,
@@ -47,7 +48,7 @@ def lo_home(request, selected_semester=None, template_schedule=None):
     if request.user.is_superuser:
         context = {}
         if Semester.objects.all().exists():
-            if selected_semester is None:
+            if cache.get('selected_semester') is None:
                 # establish current semester time/year, based on time
                 current_semester = cache.get('most_recent_semester')
                 if current_semester is None:
@@ -55,17 +56,19 @@ def lo_home(request, selected_semester=None, template_schedule=None):
 
             else:
                 # get the current semester argument
-                current_semester = selected_semester
+                current_semester = cache.get('selected_semester')
+                # clear the cache for future decisions
+                cache.delete('selected_semester')
                 cache.set('most_recent_semester', current_semester, None)
 
             # check if a template schedule was given
-            if template_schedule is None:
+            if cache.get('template_schedule') is None:
                 # if not, get the most recent version of the current semester
                 template_schedule = get_most_recent_sched(current_semester['time'],
                                                           current_semester['year'])
             else:
                 # use the provided template schedule
-                template_schedule = template_schedule
+                template_schedule = cache.get('template_schedule')
 
             # Handles get request required for generating switches
             if request.GET.get('lab_name') is not None:
@@ -78,16 +81,18 @@ def lo_home(request, selected_semester=None, template_schedule=None):
             # Handles get request required for undoing changes
             if request.GET.get('undo') is not None:
                 node = template_schedule.his_nodes.last()
-
                 if node is not None:
-                    to_assignment, from_assignment = None, None
-                    for assignment in template_schedule.assignments.all():
-                        if assignment.ta == node.ta_1.first():
-                            from_assignment = assignment
-                        elif assignment.ta == node.ta_2.first():
-                            to_assignment = assignment
+                    if not node.is_assignment:
+                        to_assignment, from_assignment = None, None
+                        for assignment in template_schedule.assignments.all():
+                            if assignment.ta == node.ta_1.first():
+                                from_assignment = assignment
+                            elif assignment.ta == node.ta_2.first():
+                                to_assignment = assignment
 
-                    node.undo_bilateral_switch(template_schedule, from_assignment, to_assignment)
+                        node.undo_bilateral_switch(template_schedule, from_assignment, to_assignment)
+                    else:
+                        template_schedule.assign(node.ta_1.first(), node.lab_1.first())
                     node.delete()
 
             # Handles get request required for confirming switches
@@ -173,7 +178,12 @@ def lo_generate_switches(course_id, current_semester, template_schedule):
     for assignment in template_schedule.assignments.all():
         if assignment.lab.course_id == course_id:
             selected_ta = assignment.ta
-    current_score = selected_ta.get_score(selected_lab, template_schedule.id)
+
+    if selected_ta is not None:
+        current_score = selected_ta.get_score(selected_lab, template_schedule.id)
+    else:
+        print('selected ta none')
+        return None
 
     # remove selected ta so that it is not compared against itself
     tas = list(tas)
@@ -181,6 +191,9 @@ def lo_generate_switches(course_id, current_semester, template_schedule):
 
     # remove TA's that were not considered for scoreing
     tas = filter_out_unscored(tas)
+
+    # filter out tas with no previous lab assignments
+    tas = filter_out_nolabs(tas, template_schedule)
 
     # calculate the deviation score for each relevant TA
     deviation_scores = []
@@ -212,24 +225,23 @@ def lo_generate_switches(course_id, current_semester, template_schedule):
         to_labs = to_ta.get_assignments_from_template(template_schedule)
 
         # check for one lab we could switch into
-        if len(to_labs) > 0:
-            to_lab = to_labs[0]
+        to_lab = to_labs[0]
 
-            switches.append({
-                "to_lab": to_lab.subject + to_lab.catalog_id + ':' + to_lab.course_id,
-                "from_lab": selected_lab.subject + selected_lab.catalog_id + ':' + selected_lab.course_id,
-                "to_ta": to_ta.first_name + ":" + to_ta.student_id,
-                "from_ta": selected_ta.first_name + ":" + selected_ta.student_id,
-                "deviation_score": ta[0],
-                "score_color": grade,
-                "switch_id": index + 1,
-                "st_score": ta[2],
-                "pt_score": ta[3]
-            })
+        switches.append({
+            "to_lab": to_lab.subject + to_lab.catalog_id + ':' + to_lab.course_id,
+            "from_lab": selected_lab.subject + selected_lab.catalog_id + ':' + selected_lab.course_id,
+            "to_ta": to_ta.first_name + ":" + to_ta.student_id,
+            "from_ta": selected_ta.first_name + ":" + selected_ta.student_id,
+            "deviation_score": ta[0],
+            "score_color": grade,
+            "switch_id": index + 1,
+            "st_score": ta[2],
+            "pt_score": ta[3]
+        })
 
-            switch_names.append("switch_" + str(index + 1))
+        switch_names.append("switch_" + str(index + 1))
 
-            index += 1
+        index += 1
 
     response = dict(zip(switch_names, switches))
     return response
@@ -284,7 +296,32 @@ def lo_confirm_switch(switch_data, template_schedule):
     # Confirm the switch on the database side
     template_schedule.swap_assignments(from_assignment, to_assignment)
 
-    return redirect('/laborganizer/')
+    return redirect('lo_home')
+
+def generate_assignment_node(ta, lab, template_schedule):
+    """Generate an assignment history node for record"""
+
+    # find idenity of other TA to switch
+    other_ta = None
+    for assignment in TemplateAssignment.objects.all():
+        if assignment.lab == lab:
+            other_ta = assignment.ta
+
+    # set up node for switching
+    relative_node_id = len(template_schedule.his_nodes.all()) + 1
+    abs_node_id = len(History.objects.all()) + 1
+
+    # create said node
+    node = History(id=abs_node_id)
+    node.save()
+    node.relative_node_id = relative_node_id
+    node.ta_1.set([other_ta])
+    node.ta_2.set([ta])
+    node.lab_1.set([lab])
+    node.lab_2.set([None])
+    node.temp_sched = template_schedule
+    node.is_assignment = True
+    node.save()
 
 
 @login_required
@@ -304,7 +341,9 @@ def lo_select_schedule_version(request):
 
             # get that schedule version
             template_schedule = get_template_schedule(time, year, version_number)
-            return lo_home(request, selected_semester, template_schedule)
+            
+            cache.set('selected_semester', selected_semester, None)
+            cache.set('template_schedule', template_schedule, None)
 
         return redirect('lo_home')
 
@@ -329,6 +368,9 @@ def lo_assign_to_template(request):
             ta = TA.objects.get(student_id=student_id)
             lab = Lab.objects.get(course_id=course_id)
             template_schedule = get_template_schedule(time, year, version)
+
+            # generate the history node for the assignment
+            generate_assignment_node(ta, lab, template_schedule)
 
             # assign the ta to the selected lab
             template_schedule.assign(ta, lab)
@@ -360,10 +402,10 @@ def lo_select_semester(request):
                 'year': year,
             }
 
-            # pass the selected semester to the primary view
-            return lo_home(request, selected_semester, None)
+            # set the cache for selection in lo_home
+            cache.set('selected_semester', selected_semester, None)
 
-        return lo_home(request, selected_semester, None)
+        return redirect('lo_home')
 
     # the user is not a superuser, take them back to the login page
     return redirect('sign_in')
@@ -422,11 +464,17 @@ def lo_generate_schedule(request):
                 # optimization.models
                 template_schedule = generate_by_selection(tas, labs, selected_semester, priority_bonus)
 
-                return lo_home(request, selected_semester, template_schedule)
+                # set the cache
+                cache.set('selected_semester', selected_semester, None)
+                cache.set('template_schedule', template_schedule, None)
+
+                return redirect('lo_home')
 
             # there are no labs in the semester, warn the user
             messages.warning(request, "Please create labs before creating a schedule!")
-            return lo_home(request, selected_semester)
+            # cache the selected semester
+            cache.set('selected_semester', selected_semester, None)
+            return redirect('lo_home')
 
         # not a POST request, direct to default view
         return redirect('lo_home')
@@ -583,7 +631,9 @@ def lo_propogate_schedule(request):
                 }
 
                 messages.success(request, f'Successfully uploaded version {version}!')
-                return lo_home(request, selected_semester, schedule)
+                cache.set('selected_semester', selected_semester, None)
+                cache.set('template_schedule', schedule, None)
+                return redirect('lo_home')
 
         # there are no labs, warn the user
         messages.warning(request, 'There are no labs to propogate a schedule for!')

@@ -6,7 +6,11 @@
 
     <div class="my-5 container">
 
-	<p class="alert alert-info">Please make sure all the information below is correct! After you submit this form, you won't be able to edit it again without the consent of your lab organizer!</p>
+	<div class="alert alert-info">
+	    <p>Please make sure all the information below is correct! After you submit this form, you won't be able to edit it again without the consent of your lab organizer!</p>
+
+	    <p>When entering your class times, please be aware that these will represent the times you are <strong>unavailable</strong> to work!</p>
+	</div>
 
         <form method="post" action="{% url 'ta_info' %}" class="needs-validation" novalidate>
 	    {% csrf_token %}
@@ -93,6 +97,15 @@
 			</div>
 		    </div>
 		</div>
+
+		<div class="row">
+		    <div class="col-12">
+			<div class="input-group">
+			    <span class="input-group-text">Which semester?</span>
+			    <input type="text" class="form-control" name="ta_class_semester_0" placeholder="e.g. SPR2022" required>
+			</div>
+		    </div>
+		</div>		
 		
 		<!-- Day Selection -->
 		<div id="class_input_form">
@@ -121,7 +134,7 @@
 			</div>
 		    </div>
 		</div>
-		<!-- End Day Selection -->
+		<!-- End Day Selection -->		
 
 	    </div>
 

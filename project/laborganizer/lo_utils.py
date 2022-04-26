@@ -34,8 +34,12 @@ def get_current_semester():
     # check if the semester doesn't exist in the database
     # if not, default to the first semester in the database
     if not check_if_sem_exists(current_semester_dict):
-        current_semester_dict['time'] = Semester.objects.all().first().semester_time
-        current_semester_dict['year'] = Semester.objects.all().first().year
+        try:
+            current_semester_dict['time'] = Semester.objects.all().first().semester_time
+            current_semester_dict['year'] = Semester.objects.all().first().year
+        except AttributeError:
+            current_semester_dict['time'] = ''
+            current_semester_dict['year'] = 0
 
     return current_semester_dict
 
@@ -167,6 +171,9 @@ def get_deviation_score(potential_ta, selected_ta, selected_lab, current_score, 
     pt_labs = potential_ta.get_assignments_from_template(template_schedule)
     pt_potential_score = potential_ta.get_score(selected_lab, template_schedule.id)
     st_current_score = current_score
+
+    if pt_potential_score == None or st_current_score == None:
+        return 0, 0, 0
 
     # if the potential ta doesnt have an assignment, just return the difference between st and pt scores
     if len(pt_labs) == 0:
@@ -398,5 +405,11 @@ def filter_out_unscored(ta_list):
     for ta in ta_list:
         if len(ta.scores.all()) != 0:
             tas.append(ta)
+    return tas
 
+def filter_out_nolabs(ta_list, template_schedule):
+    tas = []
+    for ta in ta_list:
+        if len(ta.get_assignments_from_template(template_schedule)) > 0:
+            tas.append(ta)
     return tas
