@@ -3,6 +3,61 @@ from django.db import models
 from datetime import datetime, date
 
 
+class LOCache(models.Model):
+    """
+    Cache object.
+
+    Used to remember which semester and template schedule the LO
+    recently viewed.
+    """
+
+    def get_semester(self):
+        """Return the set semester."""
+        if self.semester_time is None or self.year is None:
+            return None
+        return {
+            'year': self.year,
+            'time': self.semester_time,
+        }
+
+    def set_semester(self, semester):
+        """Set a new semester."""
+        self.year = semester['year']
+        self.semester_time = semester['time']
+        self.save()
+
+    def get_template_schedule(self):
+        """Get the set template schedule."""
+        if self.template_schedule is None:
+            return None
+        return self.template_schedule
+
+    def set_template_schedule(self, template_schedule):
+        """Set a new template schedule."""
+        self.template_schedule = template_schedule
+        self.save()
+
+    def template_exists(self, template_schedule):
+        """Ensure a template schedule exists for the cached semester."""
+        template_semester = template_schedule.get_semester()
+        template_year = template_semester.get_year()
+        template_time = template_semester.get_semester_time()
+
+        if (template_year == self.year
+            and template_time == self.semester_time):
+            return True
+        return False
+
+    year = models.IntegerField(blank=True, null=True)
+    semester_time = models.CharField(blank=True, null=True, max_length=3)
+    template_schedule = models.ForeignKey(
+        'optimization.TemplateSchedule',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
+
+
 class Semester(models.Model):
     """
     Semester Object. Primary key is predefined as an integer by Django.
@@ -23,6 +78,14 @@ class Semester(models.Model):
     def get_string(self):
         """Human readable class name, for view use."""
         return self.semester_time + str(self.year)
+
+    def get_year(self):
+        """Get the year of this semester."""
+        return self.year
+
+    def get_semester_time(self):
+        """Get the time of this semester."""
+        return self.semester_time
 
     TIMES = (
         ('SPR', 'Spring'),
@@ -45,7 +108,6 @@ class Semester(models.Model):
             year += 1
             years.append((year, year))
         return years
-
 
     YEARS = get_10_years()
 
