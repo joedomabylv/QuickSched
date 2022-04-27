@@ -251,6 +251,10 @@ class TemplateSchedule(models.Model):
                 return True
         return False
 
+    def get_semester(self):
+        """Get the semester this schedule is for."""
+        return self.semester
+
     version_number = models.IntegerField('Schedule Version', default=0)
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE,
                                  blank=True, null=True)

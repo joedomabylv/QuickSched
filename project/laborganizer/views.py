@@ -13,7 +13,7 @@ Variables used throughout LO dashboard:
 from django.shortcuts import render, redirect
 from django.core.cache import cache
 from teachingassistant.models import TA, Holds
-from .models import Semester, Lab, AllowTAEdit
+from .models import Semester, Lab, AllowTAEdit, LOCache
 from optimization.models import History, TemplateSchedule, TemplateAssignment
 from django.contrib import messages
 from laborganizer.lo_utils import (get_current_semester,
@@ -29,6 +29,7 @@ from laborganizer.lo_utils import (get_current_semester,
                                    get_semester_cluster,
                                    parse_semester_lab_dict,
                                    validate_course_id,
+                                   validate_edit_course_id,
                                    filter_out_unscored,
                                    filter_out_nolabs,
                                    add_labs)
@@ -36,6 +37,7 @@ from django.contrib.auth.decorators import login_required
 from optimization.optimization_utils import (generate_by_selection,
                                              propogate_schedule)
 from django.http import JsonResponse
+
 
 @login_required
 def lo_home(request, selected_semester=None, template_schedule=None):
@@ -47,8 +49,10 @@ def lo_home(request, selected_semester=None, template_schedule=None):
     # ensure the user is a superuser
     if request.user.is_superuser:
         context = {}
+        # get the LO Cache
+        lo_cache = LOCache.objects.all().first()
         if Semester.objects.all().exists():
-            if cache.get('selected_semester') is None:
+            if lo_cache.get_semester() is None:
                 # establish current semester time/year, based on time
                 current_semester = cache.get('most_recent_semester')
                 if current_semester is None:
@@ -56,19 +60,21 @@ def lo_home(request, selected_semester=None, template_schedule=None):
 
             else:
                 # get the current semester argument
-                current_semester = cache.get('selected_semester')
-                # clear the cache for future decisions
-                cache.delete('selected_semester')
-                cache.set('most_recent_semester', current_semester, None)
+                current_semester = lo_cache.get_semester()
+                lo_cache.set_semester(current_semester)
 
             # check if a template schedule was given
-            if cache.get('template_schedule') is None:
+            if lo_cache.get_template_schedule() is None:
                 # if not, get the most recent version of the current semester
                 template_schedule = get_most_recent_sched(current_semester['time'],
                                                           current_semester['year'])
             else:
-                # use the provided template schedule
-                template_schedule = cache.get('template_schedule')
+                # use the provided template schedule, if it exists for the
+                # cached semester
+                template_schedule = lo_cache.get_template_schedule()
+                if not lo_cache.template_exists(template_schedule):
+                    template_schedule = get_most_recent_sched(current_semester['time'],
+                                                              current_semester['year'])
 
             # Handles get request required for generating switches
             if request.GET.get('lab_name') is not None:
@@ -182,7 +188,6 @@ def lo_generate_switches(course_id, current_semester, template_schedule):
     if selected_ta is not None:
         current_score = selected_ta.get_score(selected_lab, template_schedule.id)
     else:
-        print('selected ta none')
         return None
 
     # remove selected ta so that it is not compared against itself
@@ -327,6 +332,8 @@ def generate_assignment_node(ta, lab, template_schedule):
 @login_required
 def lo_select_schedule_version(request):
     """Select a new version of a template schedule to display."""
+    # get the lo cache
+    lo_cache = LOCache.objects.all().first()
     # ensure the user is a superuser
     if request.user.is_superuser:
         if request.method == 'POST':
@@ -341,9 +348,9 @@ def lo_select_schedule_version(request):
 
             # get that schedule version
             template_schedule = get_template_schedule(time, year, version_number)
-            
-            cache.set('selected_semester', selected_semester, None)
-            cache.set('template_schedule', template_schedule, None)
+
+            lo_cache.set_semester(selected_semester)
+            lo_cache.set_template_schedule(template_schedule)
 
         return redirect('lo_home')
 
@@ -390,6 +397,8 @@ def lo_select_semester(request):
     When the LO selects a semester from the lefthand dropdown menu, display
     that semester information.
     """
+    # get the lo cache
+    lo_cache = LOCache.objects.all().first()
     # ensure the user is a superuser
     if request.user.is_superuser:
         if request.method == 'POST':
@@ -403,7 +412,7 @@ def lo_select_semester(request):
             }
 
             # set the cache for selection in lo_home
-            cache.set('selected_semester', selected_semester, None)
+            lo_cache.set_semester(selected_semester)
 
         return redirect('lo_home')
 
@@ -418,6 +427,8 @@ def lo_generate_schedule(request):
 
     Generate a new version of a TemplateSchedule object.
     """
+    # get the lo cache
+    lo_cache = LOCache.objects.all().first()
     # ensure the user is a superuser
     if request.user.is_superuser:
         if request.method == 'POST':
@@ -465,15 +476,15 @@ def lo_generate_schedule(request):
                 template_schedule = generate_by_selection(tas, labs, selected_semester, priority_bonus)
 
                 # set the cache
-                cache.set('selected_semester', selected_semester, None)
-                cache.set('template_schedule', template_schedule, None)
+                lo_cache.set_semester(selected_semester)
+                lo_cache.set_template_schedule(template_schedule)
 
                 return redirect('lo_home')
 
             # there are no labs in the semester, warn the user
             messages.warning(request, "Please create labs before creating a schedule!")
             # cache the selected semester
-            cache.set('selected_semester', selected_semester, None)
+            lo_cache.set_semester(selected_semester)
             return redirect('lo_home')
 
         # not a POST request, direct to default view
@@ -595,6 +606,8 @@ def lo_semester_management(request, selected_semester=None):
 @login_required
 def lo_propogate_schedule(request):
     """Propogate the desired template schedule to the live version."""
+    # get the lo cache
+    lo_cache = LOCache.objects.all().first()
     # ensure the user is a superuser
     if request.user.is_superuser:
         if request.method == 'POST':
@@ -631,8 +644,8 @@ def lo_propogate_schedule(request):
                 }
 
                 messages.success(request, f'Successfully uploaded version {version}!')
-                cache.set('selected_semester', selected_semester, None)
-                cache.set('template_schedule', schedule, None)
+                lo_cache.set_semester(selected_semester)
+                lo_cache.set_template_schedule(schedule)
                 return redirect('lo_home')
 
         # there are no labs, warn the user
@@ -649,8 +662,12 @@ def lo_edit_lab(request):
     # ensure the user is a superuser
     if request.user.is_superuser:
         if request.method == 'POST':
+            # get the previous course ID for database lookup and validation
+            old_course_id = request.POST.get('old_course_id')
+
             # get all data from the post request
-            new_course_id = validate_course_id(request.POST.get('course_id'))
+            new_course_id = validate_edit_course_id(request.POST.get('course_id'),
+                                                    old_course_id)
             new_section = request.POST.get('section')
             new_facility_building = request.POST.get('facility_building')
             new_facility_id = request.POST.get('facility_id')
@@ -666,14 +683,15 @@ def lo_edit_lab(request):
             # get the name of the lab from the submit button
             submit_value = request.POST.get('submit')
 
-            # get the previous course ID for database lookup
-            old_course_id = request.POST.get('old_course_id')
-
             # get the lab that needs to be updated
-            lab = Lab.objects.get(course_id=old_course_id)
+            try:
+                lab = Lab.objects.get(course_id=old_course_id)
+            except Lab.DoesNotExist:
+                messages.warning(request, 'Something went wrong. Please refresh the page and try again!')
+                return redirect('lo_semester_management')
 
             # update to new information
-            lab.course_id = new_course_id
+            lab.course_id = new_course_id[0]
             lab.section = new_section
             lab.set_days(new_days)
             lab.facility_id = new_facility_id
@@ -685,6 +703,7 @@ def lo_edit_lab(request):
             # save changes to database
             lab.save()
 
+        messages.success(request, f'Successfully edited {lab}!')
         return lo_semester_management(request, submit_value)
 
     # user is not a superuser, take them back to the login page
@@ -925,7 +944,6 @@ def lo_display_semester(request):
                     lab.semester.year == semester_year and
                     lab.semester.semester_time == semester_time):
                     select_labs.append(lab)
-
 
             context = {
                 'semesters': all_semesters,

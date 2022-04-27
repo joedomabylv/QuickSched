@@ -273,6 +273,25 @@ def validate_course_id(course_id):
         return (course_id, True)
 
 
+def validate_edit_course_id(new_course_id, old_course_id):
+    """
+    Validate a new course ID for the purposes of editing an existing lab.
+
+    If a new course ID matches the old course ID, allow the edit.
+    """
+    # check if the new course ID is the same as the old course ID
+    if new_course_id is old_course_id:
+        try:
+            Lab.objects.get(course_id=new_course_id)
+
+            # course already exists in the database, cannot add it
+            return (None, False)
+        except Lab.DoesNotExist:
+            # course does not exist, we can add it
+            return (new_course_id, True)
+    return (new_course_id, True)
+
+
 def validate_days(days):
     """Ensure a given set of days is properly formatted for the database."""
     valid_days = ['M', 'T', 'W', 'Th', 'F']
