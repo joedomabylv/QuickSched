@@ -878,6 +878,11 @@ def lo_new_lab_confirm(request):
             if not course_id[1]:
                 messages.warning(request, 'The lab you\'re attempting to create has a course ID in use by another lab!')
                 return redirect('lo_semester_management')
+				
+            # check if start time is after end time
+            if start_time >= end_time:
+                messages.warning(request, 'The lab you\'re attempting to create has an invalid start and end time!')
+                return redirect('lo_semester_management')
 
             # get the chosen semester object
             semester_time = semester[:3]
