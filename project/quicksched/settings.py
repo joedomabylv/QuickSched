@@ -154,6 +154,10 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = '/static/'
 
+STATIC_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
+
 FIXTURE_DIRS = [
     os.path.join(BASE_DIR, "fixtures")
 ]
