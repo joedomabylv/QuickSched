@@ -7,4 +7,4 @@ db.sqlite3
 *.csv
 *.pyc
 __pycache__/
-/project/quicksched/settings.py
+project/quicksched/settings.py
