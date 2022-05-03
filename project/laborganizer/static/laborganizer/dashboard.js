@@ -10,12 +10,6 @@ var popoverTriggerList = [].slice.call(
 var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
   return new bootstrap.Popover(popoverTriggerEl);
 });
-var popover = new bootstrap.Popover(
-  document.querySelector(".example-popover"),
-  {
-    container: "body",
-  }
-);
 //filter
 function filterFuntion() {
   // Declare variables
@@ -77,28 +71,33 @@ function sortTable(n) {
       shouldSwitch = false;
       /* Get the two elements you want to compare,
       one from current row and one from the next: */
-      if( n == -1){
+      if(n == -1){
         x = rows[i].getElementsByTagName("th")[0];
         y = rows[i + 1].getElementsByTagName("th")[0];
-      }else if( n == 8){
-        let tempx= rows[i].getElementsByTagName("td")[8].getElementsByTagName("select")[0];
-        x = tempx.options[tempx.selectedIndex];
-        let tempy = rows[i + 1].getElementsByTagName("td")[8].getElementsByTagName("select")[0];
-        y = tempy.options[tempy.selectedIndex];
       }else{
         x = rows[i].getElementsByTagName("td")[n];
         y = rows[i + 1].getElementsByTagName("td")[n];
       }
       /* Check if the two rows should switch place,
       based on the direction, asc or desc: */
+      if( n == -1 || n == 9){
+        sortX = parseInt(x.innerHTML);
+        sortY = parseInt(y.innerHTML);
+      }else if( n == 8){
+        sortX = x.getElementsByTagName("option")[0].text;
+        sortY = y.getElementsByTagName("option")[0].text;
+      }else{
+        sortX = x.innerHTML.toLowerCase();
+        sortY = y.innerHTML.toLowerCase();
+      }
       if (dir == "asc") {
-        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+        if (sortX > sortY) {
           // If so, mark as a switch and break the loop:
           shouldSwitch = true;
           break;
         }
       } else if (dir == "desc") {
-        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+        if (sortX < sortY) {
           // If so, mark as a switch and break the loop:
           shouldSwitch = true;
           break;
@@ -106,7 +105,7 @@ function sortTable(n) {
       }
     }
     if (shouldSwitch) {
-      /* If a switch has been marked, make the switch
+      /* If a switch has been maed, make the switch
       and mark that a switch has been done: */
       rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
       switching = true;
@@ -121,4 +120,26 @@ function sortTable(n) {
       }
     }
   }
+}
+
+window.onload = refreshAssignedLabs()
+
+//Refresh assinged number of labs
+function refreshAssignedLabs(){
+    var table = document.getElementById("labTable");
+    var rows = table.rows;
+    for (i = 0; i < rows.length; i++) {
+	let count = 0;
+	let TA = rows[i].getElementsByTagName("td")[8].getElementsByTagName("option")[0].text;
+	if(TA.length != 0)
+	{
+	    for(j = 0; j < rows.length; j++){
+		let TA2 = rows[j].getElementsByTagName("td")[8].getElementsByTagName("option")[0].text;
+		if(TA == TA2){
+		    count++;
+		}
+	    }
+	}
+	rows[i].getElementsByTagName("td")[9].innerHTML = count;
+    }
 }
