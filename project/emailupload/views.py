@@ -5,11 +5,13 @@ from django.utils.crypto import get_random_string
 from django.contrib.auth import get_user_model
 from django.core.validators import validate_email
 from django.core.mail import send_mail, send_mass_mail
+from django.contrib.sites.shortcuts import get_current_site
 from quicksched import settings
 from django.contrib import messages
 from django.forms import ValidationError
 from django.utils.datastructures import MultiValueDictKeyError
 from .models import NewAccountEmails, ReturningAccountEmails
+from smtplib import SMTPAuthenticationError, SMTPSenderRefused
 from authentication.models import CustomUserModel
 import csv
 import os
@@ -134,20 +136,41 @@ def confirm_emails(request):
             welcome_subject = "Welcome to QuickSched!"
             welcome_message = """Hello! \n Welcome to Quicksched!\nYour Account has successfully been created.
             \n\n To finish your registration, please use your email and temporary password down below to login.
-            You will be prompted to change it upon your login.\n\n Temporary Password: """ + temp_pass
+            You will be prompted to change it upon your login. Visit """ + get_current_site(request).domain + """ and enter your temporary password.
+            \n\n Temporary Password: """ + temp_pass
             from_email = settings.EMAIL_HOST_USER
             email_messages.append((welcome_subject, welcome_message, from_email, [to_email]))
             index += 1
-        send_mass_mail(tuple(email_messages), fail_silently=False)
+
+        try:
+            send_mass_mail(tuple(email_messages), fail_silently=False)
+
+        except SMTPAuthenticationError:
+            messages.error(request, 'It seems that the email credentials in your .env file are faulty. Please also make sure the Email you\'re using has proper security settings. For more info, refer to the setup guide.')
+            return redirect('../')
+
+        except SMTPSenderRefused:
+            messages.error(request, 'It seems either your email username and password is missing from your .env file. Please refer to the setup guide to update them.')
+            return redirect('../ta_add')
 
     # returning email
     if len(returning_accounts) > 0:
         welcome_subject = "Welcome to back to QuickSched!"
         welcome_message = """Hello!\n This email is here to let you know that your email has been registered back in the system.
-        Please sign in and update your schedule and other information about your availability and qualifications."""
+        Please sign in and update your schedule and other information about your availability and qualifications. Visit """ + get_current_site(request).domain + """ and sign in to update your availability."""
         from_email = settings.EMAIL_HOST_USER
-        send_mail(welcome_subject, welcome_message, from_email,
-                  returning_accounts, fail_silently=False)
+
+        try:
+            send_mail(welcome_subject, welcome_message, from_email,
+                    returning_accounts, fail_silently=False)
+
+        except SMTPAuthenticationError:
+            messages.error(request, 'It seems that the email credentials in your .env file are faulty. Please also make sure the Email you\'re using has proper security settings. For more info, refer to the setup guide.')
+            return redirect('../ta_add')
+
+        except SMTPSenderRefused:
+            messages.error(request, 'It seems either your email username and password is missing from your .env file. Please refer to the setup guide to update them.')
+            return redirect('../ta_add')
 
     # loop through the list of emails and passwords and create accounts for TA's
     index = 0
