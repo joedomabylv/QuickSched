@@ -126,17 +126,20 @@ window.onload = refreshAssignedLabs()
 
 //Refresh assinged number of labs
 function refreshAssignedLabs(){
-  var table = document.getElementById("labTable");
-  var rows = table.rows;
-  for (i = 0; i < rows.length; i++) {
-    let count = 0;
-    let TA = rows[i].getElementsByTagName("td")[8].getElementsByTagName("option")[0].text;
-    for(j = 0; j < rows.length; j++){
-      let TA2 = rows[j].getElementsByTagName("td")[8].getElementsByTagName("option")[0].text;
-      if(TA == TA2){
-        count++;
-      }
+    var table = document.getElementById("labTable");
+    var rows = table.rows;
+    for (i = 0; i < rows.length; i++) {
+	let count = 0;
+	let TA = rows[i].getElementsByTagName("td")[8].getElementsByTagName("option")[0].text;
+	if(TA.length != 0)
+	{
+	    for(j = 0; j < rows.length; j++){
+		let TA2 = rows[j].getElementsByTagName("td")[8].getElementsByTagName("option")[0].text;
+		if(TA == TA2){
+		    count++;
+		}
+	    }
+	}
+	rows[i].getElementsByTagName("td")[9].innerHTML = count;
     }
-    rows[i].getElementsByTagName("td")[9].innerHTML = count;
-  }
 }
