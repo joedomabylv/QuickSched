@@ -145,7 +145,7 @@ class TemplateSchedule(models.Model):
                 num_assignments = 1
                 for ta in highest_scoring_tas:
                     num_assignments = len(self.get_ta_lab_assignment(ta))
-                    if num_assignments < 2:
+                    if num_assignments < 3:
                         if not self.lab_has_an_assignment(lab):
                             self.assign(ta, lab)
 
@@ -154,7 +154,7 @@ class TemplateSchedule(models.Model):
                 num_assignments = 1
                 for ta in highest_scoring_tas:
                     num_assignments = len(self.get_ta_lab_assignment(ta))
-                    if num_assignments < 2:
+                    if num_assignments < 3:
                         if not self.lab_has_an_assignment(lab):
                             self.assign(ta, lab)
 

@@ -225,6 +225,10 @@ class TA(models.Model):
                 # they are, unassign them
                 self.assigned_semesters.remove(semester)
 
+    def get_lab_objects(self):
+        """Get all the lab objects a TA is assigned to."""
+        return self.assigned_labs.all()
+
     # define choice variable
     YEAR = (
         ('FR', 'Freshman'),

@@ -7,7 +7,6 @@ $(document).ready(function(){
           lab_name: this.id
       },
 	success: function(response) {
-	    console.log('hi');
         for(var key in response) {
           $("#switches-list").append(
             '<a href="" id="switch" class="list-group-item list-group-item-action switch '+ response[key].score_color + '"> \

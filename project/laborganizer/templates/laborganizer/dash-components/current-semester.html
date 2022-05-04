@@ -115,7 +115,7 @@
 			<div class="d-grid">
 			    <form method="post" id="class_{{ forloop.counter }}" action="{% url 'lo_assign_to_template' %}">
 				{% csrf_token %}
-				<select onclick="refreshAssignedLabs()" onchange="to_template(this.value, {{ lab.course_id }}, '{{ current_semester.time }}', {{ current_semester.year }}, {{ template_schedule.version_number }}); location.reload()" class="btn btn-outline-dark border-0 form-select">
+				<select onclick="" onchange="to_template(this.value, {{ lab.course_id }}, '{{ current_semester.time }}', {{ current_semester.year }}, {{ template_schedule.version_number }});" class="btn btn-outline-dark border-0 form-select">
 				    <option selected>
 					{% if template_schedule %}
 
@@ -142,7 +142,7 @@
 			    </form>
 			</div>
 		    </td>
-				<td>0</td>
+				<td></td>
 		    <td>
 			<!--Run switch button-->
 			<div class="d-grid">
