@@ -92,7 +92,8 @@
 		    <th class="sortBtn" title="Sort by days" scope="col" onclick="sortTable(6)">Days</th>
 		    <th class="sortBtn" title="Sort by instructor" scope="col" onclick="sortTable(7)">Instructor</th>
 		    <th class="sortBtn" title="Sort by TA" scope="col" onclick="sortTable(8)">TA</th>
-		    <th scope="col">Switch</th>
+		    <th class="sortBtn" title="Sort by number of labs assigned" scope="col" onclick="sortTable(9)">Assigned Labs</th>
+				<th title="Swith this TA with other TA"scope="col">Switch</th>
 		</tr>
 	    </thead>
 	    {% if labs %}
@@ -114,7 +115,7 @@
 			<div class="d-grid">
 			    <form method="post" id="class_{{ forloop.counter }}" action="{% url 'lo_assign_to_template' %}">
 				{% csrf_token %}
-				<select onchange="to_template(this.value, {{ lab.course_id }}, '{{ current_semester.time }}', {{ current_semester.year }}, {{ template_schedule.version_number }})" class="btn btn-outline-dark border-0 form-select">
+				<select onclick="" onchange="to_template(this.value, {{ lab.course_id }}, '{{ current_semester.time }}', {{ current_semester.year }}, {{ template_schedule.version_number }});" class="btn btn-outline-dark border-0 form-select">
 				    <option selected>
 					{% if template_schedule %}
 
@@ -141,6 +142,7 @@
 			    </form>
 			</div>
 		    </td>
+				<td></td>
 		    <td>
 			<!--Run switch button-->
 			<div class="d-grid">

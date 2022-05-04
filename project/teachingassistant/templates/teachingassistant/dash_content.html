@@ -1,11 +1,11 @@
-<div class="col d-flex flex-column flex-shrink-0 bg-light">
+<div class="col d-flex flex-column flex-shrink-0 bg-light" style="overflow-y: scroll;">
 
     {% include 'teachingassistant/horizontal_tool_bar.html' %}
     {% include 'teachingassistant/message.html' %}
 
     {% if labs %}
-    <div class="w-75 mx-auto mt-3" id="assigned_labs">
-	<h3>{{ semester.time }}{{ semester.year }} Labs</h3>
+    <div class="w-75 mx-auto mt-3 mb-5" id="assigned_labs">
+	<h3>Assignments</h3>
 	<p>{{ labs|length }} assignments</p>
 
 	<div class="accordion" id="accordionLabs">
@@ -22,7 +22,16 @@
 			       aria-expanded="false"
 			       aria-controls="collapse-{{ forloop.counter }}"
 		    >
-			{{ lab }}
+			<div class="container">
+			    <div class="row">
+				<div class="col text-start">
+				    {{ lab }}
+				</div>
+				<div class="col text-end">
+				    {{ lab.semester }}
+				</div>
+			    </div>
+			</div>
 		    </button>
 		</h2>
 

@@ -3,6 +3,7 @@
     {% include 'laborganizer/csv_upload/horizontal_tool_bar.html' %}
     {% include 'laborganizer/message.html' %}
 
+  <div style="overflow-y: scroll;">
     <div class="m-5 text-start">
 	<h3>New {{ time }}{{ year }} Semester</h3>
 	<p>Please ensure the data below is correct before submitting</p>
@@ -130,5 +131,5 @@
     {% else %}
     No data to display
     {% endif %}
-    
+  </div>
 </div>

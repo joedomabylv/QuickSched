@@ -9,6 +9,10 @@ function to_template(student_id, course_id, time, year, version_number) {
 	    'year': year,
 	    'version': version_number
 	},
+	success: function(response) {
+	    // refresh the page when the database transaction is complete
+	    location.reload();
+	}
     });
 
     // update the history tab
@@ -19,4 +23,5 @@ function to_template(student_id, course_id, time, year, version_number) {
     if (!old_html.startsWith(warning_string)) {
 	history_list.innerHTML = warning_string + old_html;	
     }
+    
 }
