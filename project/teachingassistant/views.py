@@ -22,7 +22,7 @@ def ta_home(request):
 
         # get any labs the TA is assigned to for the current semester
         semester = get_current_semester()
-        labs = ta.get_assigned_labs(semester)
+        labs = ta.get_lab_objects()
 
         context = {
             'ta': ta,

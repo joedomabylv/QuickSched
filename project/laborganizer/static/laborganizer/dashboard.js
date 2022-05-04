@@ -122,9 +122,7 @@ function sortTable(n) {
   }
 }
 
-window.onload = refreshAssignedLabs()
-
-//Refresh assinged number of labs
+//Refresh assigned number of labs
 function refreshAssignedLabs(){
     var table = document.getElementById("labTable");
     var rows = table.rows;
@@ -142,4 +140,8 @@ function refreshAssignedLabs(){
 	}
 	rows[i].getElementsByTagName("td")[9].innerHTML = count;
     }
+
+
 }
+
+window.onload = refreshAssignedLabs()
